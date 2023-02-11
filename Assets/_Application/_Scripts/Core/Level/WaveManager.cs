@@ -42,20 +42,21 @@ namespace _Application._Scripts.Core
 
         public void StartSpawn()
         {
-            _spawnCoroutine = StartCoroutine(SpawnCoroutine());
-        }
-
-        private IEnumerator SpawnCoroutine()
-        {
             _currentWaveIndex = 0;
             _approachedEnemyCount = 0;
             _isWaveEnded = false;
             EnemyTracker = new EnemyTracker();
             EnemyTracker.WaveEnded += OnWaveEnded;
             EnemyTracker.Approached += OnEnemyApproached;
+            
+            _spawnCoroutine = StartCoroutine(SpawnCoroutine());
+        }
 
+        private IEnumerator SpawnCoroutine()
+        {
             while (_currentWaveIndex < _levelData.WavesData.Count)
             {
+                yield return null;
                 yield return StartCoroutine(SpawnWave());
                 yield return new WaitUntil(() => _isWaveEnded);
                 _isWaveEnded = false;
@@ -65,7 +66,7 @@ namespace _Application._Scripts.Core
             }
 
             Unsubscribe();
-
+            EnemyTracker = null;
             Debug.Log("passed");
             LevelPassed();
         }
@@ -83,7 +84,15 @@ namespace _Application._Scripts.Core
             if (_approachedEnemyCount == _levelData.ApproachingCount)
             {
                 EnemyTracker.Clear();
+                EnemyTracker = null;
+                
                 Unsubscribe();
+                if (_spawnCoroutine != null)
+                {
+                    StopCoroutine(_spawnCoroutine);
+                    _spawnCoroutine = null;
+                }
+                
                 LevelFailed();
             }
             else

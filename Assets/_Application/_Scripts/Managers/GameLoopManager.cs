@@ -35,11 +35,11 @@ namespace _Application.Scripts.Managers
 
         private int _lastCompletedLevel;
         private bool _hasUpgradeTutorialShown;
-        private readonly CounterSpawner _counterSpawner;
+        private readonly BarSpawner _barSpawner;
 
         public GameLoopManager(LevelManager levelsManager, CoroutineRunner coroutineRunner,
             GlobalPool pool, OutlookService outlookService, UserControl userControl, ScriptableService scriptableService,
-            ProgressService progressService, AudioManager audioManager, CoreConfig coreConfig, CounterSpawner counterSpawner)
+            ProgressService progressService, AudioManager audioManager, CoreConfig coreConfig, BarSpawner barSpawner)
         {
             _useTutorial = AllServices.Get<CoreConfig>().UseTutorial;
             _coroutineRunner = coroutineRunner;
@@ -50,7 +50,7 @@ namespace _Application.Scripts.Managers
             _scriptableService = scriptableService;
             _progressService = progressService;
             _audioManager = audioManager;
-            _counterSpawner = counterSpawner;
+            _barSpawner = barSpawner;
        }
 
         public void StartGame()
@@ -94,8 +94,9 @@ namespace _Application.Scripts.Managers
                 }
                 case GameStates.GameEnded:
                 {
+                    _levelsManager.Clear();
                     _userControl.Disable();
-                    _counterSpawner.ClearLists();
+                    _barSpawner.Clear();
 
                     int currentLevelNumber = _levelsManager.CurrentLevelIndex;
                     if (currentLevelNumber <= MaxTutorialCount && _useTutorial) 
@@ -149,10 +150,7 @@ namespace _Application.Scripts.Managers
         {
             yield return _coroutineRunner.StartCoroutine(_levelsManager.CreateLevel());
             _levelsManager.StartLevel();
-            
-            //_outlookService.PrepareLevel(_allBuildings);
-
-            _counterSpawner.FillLists(UISystem.GetWindow<GameplayWindow>().CounterContainer);
+            _barSpawner.Initialize(_levelsManager.EnemyTracker);
             
             _userControl.Enable();
         }

@@ -8,10 +8,10 @@ namespace _Application.Scripts.Managers
     [CreateAssetMenu(fileName = "Warehouse", menuName = "Resources/Warehouse", order = 0)]
     public class Warehouse : ScriptableObject
     {
-        [SerializeField] private Counter _counterPrefab;
+        [SerializeField] private UnitBar _barPrefab;
         [SerializeField, NonReorderable] private MyDictionary<EnemyType, BaseEnemy> _enemiesPrefabs;
         
         public MyDictionary<EnemyType, BaseEnemy> EnemiesPrefabs => _enemiesPrefabs;
-        public Counter CounterPrefab => _counterPrefab;
+        public UnitBar BarPrefab => _barPrefab;
     }
 }

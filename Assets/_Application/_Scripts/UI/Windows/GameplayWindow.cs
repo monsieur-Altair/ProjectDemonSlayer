@@ -10,12 +10,12 @@ namespace _Application.Scripts.UI.Windows
     public class GameplayWindow : Window
     {
         [SerializeField] 
-        private Transform _counterContainer;
+        private Transform _barParent;
 
         private CoroutineRunner _coroutineRunner;
         private LevelManager _levelManager;
         private ScriptableService _scriptableService;
-        public Transform CounterContainer => _counterContainer;
+        public Transform BarParent => _barParent;
 
         public override void GetDependencies()
         {

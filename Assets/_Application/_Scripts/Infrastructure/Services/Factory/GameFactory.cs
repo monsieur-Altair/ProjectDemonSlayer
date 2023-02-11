@@ -35,7 +35,7 @@ namespace _Application.Scripts.Infrastructure.Services.Factory
             
             UserControl userControl = AllServices.Get<UserControl>();
 
-            CounterSpawner counterSpawner = new(warehouse, objectPool, globalCamera, _coreConfig.Warehouse.CounterPrefab);
+            BarSpawner barSpawner = new(_coreConfig, objectPool, globalCamera);
 
             GameLoopManager gameLoopManager = new(AllServices.Get<LevelManager>(), 
                 coroutineRunner, objectPool, AllServices.Get<OutlookService>(), userControl,
@@ -43,7 +43,7 @@ namespace _Application.Scripts.Infrastructure.Services.Factory
                 AllServices.Get<ProgressService>(),
                 AllServices.Get<AudioManager>(), 
                 _coreConfig, 
-                counterSpawner);
+                barSpawner);
             
             ProgressReaders.Add(gameLoopManager);
             ProgressWriters.Add(gameLoopManager);

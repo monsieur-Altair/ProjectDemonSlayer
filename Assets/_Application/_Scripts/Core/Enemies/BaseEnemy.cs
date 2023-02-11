@@ -12,6 +12,9 @@ namespace _Application._Scripts.Core.Enemies
         public event Action<BaseEnemy> Died = delegate { };
         public event Action<BaseEnemy> Damaged = delegate { };
         public event Action<BaseEnemy> Approached = delegate { };
+        public event Action<BaseEnemy> Updated = delegate { };
+
+        [SerializeField] private Transform _barPoint;
 
         private BaseEnemyData _baseEnemyData;
         private bool _canMove;
@@ -19,6 +22,9 @@ namespace _Application._Scripts.Core.Enemies
         private float _currentDistance;
         private Transform _transform;
 
+        public Transform BarPoint => _barPoint;
+        public float CurrentHealth { get; private set; }
+        public float MaxHealth => _baseEnemyData.Health;
 
         private void Awake()
         {
@@ -31,6 +37,8 @@ namespace _Application._Scripts.Core.Enemies
             _baseEnemyData = baseEnemyData;
             _currentDistance = 0.0f;
             _canMove = false;
+
+            CurrentHealth = _baseEnemyData.Health;
         }
 
         public void Launch()
@@ -48,6 +56,8 @@ namespace _Application._Scripts.Core.Enemies
             _transform.position = _path.GetPointAtDistance(_currentDistance);
             _transform.rotation = _path.GetRotationAtDistance(_currentDistance) * Quaternion.Euler(0,0,90);
 
+            Updated(this);
+            
             if (_currentDistance/_path.length >= 0.5f)
             {
                 _canMove = false;

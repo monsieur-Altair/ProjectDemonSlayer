@@ -73,7 +73,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8a81c7b2fad5436fb6154b06a87fb09a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _counterContainer: {fileID: 2052767558393937230}
+  _barParent: {fileID: 2052767558393937230}
 --- !u!114 &6509410304153461913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,7 +101,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2052767558393937230}
   m_Layer: 5
-  m_Name: Counters
+  m_Name: Bar Parent
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

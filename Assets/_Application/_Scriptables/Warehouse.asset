@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc04737c77eb4546b1a5dcaa8585953d, type: 3}
   m_Name: Warehouse
   m_EditorClassIdentifier: 
-  _counterPrefab: {fileID: 3431195707890077729, guid: 072d865c1ef6bd844b78860b581e8233, type: 3}
+  _barPrefab: {fileID: 3431195707890077729, guid: 072d865c1ef6bd844b78860b581e8233, type: 3}
   _enemiesPrefabs:
     _pairs:
     - _key: 0

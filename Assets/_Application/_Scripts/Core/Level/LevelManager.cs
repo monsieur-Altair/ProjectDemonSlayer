@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using _Application._Scripts.Core;
 using _Application.Scripts.Infrastructure.Services;
 using _Application.Scripts.Infrastructure.Services.Factory;
 using _Application.Scripts.Infrastructure.Services.Progress;
@@ -18,6 +19,7 @@ namespace _Application.Scripts.Managers
         private CoreConfig _coreConfig;
 
         public int CurrentLevelIndex { get;  set; }
+        public EnemyTracker EnemyTracker => _currentLevel.WaveManager.EnemyTracker;
 
         public override void Init()
         {
@@ -54,13 +56,17 @@ namespace _Application.Scripts.Managers
 
             _currentLevel = _gameFactory.CreateLevel(_levels[CurrentLevelIndex]);
             _currentLevel.Initialize(_globalPool, _coreConfig, CurrentLevelIndex);
-            _currentLevel.gameObject.SetActive(true);
-            _currentLevel.transform.SetParent(transform.parent);
+            _currentLevel.transform.SetParent(transform);
         }
 
         public void DeleteCurrentLevel()
         {
             StartCoroutine(DeleteLevel());
+        }
+
+        public void Clear()
+        {
+            _currentLevel.Clear();
         }
 
         private IEnumerator DeleteLevel()

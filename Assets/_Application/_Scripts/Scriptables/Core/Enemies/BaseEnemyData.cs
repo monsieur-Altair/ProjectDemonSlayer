@@ -1,5 +1,4 @@
 ﻿using _Application.Scripts.Scriptables.Core.Enemies;
-using _Application.Scripts.Units;
 using UnityEngine;
 
 namespace _Application._Scripts.Scriptables.Core.Enemies

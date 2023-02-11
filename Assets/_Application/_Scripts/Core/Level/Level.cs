@@ -13,6 +13,8 @@ namespace _Application.Scripts.Managers
         [SerializeField] private List<PathCreator> _pathCreators;
         [SerializeField] private WaveManager _waveManager;
 
+        public WaveManager WaveManager => _waveManager;
+
         public void Initialize(GlobalPool globalPool, CoreConfig coreConfig, int levelIndex)
         {
             List<VertexPath> paths = _pathCreators.Select(creator => creator.path).ToList();
@@ -22,6 +24,11 @@ namespace _Application.Scripts.Managers
         public void StartWaves()
         {
             _waveManager.StartSpawn();
+        }
+
+        public void Clear()
+        {
+            _waveManager.EnemyTracker.Clear();
         }
     }
 }

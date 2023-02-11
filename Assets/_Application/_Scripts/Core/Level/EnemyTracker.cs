@@ -8,10 +8,11 @@ namespace _Application._Scripts.Core
 {
     public class EnemyTracker
     {
+        public event Action<BaseEnemy> Added = delegate {  };
+        public event Action<BaseEnemy> Removed = delegate {  };
         public event Action WaveEnded = delegate { }; 
-        public event Action<BaseEnemy> Approached = delegate { }; 
-        
-        private readonly List<BaseEnemy> _enemies = new();
+        public event Action<BaseEnemy> Approached = delegate { };
+
         private int _enemyAmountInWave;
 
         private int _aliveEnemyAmount;
@@ -19,6 +20,7 @@ namespace _Application._Scripts.Core
         
         private bool _isTrackingEnabled;
         private GlobalPool _globalPool;
+        public List<BaseEnemy> Enemies { get; } = new();
 
         public void Initialize(int enemyAmountInWave, GlobalPool globalPool)
         {
@@ -31,26 +33,27 @@ namespace _Application._Scripts.Core
 
         public void AddRange(List<BaseEnemy> enemies)
         {
-            _enemies.AddRange(enemies);
+            foreach (BaseEnemy enemy in enemies) 
+                AddEnemy(enemy);
+        }
 
-            foreach (BaseEnemy enemy in enemies)
-            {
-                enemy.Launched += OnEnemyLaunched;
-                enemy.Died += OnEnemyDied;
-                enemy.Approached += OnEnemyApproached;
-            }
+        private void AddEnemy(BaseEnemy enemy)
+        {
+            enemy.Launched += OnEnemyLaunched;
+            enemy.Died += OnEnemyDied;
+            enemy.Approached += OnEnemyApproached;
+            
+            Enemies.Add(enemy);
+
+            Added(enemy);
         }
 
         public void OnEnemyDied(BaseEnemy enemy)
         {
-            _enemies.Remove(enemy);
+            Enemies.Remove(enemy);
             _aliveEnemyAmount--;
 
-            enemy.Launched -= OnEnemyLaunched;
-            enemy.Died -= OnEnemyDied;
-            enemy.Approached -= OnEnemyApproached;
-            
-            _globalPool.Free(enemy);
+            FreeEnemy(enemy);
 
             if (_isTrackingEnabled && _aliveEnemyAmount == 0)
             {
@@ -58,6 +61,17 @@ namespace _Application._Scripts.Core
                 Debug.Log("ended");
                 WaveEnded();
             }
+        }
+
+        private void FreeEnemy(BaseEnemy enemy)
+        {
+            enemy.Launched -= OnEnemyLaunched;
+            enemy.Died -= OnEnemyDied;
+            enemy.Approached -= OnEnemyApproached;
+
+            _globalPool.Free(enemy);
+
+            Removed(enemy);
         }
 
         private void OnEnemyApproached(BaseEnemy enemy)
@@ -77,16 +91,10 @@ namespace _Application._Scripts.Core
 
         public void Clear()
         {
-            foreach (BaseEnemy enemy in _enemies)
-            {
-                enemy.Launched -= OnEnemyLaunched;
-                enemy.Died -= OnEnemyDied;
-                enemy.Approached -= OnEnemyApproached;
-                
-                _globalPool.Free(enemy);
-            }
+            foreach (BaseEnemy enemy in Enemies) 
+                FreeEnemy(enemy);
 
-            _enemies.Clear();
+            Enemies.Clear();
         }
 
         private void EnableTracking()
