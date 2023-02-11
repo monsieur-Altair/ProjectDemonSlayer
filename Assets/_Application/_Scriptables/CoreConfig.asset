@@ -22,5 +22,9 @@ MonoBehaviour:
       _value: {fileID: 11400000, guid: 7efd8b487d1031148b57bc2b3734d079, type: 2}
     - _key: 1
       _value: {fileID: 11400000, guid: 75e66d93d5364e743b865cc509ea0bc7, type: 2}
+  _towersData:
+    _pairs:
+    - _key: 0
+      _value: {fileID: 11400000, guid: 093bee9b94c1eba4db390b69c58d3f28, type: 2}
   _levelData:
   - {fileID: 11400000, guid: 832c495a65c42644283cba5abbea4016, type: 2}

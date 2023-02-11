@@ -19,3 +19,11 @@ MonoBehaviour:
       _value: {fileID: 7288729417567964204, guid: a4c79d078865c584188878e072d8871e, type: 3}
     - _key: 1
       _value: {fileID: 5816151529748882696, guid: 20a519a7cc9d3124a99c34a3106e0059, type: 3}
+  _projectilePrefabs:
+    _pairs:
+    - _key: 0
+      _value: {fileID: 2554994441686294847, guid: bcba52354d7108347978b917cecb34a3, type: 3}
+  _towersPrefabs:
+    _pairs:
+    - _key: 0
+      _value: {fileID: 4367413915336739424, guid: bdf0c0170a64246409dc4cf6528519f9, type: 3}

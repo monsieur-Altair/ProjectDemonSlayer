@@ -38,6 +38,8 @@ namespace _Application._Scripts.Core
             _globalPool = globalPool;
             _enemiesPrefabs = coreConfig.Warehouse.EnemiesPrefabs;
             _enemiesData = coreConfig.EnemiesData;
+            
+            EnemyTracker = new EnemyTracker();
         }
 
         public void StartSpawn()
@@ -45,7 +47,6 @@ namespace _Application._Scripts.Core
             _currentWaveIndex = 0;
             _approachedEnemyCount = 0;
             _isWaveEnded = false;
-            EnemyTracker = new EnemyTracker();
             EnemyTracker.WaveEnded += OnWaveEnded;
             EnemyTracker.Approached += OnEnemyApproached;
             
@@ -84,7 +85,6 @@ namespace _Application._Scripts.Core
             if (_approachedEnemyCount == _levelData.ApproachingCount)
             {
                 EnemyTracker.Clear();
-                EnemyTracker = null;
                 
                 Unsubscribe();
                 if (_spawnCoroutine != null)
@@ -93,6 +93,7 @@ namespace _Application._Scripts.Core
                     _spawnCoroutine = null;
                 }
                 
+                EnemyTracker = null;
                 LevelFailed();
             }
             else

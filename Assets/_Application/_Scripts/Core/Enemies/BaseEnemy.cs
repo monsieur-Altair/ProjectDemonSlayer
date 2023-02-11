@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using _Application._Scripts.Scriptables.Core.Enemies;
+using _Application.Scripts.Scriptables.Core.Enemies;
 using PathCreation;
 using Pool_And_Particles;
 using UnityEngine;
@@ -25,6 +27,8 @@ namespace _Application._Scripts.Core.Enemies
         public Transform BarPoint => _barPoint;
         public float CurrentHealth { get; private set; }
         public float MaxHealth => _baseEnemyData.Health;
+        public bool IsAlive { get; private set; }
+        public List<DamageInfo> DefenceInfo => _baseEnemyData.DefenseInfo;
 
         private void Awake()
         {
@@ -43,6 +47,7 @@ namespace _Application._Scripts.Core.Enemies
 
         public void Launch()
         {
+            IsAlive = true;
             _canMove = true;
             Launched(this);
         }
@@ -57,19 +62,29 @@ namespace _Application._Scripts.Core.Enemies
             _transform.rotation = _path.GetRotationAtDistance(_currentDistance) * Quaternion.Euler(0,0,90);
 
             Updated(this);
-            
-            if (_currentDistance/_path.length >= 0.5f)
+                
+            if (Mathf.Abs(_currentDistance - _path.length) < 1.0f)
             {
-                _canMove = false;
-                Died(this);
-            }
-
-            
-            if (Mathf.Abs(_currentDistance - _path.length) < float.Epsilon)
-            {
+                IsAlive = false;
                 _canMove = false;
                 Approached(this);
             }
+        }
+
+        private void Die()
+        {
+            _canMove = false;
+            IsAlive = false;
+            Died(this);
+        }
+
+        public void TakeDamage(float damageAmount)
+        {
+            CurrentHealth = Mathf.Max(0f, CurrentHealth - damageAmount);
+            Damaged(this);
+
+            if (CurrentHealth <= float.Epsilon)
+                Die();
         }
     }
 }
