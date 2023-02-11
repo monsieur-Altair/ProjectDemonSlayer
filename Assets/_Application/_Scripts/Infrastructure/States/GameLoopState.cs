@@ -1,5 +1,6 @@
 ﻿using _Application.Scripts.Infrastructure.Services.Factory;
 using _Application.Scripts.Managers;
+using UnityEngine;
 
 namespace _Application.Scripts.Infrastructure.States
 {
@@ -21,6 +22,7 @@ namespace _Application.Scripts.Infrastructure.States
 
         public void Enter()
         {
+            Debug.Log("entered");
             _gameLoopManager.StartGame();
         }
     }

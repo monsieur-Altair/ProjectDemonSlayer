@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using _Application.Scripts.Control;
 using _Application.Scripts.Infrastructure.Services;
 using _Application.Scripts.Infrastructure.Services.Progress;
@@ -62,25 +61,19 @@ namespace _Application.Scripts.Managers
 
         public void WriteProgress(PlayerProgress playerProgress)
         {
-            playerProgress.LevelInfo.lastCompletedLevel = _lastCompletedLevel;
+            playerProgress.LevelInfo.SetLevel(_lastCompletedLevel);
         }
 
         public void ReadProgress(PlayerProgress playerProgress)
         {
-            _lastCompletedLevel = playerProgress.LevelInfo.lastCompletedLevel;
-            _levelsManager.CurrentLevelNumber = _lastCompletedLevel + 1;
+            _lastCompletedLevel = playerProgress.LevelInfo.LastCompletedLevel;
+            _levelsManager.CurrentLevelIndex = _lastCompletedLevel + 1;
         }
 
         public void Clear()
         {
             _levelsManager.DeleteCurrentLevel();
         }
-
-        private void PrepareLevel()
-        {
-            
-        }
-
 
         private void UpdateState()
         {
@@ -92,7 +85,7 @@ namespace _Application.Scripts.Managers
                     
                     UISystem.ShowWindow<GameplayWindow>();
 
-                    int currentLevelNumber = _levelsManager.CurrentLevelNumber;
+                    int currentLevelNumber = _levelsManager.CurrentLevelIndex;
 
                     if (currentLevelNumber <= MaxTutorialCount && _useTutorial) 
                         UISystem.ShowTutorialWindow(currentLevelNumber);
@@ -104,7 +97,7 @@ namespace _Application.Scripts.Managers
                     _userControl.Disable();
                     _counterSpawner.ClearLists();
 
-                    int currentLevelNumber = _levelsManager.CurrentLevelNumber;
+                    int currentLevelNumber = _levelsManager.CurrentLevelIndex;
                     if (currentLevelNumber <= MaxTutorialCount && _useTutorial) 
                         UISystem.CloseTutorialWindow(currentLevelNumber);
                     
@@ -135,7 +128,7 @@ namespace _Application.Scripts.Managers
             _isWin = isWin;
             
             if (_isWin) 
-                _lastCompletedLevel = _levelsManager.CurrentLevelNumber;
+                _lastCompletedLevel = _levelsManager.CurrentLevelIndex;
 
             AddReward();
             
@@ -145,17 +138,17 @@ namespace _Application.Scripts.Managers
 
         private void AddReward()
         {
-            int money = AllServices.Get<ProgressService>().PlayerProgress.Money;
-            int rewardMoney = _isWin ? _scriptableService.RewardList.GetReward(_lastCompletedLevel) : 0;
-            
-            money += rewardMoney;
-            AllServices.Get<ProgressService>().PlayerProgress.Money = money;
+            //int money = AllServices.Get<ProgressService>().PlayerProgress.Money;
+            //int rewardMoney = _isWin ? _scriptableService.RewardList.GetReward(_lastCompletedLevel) : 0;
+            //
+            //money += rewardMoney;
+            //AllServices.Get<ProgressService>().PlayerProgress.Money = money;
         }
 
         private IEnumerator StartGameplay()
         {
             yield return _coroutineRunner.StartCoroutine(_levelsManager.CreateLevel());
-            PrepareLevel();
+            _levelsManager.StartLevel();
             
             //_outlookService.PrepareLevel(_allBuildings);
 

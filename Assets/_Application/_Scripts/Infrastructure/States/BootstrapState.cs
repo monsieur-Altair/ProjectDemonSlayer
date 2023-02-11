@@ -48,7 +48,7 @@ namespace _Application.Scripts.Infrastructure.States
             MonoBehaviourServices servicePrefabs = _coreConfig.MonoBehaviourServices;
 
             _gameFactory.CreateAndRegisterMonoBeh(servicePrefabs.AudioManager);
-            _audioManager = servicePrefabs.AudioManager;
+            _audioManager = AllServices.Get<AudioManager>();
             _gameFactory.CreateAndRegisterMonoBeh(servicePrefabs.CoroutineRunner);
             _gameFactory.CreateAndRegisterMonoBeh(servicePrefabs.LevelManager);
             _gameFactory.CreateAndRegisterMonoBeh(servicePrefabs.GlobalCamera);

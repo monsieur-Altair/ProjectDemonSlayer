@@ -24,7 +24,6 @@ namespace _Application.Scripts.UI.Windows
         protected override void OnOpened()
         {
             base.OnOpened();
-            
             _toStatsButton.onClick.AddListener(OpenStats);
             _toUpgradeButton.onClick.AddListener(OpenUpgrades);
             _startGameButton.onClick.AddListener(StartGame);

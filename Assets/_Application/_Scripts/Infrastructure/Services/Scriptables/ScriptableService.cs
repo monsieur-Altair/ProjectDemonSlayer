@@ -7,7 +7,6 @@ namespace _Application.Scripts.Infrastructure.Services.Scriptables
     {
         private readonly CoreConfig _coreConfig;
 
-        public RewardList RewardList { get; private set; }
         
         
         public ScriptableService(CoreConfig coreConfig)
@@ -17,7 +16,6 @@ namespace _Application.Scripts.Infrastructure.Services.Scriptables
 
         public void LoadAll()
         {
-            RewardList = _coreConfig.RewardList;
         }
         
     }

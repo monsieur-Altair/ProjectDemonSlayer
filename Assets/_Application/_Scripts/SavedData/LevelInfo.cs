@@ -1,13 +1,19 @@
 ﻿using System;
+using UnityEngine;
 
 namespace _Application.Scripts.SavedData
 {
     [Serializable]
     public class LevelInfo
     {
-        public int lastCompletedLevel;
+        [SerializeField] private int _lastCompletedLevel;
+
+        public int LastCompletedLevel => _lastCompletedLevel;
 
         public LevelInfo(int levelNumber) =>
-            lastCompletedLevel = levelNumber;
+            SetLevel(levelNumber);
+
+        public void SetLevel(int level) => 
+            _lastCompletedLevel = level;
     }
 }
