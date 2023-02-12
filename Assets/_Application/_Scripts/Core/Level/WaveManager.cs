@@ -63,12 +63,10 @@ namespace _Application._Scripts.Core
                 _isWaveEnded = false;
                 EnemyTracker.Clear();
                 _currentWaveIndex++;
-                Debug.Log($"wave ended");
             }
 
             Unsubscribe();
             EnemyTracker = null;
-            Debug.Log("passed");
             LevelPassed();
         }
 
@@ -102,7 +100,6 @@ namespace _Application._Scripts.Core
 
         private IEnumerator SpawnWave()
         {
-            Debug.Log(_currentWaveIndex);
             WaveData currentWaveData = _levelData.WavesData[_currentWaveIndex];
             int enemyAmountInWave = currentWaveData.MiniWavesData.Sum(miniWaveData => miniWaveData.EnemyCount);
             EnemyTracker.Initialize(enemyAmountInWave, _globalPool);
@@ -137,7 +134,6 @@ namespace _Application._Scripts.Core
         {
             BaseEnemy prefab = _enemiesPrefabs[enemyType];
             List<BaseEnemy> enemies = new(capacity: enemyCount);
-            Debug.Log($"{enemyType}, {enemyCount}, {Time.frameCount}");
             for (int i = 0; i < enemyCount; i++)
             {
                 BaseEnemy enemy = _globalPool.Get(prefab, Vector3.forward * 100f);

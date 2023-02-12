@@ -26,5 +26,9 @@ MonoBehaviour:
     _pairs:
     - _key: 0
       _value: {fileID: 11400000, guid: 093bee9b94c1eba4db390b69c58d3f28, type: 2}
+    - _key: 3
+      _value: {fileID: 11400000, guid: 093bee9b94c1eba4db390b69c58d3f28, type: 2}
+    - _key: 2
+      _value: {fileID: 11400000, guid: 093bee9b94c1eba4db390b69c58d3f28, type: 2}
   _levelData:
   - {fileID: 11400000, guid: 832c495a65c42644283cba5abbea4016, type: 2}

@@ -22,7 +22,6 @@ namespace _Application.Scripts.Infrastructure.States
 
         public void Enter()
         {
-            Debug.Log("entered");
             _gameLoopManager.StartGame();
         }
     }

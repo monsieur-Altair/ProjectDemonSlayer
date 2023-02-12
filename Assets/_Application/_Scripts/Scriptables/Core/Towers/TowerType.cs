@@ -4,7 +4,7 @@
     {
         ArchersTower, 
         SoldierHouse,
-        MagicCrystal,
-        Cannon
+        MagicTower,
+        CannonTower
     }
 }

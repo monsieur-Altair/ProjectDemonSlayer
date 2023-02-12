@@ -10,21 +10,21 @@ namespace _Application._Scripts.Core.Towers
 {
     public class BaseTower : MonoBehaviour
     {
-        [SerializeField] private Transform _spawnPoint;
-        [SerializeField] private TowerType _towerType;
+        [SerializeField] protected Transform _spawnPoint;
+        [SerializeField] protected TowerType _towerType;
 
         [SerializeField] private float _radius;
-        
-        private BaseTowerData _baseTowerData;
+
+        protected ProjectileTracker _projectileTracker;
+        protected BaseTowerData _baseTowerData;
+        protected GlobalPool _globalPool;
+        protected Warehouse _warehouse;
+
         private bool _isEnabled;
-        private EnemyTracker _enemyTracker;
+        protected EnemyTracker _enemyTracker;
         private float _elapsedTime;
-        private GlobalPool _globalPool;
-        private Warehouse _warehouse;
 
 
-        private ProjectileTracker _projectileTracker;
-        
         protected virtual bool CanAttack => true;
 
 #if UNITY_EDITOR
@@ -47,7 +47,7 @@ namespace _Application._Scripts.Core.Towers
             new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)).normalized; 
 #endif
         
-        public void Initialize(CoreConfig coreConfig, EnemyTracker enemyTracker, GlobalPool globalPool)
+        public virtual void Initialize(CoreConfig coreConfig, EnemyTracker enemyTracker, GlobalPool globalPool)
         {
             _warehouse = coreConfig.Warehouse;
             _globalPool = globalPool;
@@ -79,29 +79,21 @@ namespace _Application._Scripts.Core.Towers
                     Attack(target);
                 }
             }
-                
         }
 
-        private void Attack(BaseEnemy target)
+        protected virtual void Attack(BaseEnemy target)
         {
-            Vector3 position = _spawnPoint.position;
-            BaseProjectile projectilePrefab = _warehouse.ProjectilePrefabs[_towerType];
-            Quaternion rot = Quaternion.LookRotation(target.transform.position - position);
             
-            BaseProjectile baseProjectile = _globalPool.Get(projectilePrefab, position, rot);
-            baseProjectile.Initialize(_baseTowerData.AttackInfo, 7f, target);
-            
-            _projectileTracker.Add(target, baseProjectile);
         }
 
-        private BaseEnemy FindClosestEnemy()
+        protected BaseEnemy FindClosestEnemy()
         {
             BaseEnemy target = null;
             float minDistance = 1000000f; 
             
             foreach (BaseEnemy baseEnemy in _enemyTracker.Enemies)
             {
-                float distance = Vector2.Distance(baseEnemy.transform.position.ToXZ(), transform.position.ToXZ());
+                float distance = Vector2.Distance(baseEnemy.HitPoint.position.ToXZ(), transform.position.ToXZ());
                 if (distance < minDistance && distance < _baseTowerData.Radius)
                 {
                     minDistance = distance;

@@ -20,9 +20,6 @@ MonoBehaviour:
     - _enemyType: 0
       _enemyCount: 1
       _miniWaveSpawnDelay: 0
-    - _enemyType: 0
-      _enemyCount: 2
-      _miniWaveSpawnDelay: 1
     _startDelay: 1
   - _miniWavesData:
     - _enemyType: 0

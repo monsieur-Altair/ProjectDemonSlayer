@@ -1,1 +1,7 @@
-﻿
+﻿-1. cannon logic (projectile flight logic)
+0. magic tower logic(slowing down)
+1. battle logic (warrior house, enemy logic too)
+2. hero logic
+3. animations
+4. UI
+5. meta ()

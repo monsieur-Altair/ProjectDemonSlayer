@@ -35,13 +35,13 @@ namespace _Application.Scripts.Managers
 
         public void Clear()
         {
-            _waveManager.EnemyTracker.Clear();
-
             foreach (BaseTower tower in _towers)
             {
                 tower.Disable();
                 tower.Clear();
             }
+
+            _waveManager.EnemyTracker.Clear();
         }
     }
 }
