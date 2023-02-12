@@ -49,7 +49,7 @@ namespace _Application._Scripts.Core.Towers
 
         protected virtual void UpdatePosition()
         {
-            Vector3 endPos = Target.HitPoint.position;
+            Vector3 endPos = Target.FindPoint.position;
             Vector3 newPos = GetPosition(_transform.position, endPos, _speed * Time.deltaTime);
             _transform.position = newPos;
             _transform.rotation = Quaternion.LookRotation(endPos - newPos);
@@ -60,27 +60,13 @@ namespace _Application._Scripts.Core.Towers
 
         protected virtual void DamageTarget()
         {
-            float damageAmount = CalculateDamage(_attackInfo, Target.DefenceInfo);
+            float damageAmount = CoreMethods.CalculateDamage(_attackInfo, Target.DefenceInfo);
             Target.TakeDamage(damageAmount);
             OnDamaged();
         }
 
         protected void OnDamaged() => 
             Damaged(this);
-
-        protected static float CalculateDamage(List<DamageInfo> attackInfos, List<DamageInfo> defenceInfos)
-        {
-            float result = 0.0f;
-
-            foreach (DamageInfo attackInfo in attackInfos)
-            {
-                DamageInfo defenceInfo = defenceInfos.FirstOrDefault(defenceInfo => defenceInfo.DamageType == attackInfo.DamageType);
-                float defenceValue = defenceInfo?.Value ?? 0.0f;
-                result += attackInfo.Value * (1 - defenceValue);
-            }
-
-            return result;
-        }
 
         protected static Vector3 GetPosition(Vector3 curr, Vector3 end, float maxDistanceDelta) => 
             Vector3.MoveTowards(curr, end, maxDistanceDelta);

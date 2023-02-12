@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
+using _Application._Scripts.Core.Towers;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace _Application.Scripts.Misc
 {
-    public static class Extensions
+    public static class BaseExtensions
     {
         public static T ConvertFromJson<T>(this string json) => 
             JsonUtility.FromJson<T>(json);

@@ -21,7 +21,7 @@ namespace _Application._Scripts.Core.Towers
             base.Attack(target);
             
             Vector3 position = _spawnPoint.position;
-            Quaternion rot = Quaternion.LookRotation(target.HitPoint.position - position);
+            Quaternion rot = Quaternion.LookRotation(target.FindPoint.position - position);
             
             BaseProjectile baseProjectile = _globalPool.Get(_projectilePrefab, position, rot);
             baseProjectile.Initialize(_baseTowerData.AttackInfo, 7f, target);

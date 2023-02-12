@@ -21,7 +21,7 @@ namespace _Application._Scripts.Core.Towers
             base.Attack(target);
             
             Vector3 position = _spawnPoint.position;
-            Quaternion rot = Quaternion.LookRotation(target.HitPoint.position - position);
+            Quaternion rot = Quaternion.LookRotation(target.FindPoint.position - position);
             
             MagicProjectile projectile = _globalPool.Get(_projectilePrefab, position, rot);
             projectile.Initialize(_baseTowerData.AttackInfo, 7f, target, 0.4f, 0.6f);

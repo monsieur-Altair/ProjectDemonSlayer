@@ -52,7 +52,7 @@ namespace _Application._Scripts.Core.Towers
 
             foreach (BaseEnemy enemy in enemiesInRange)
             {
-                float damageAmount = CalculateDamage(attackInfo, enemy.DefenceInfo);
+                float damageAmount = CoreMethods.CalculateDamage(attackInfo, enemy.DefenceInfo);
                 enemy.TakeDamage(damageAmount);    
             }
             
@@ -68,7 +68,7 @@ namespace _Application._Scripts.Core.Towers
             
             foreach (BaseEnemy baseEnemy in _enemyTracker.Enemies)
             {
-                float distance = Vector2.Distance(baseEnemy.HitPoint.position.ToXZ(), transform.position.ToXZ());
+                float distance = Vector2.Distance(baseEnemy.FindPoint.position.ToXZ(), transform.position.ToXZ());
                 if (distance < _explosionRadius) 
                     result.Add(baseEnemy);
             }

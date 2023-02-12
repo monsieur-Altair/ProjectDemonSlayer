@@ -1,5 +1,4 @@
-﻿using System;
-using _Application._Scripts.Core.Enemies;
+﻿using _Application._Scripts.Core.Enemies;
 using _Application._Scripts.Scriptables.Core.Towers;
 using _Application.Scripts.Managers;
 using _Application.Scripts.Misc;
@@ -20,9 +19,9 @@ namespace _Application._Scripts.Core.Towers
         protected GlobalPool _globalPool;
         protected Warehouse _warehouse;
 
-        private bool _isEnabled;
+        protected bool _isEnabled;
         protected EnemyTracker _enemyTracker;
-        private float _elapsedTime;
+        protected float _elapsedTime;
 
 
         protected virtual bool CanAttack => true;
@@ -63,7 +62,7 @@ namespace _Application._Scripts.Core.Towers
             _projectileTracker.Clear();
         }
         
-        private void Update()
+        protected virtual void Update()
         {
             if (_isEnabled == false)
                 return;
@@ -72,7 +71,7 @@ namespace _Application._Scripts.Core.Towers
 
             if (_elapsedTime >= _baseTowerData.AttackCooldown && CanAttack)
             {
-                BaseEnemy target = FindClosestEnemy();
+                BaseEnemy target = CoreMethods.FindClosest(_enemyTracker.Enemies, _baseTowerData.Radius, transform);
                 if (target != null)
                 {
                     _elapsedTime = 0f;
@@ -84,24 +83,6 @@ namespace _Application._Scripts.Core.Towers
         protected virtual void Attack(BaseEnemy target)
         {
             
-        }
-
-        protected BaseEnemy FindClosestEnemy()
-        {
-            BaseEnemy target = null;
-            float minDistance = 1000000f; 
-            
-            foreach (BaseEnemy baseEnemy in _enemyTracker.Enemies)
-            {
-                float distance = Vector2.Distance(baseEnemy.HitPoint.position.ToXZ(), transform.position.ToXZ());
-                if (distance < minDistance && distance < _baseTowerData.Radius)
-                {
-                    minDistance = distance;
-                    target = baseEnemy;
-                }
-            }
-
-            return target;
         }
 
         public void Enable()

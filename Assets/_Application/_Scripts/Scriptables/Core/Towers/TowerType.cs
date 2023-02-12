@@ -3,7 +3,7 @@
     public enum TowerType
     {
         ArchersTower, 
-        SoldierHouse,
+        WarriorTower,
         MagicTower,
         CannonTower
     }
