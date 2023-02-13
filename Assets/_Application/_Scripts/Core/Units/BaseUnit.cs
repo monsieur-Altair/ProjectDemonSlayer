@@ -21,7 +21,7 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
 
         protected UnitStateMachine _stateMachine;
 
-        public BaseUnitData BaseUnitData { get; private set; }
+        public BaseUnitData BaseUnitData { get; protected set; }
         public BaseEnemy Target { get; private set; }
         public float CloseAttackRadius => _closeAttackRadius;
         public List<DamageInfo> DefenceInfo => BaseUnitData.DefenseInfo;
@@ -43,15 +43,26 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
         private void Update()
         {
             _stateMachine.Update();
+            OnUpdated();
             Updated(this);
         }
 
-        public void Initialize(CoreConfig coreConfig)
+        protected virtual void OnUpdated()
         {
-            BaseUnitData = coreConfig.WarriorData;
+            
+        }
+
+        public virtual void Initialize(CoreConfig coreConfig)
+        {
+            FetchData(coreConfig);
             CreateStateMachine();
             RestoreHp();
             OnAppeared();
+        }
+
+        protected virtual void FetchData(CoreConfig coreConfig)
+        {
+            BaseUnitData = coreConfig.WarriorData;
         }
 
         protected virtual void CreateStateMachine()
@@ -83,7 +94,7 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
 
         public void StopTarget()
         {
-            if (Target != null)
+            if (Target != null && Target.CurrentEnemyState == EnemyState.Running)
                 Target.Stop();
         }
 

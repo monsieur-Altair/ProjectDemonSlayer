@@ -12,7 +12,6 @@ namespace _Application.Scripts.Managers
         [SerializeField] private Level[] _levels;
 
         private GlobalPool _globalPool;
-        private ProgressService _progressService;
         private GameFactory _gameFactory;
         private CoreConfig _coreConfig;
 
@@ -26,7 +25,6 @@ namespace _Application.Scripts.Managers
 
             _coreConfig = AllServices.Get<CoreConfig>();
             _globalPool = AllServices.Get<GlobalPool>();
-            _progressService = AllServices.Get<ProgressService>();
             _gameFactory = AllServices.Get<GameFactory>();
         }
 

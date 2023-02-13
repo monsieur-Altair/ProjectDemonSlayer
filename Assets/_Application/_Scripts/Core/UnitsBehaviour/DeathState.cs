@@ -13,8 +13,6 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
 
         public override void Enter()
         {
-            Debug.Log($"enter death");
-
             base.Enter();
 
             Holder.SetIsAlive(false);
@@ -33,8 +31,6 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
 
         public override void Exit()
         {
-            Debug.Log($"exit death");
-
             base.Exit();
             Holder.RestoreHp();
             Holder.OnAppeared();

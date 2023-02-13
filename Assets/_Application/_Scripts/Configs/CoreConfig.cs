@@ -20,6 +20,7 @@ namespace _Application.Scripts.Managers
         [Space, SerializeField] private MyDictionary<TowerType, BaseTowerData> _towersData;
         [Space, SerializeField, NonReorderable] private List<LevelData> _levelData;
         [Space, SerializeField] private BaseUnitData _warriorData;
+        [Space, SerializeField] private BaseUnitData _heroData;
 
         public MyDictionary<TowerType, BaseTowerData> TowersData => _towersData;
         public List<LevelData> LevelData => _levelData;
@@ -29,5 +30,6 @@ namespace _Application.Scripts.Managers
         public PlayerConfig PlayerConfig => _playerConfig;
         public Warehouse Warehouse => _warehouse;
         public BaseUnitData WarriorData => _warriorData;
+        public BaseUnitData HeroData => _heroData;
     }
 }

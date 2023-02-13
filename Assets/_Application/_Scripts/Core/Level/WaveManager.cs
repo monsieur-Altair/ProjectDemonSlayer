@@ -67,6 +67,7 @@ namespace _Application._Scripts.Core
 
             Unsubscribe();
             EnemyTracker = null;
+            Debug.Log("passed");
             LevelPassed();
         }
 
@@ -92,6 +93,7 @@ namespace _Application._Scripts.Core
                 }
                 
                 EnemyTracker = null;
+                Debug.Log("failed");
                 LevelFailed();
             }
             else

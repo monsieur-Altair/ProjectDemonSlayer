@@ -9,6 +9,7 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
         private LevelManager _levelManager;
         private float _motionSpeed;
         private float _closeAttackRadius;
+        private float _stopRange;
 
         public MoveToTargetState(UnitStateMachine unitStateMachine) : base(unitStateMachine)
         {
@@ -16,8 +17,6 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
         
         public override void Enter()
         {
-            Debug.Log($"enter move to");
-
             base.Enter();
 
             Holder.Target.Died += OnTargetDied;
@@ -25,18 +24,16 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
 
             _motionSpeed = Holder.BaseUnitData.MotionsSpeed;
             _closeAttackRadius = Holder.CloseAttackRadius;
+            _stopRange = 2f * _closeAttackRadius;
         }
 
         public override void Exit()
         {
-            Debug.Log($"exit move to");
-
             base.Exit();
 
             if (Holder.Target != null)
                 Holder.Target.Died -= OnTargetDied;
             
-            Holder.StopTarget();
             Holder.SetBusy(false);
         }
 
@@ -49,11 +46,6 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
 
         public override void Update()
         {
-            UpdatePosition();
-        }
-
-        private void UpdatePosition()
-        {
             Transform transform = Holder.transform;
             Vector3 current = transform.position;
             Vector3 target = Holder.Target.Transform.position;
@@ -61,8 +53,12 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
             transform.position = newPos;
             transform.rotation = Quaternion.LookRotation(target - newPos);
 
-            if (Vector3.Distance(transform.position, target) < _closeAttackRadius) 
+            float distance = Vector3.Distance(newPos, target);
+            
+            if (distance < _closeAttackRadius) 
                 Holder.StartAttacking(Holder.Target);
+            else if(distance < _stopRange) 
+                Holder.StopTarget();
         }
     }
 }

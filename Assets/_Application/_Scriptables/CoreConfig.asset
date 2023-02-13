@@ -35,3 +35,4 @@ MonoBehaviour:
   _levelData:
   - {fileID: 11400000, guid: 832c495a65c42644283cba5abbea4016, type: 2}
   _warriorData: {fileID: 11400000, guid: f16132c44e0a55a4ebd20515fd94beea, type: 2}
+  _heroData: {fileID: 11400000, guid: a07bf4eb60ea58c46b3e1b85f7c9c3e8, type: 2}

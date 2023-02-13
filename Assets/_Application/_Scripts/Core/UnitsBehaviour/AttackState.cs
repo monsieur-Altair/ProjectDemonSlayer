@@ -20,7 +20,6 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
         public override void Enter()
         {
             base.Enter();
-            Debug.Log($"enter attack");
 
             _holderData = Holder.BaseUnitData;
             _elapsedTime = _holderData.AttackCooldown + float.Epsilon;
@@ -32,8 +31,6 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
 
         public override void Exit()
         {
-            Debug.Log($"exit attack");
-
             base.Exit();
             Holder.SetBusy(false);
             if (Holder.Target != null)

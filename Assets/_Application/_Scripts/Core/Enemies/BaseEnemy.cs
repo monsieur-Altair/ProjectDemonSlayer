@@ -37,8 +37,8 @@ namespace _Application._Scripts.Core.Enemies
         public Transform FindPoint => _hitPoint;
         public float MotionSpeed => _baseEnemyData.MotionsSpeed;
         public EnemyBehaviourType BehaviourType => _baseEnemyData.BehaviourType;
+        public EnemyState CurrentEnemyState { get; private set; } = EnemyState.None;
 
-        private EnemyState _currentEnemyState = EnemyState.None;
         private IDamagable _target;
 
         private readonly List<IDamagable> _targets = new();
@@ -61,13 +61,13 @@ namespace _Application._Scripts.Core.Enemies
 
         public void Launch()
         {
-            _currentEnemyState = EnemyState.Running;
+            CurrentEnemyState = EnemyState.Running;
             Launched(this);
         }
 
         public void Stop()
         {
-            _currentEnemyState = EnemyState.Waiting;
+            CurrentEnemyState = EnemyState.Waiting;
         }
 
         public void SlowDown(float newSpeed, float slowDur)
@@ -79,7 +79,7 @@ namespace _Application._Scripts.Core.Enemies
 
         public Vector3 GetFuturePos(float elapsedTime)
         {
-            float speed = _currentEnemyState == EnemyState.Running ? _speed : 0f;
+            float speed = CurrentEnemyState == EnemyState.Running ? _speed : 0f;
             float futureDistance = _currentDistance + elapsedTime * speed;
             float t = Mathf.Clamp(futureDistance / _path.length, 0, 0.995f);
             return _path.GetPointAtTime(t);
@@ -101,10 +101,9 @@ namespace _Application._Scripts.Core.Enemies
             else
                 _targets.Add(target);
 
-            //todo: Subscribe for death and handle many targets   
             target.Died += OnTargetDied;
             
-            _currentEnemyState = EnemyState.Attacking;
+            CurrentEnemyState = EnemyState.Attacking;
             _elapsedTime = _baseEnemyData.AttackCooldown + float.Epsilon;
         }
 
@@ -117,7 +116,7 @@ namespace _Application._Scripts.Core.Enemies
                 if (_targets.Count == 0)
                 {
                     _target = null;
-                    _currentEnemyState = EnemyState.Running;
+                    CurrentEnemyState = EnemyState.Running;
                 }
                 else
                 {
@@ -133,7 +132,7 @@ namespace _Application._Scripts.Core.Enemies
 
         private void Update()
         {
-            switch (_currentEnemyState)
+            switch (CurrentEnemyState)
             {
                 case EnemyState.None:
                     break;
@@ -173,7 +172,7 @@ namespace _Application._Scripts.Core.Enemies
 
             if (Mathf.Abs(_currentDistance - _path.length) < 1.0f)
             {
-                _currentEnemyState = EnemyState.None;
+                CurrentEnemyState = EnemyState.None;
                 Approached(this);
             }
         }
@@ -185,7 +184,7 @@ namespace _Application._Scripts.Core.Enemies
 
             _target = null;
             _targets.Clear();
-            _currentEnemyState = EnemyState.None;
+            CurrentEnemyState = EnemyState.None;
             Died(this);
         }
     }

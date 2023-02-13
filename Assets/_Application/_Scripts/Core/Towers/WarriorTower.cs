@@ -13,7 +13,7 @@ namespace _Application._Scripts.Core.Towers
 {
     public class WarriorTower : BaseTower
     {
-        public event Action<IDamagable> Added = delegate {  };
+        public event Action<IDamagable> WarriorAdded = delegate {  };
         
         [SerializeField] private int _warriorAmount = 3;
         [SerializeField] private Transform _unitSpawnPoint;
@@ -69,7 +69,7 @@ namespace _Application._Scripts.Core.Towers
             Vector3 pos = new(basePos.x + offset.x, basePos.y, basePos.z + offset.y);
             baseUnit.Transform.position = pos;
 
-            Added(baseUnit);
+            WarriorAdded(baseUnit);
         }
 
         protected override void Update()

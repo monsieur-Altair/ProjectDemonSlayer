@@ -21,6 +21,7 @@ namespace _Application.Scripts.Control
             if(!_isActive)
                 return;
             
+            
         }
 
         public void Disable() => 

@@ -9,7 +9,7 @@ namespace _Application.Scripts.Infrastructure.Services
         [SerializeField] private CameraResolution _cameraResolution;
         [SerializeField] private Camera _camera;
 
-        public Camera MainCamera => _camera;
+        public Camera WorldCamera => _camera;
 
         public override void Init()
         {

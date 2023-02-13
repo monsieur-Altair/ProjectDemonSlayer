@@ -18,8 +18,6 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
 
         public override void Enter()
         {
-            Debug.Log($"enter idle");
-
             base.Enter();
 
             Holder.SetIsAlive(true);
@@ -30,8 +28,6 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
 
         public override void Exit()
         {
-            Debug.Log($"exit idle");
-
             base.Exit();
             
             Holder.SetBusy(false);

@@ -22,6 +22,7 @@ namespace _Application.Scripts.UI
         private readonly Dictionary<IDamagable, UnitBar> _unitsBars = new();
         private EnemyTracker _enemyTracker;
         private List<WarriorTower> _warriorTowers;
+        private LevelManager _levelManager;
 
         public BarSpawner(CoreConfig coreConfig, GlobalPool pool, GlobalCamera globalCamera)
         {
@@ -34,18 +35,22 @@ namespace _Application.Scripts.UI
         public void Initialize(LevelManager levelManager)
         {
             _barParent = UISystem.GetWindow<GameplayWindow>().BarParent;
-            
-            _enemyTracker = levelManager.CurrentLevel.WaveManager.EnemyTracker;
-            _warriorTowers = levelManager.CurrentLevel.GetTowers<WarriorTower>(TowerType.WarriorTower);
+
+            _levelManager = levelManager;
+            _enemyTracker = _levelManager.CurrentLevel.WaveManager.EnemyTracker;
+            _warriorTowers = _levelManager.CurrentLevel.GetTowers<WarriorTower>(TowerType.WarriorTower);
 
             foreach (WarriorTower warriorTower in _warriorTowers)
             {
-                warriorTower.Added += AddBar;
+                warriorTower.WarriorAdded += AddBar;
                 foreach (IDamagable damagable in warriorTower.Damagables) 
                     AddBar(damagable);
             }
+
+            _levelManager.CurrentLevel.HeroAdded += AddBar;
+            AddBar(_levelManager.CurrentLevel.BaseHero);
             
-            _enemyTracker.Added += OnEnemyAdded;
+            _enemyTracker.EnemyAdded += AddBar;
         }
 
         public void Clear()
@@ -54,8 +59,9 @@ namespace _Application.Scripts.UI
                 _pool.Free(counter);
             
             foreach (WarriorTower warriorTower in _warriorTowers) 
-                warriorTower.Added -= AddBar;
-            _enemyTracker.Added -= OnEnemyAdded;
+                warriorTower.WarriorAdded -= AddBar;
+            _enemyTracker.EnemyAdded -= AddBar;
+            _levelManager.CurrentLevel.HeroAdded -= AddBar;
 
             _unitsBars.Clear();
             _enemyTracker = null;
@@ -72,11 +78,6 @@ namespace _Application.Scripts.UI
             damagable.Died -= OnDied;
         }
 
-        private void OnEnemyAdded(BaseEnemy enemy)
-        {
-            AddBar(enemy);
-        }
-
         private void AddBar(IDamagable damagable)
         {
             UnitBar unitBar = _pool.Get(_barPrefab, parent: _barParent);
@@ -91,7 +92,6 @@ namespace _Application.Scripts.UI
 
         private void UpdateBar(IDamagable damagable)
         {
-            Debug.Log("updated " + damagable.Transform.name);
             UnitBar unitBar = _unitsBars[damagable];
             unitBar.gameObject.SetActive(true);
             float percent = Mathf.Clamp01(damagable.CurrentHealth / damagable.MaxHealth); 
@@ -100,7 +100,7 @@ namespace _Application.Scripts.UI
 
         private void UpdateCounterPos(IDamagable damagable)
         {
-            Vector2 counterPos = UISystem.GetUIPosition(_globalCamera.MainCamera, damagable.BarPoint.position);
+            Vector2 counterPos = UISystem.GetUIPosition(_globalCamera.WorldCamera, damagable.BarPoint.position);
             _unitsBars[damagable].SetAnchorPos(counterPos);
         }
     }

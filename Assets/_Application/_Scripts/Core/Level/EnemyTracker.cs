@@ -8,7 +8,7 @@ namespace _Application._Scripts.Core
 {
     public class EnemyTracker
     {
-        public event Action<BaseEnemy> Added = delegate {  };
+        public event Action<IDamagable> EnemyAdded = delegate {  };
         public event Action WaveEnded = delegate { }; 
         public event Action<BaseEnemy> Approached = delegate { };
 
@@ -44,7 +44,7 @@ namespace _Application._Scripts.Core
             
             Enemies.Add(enemy);
 
-            Added(enemy);
+            EnemyAdded(enemy);
         }
 
         public void OnEnemyDied(IDamagable damagable)
