@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using _Application._Scripts.Core;
 using _Application.Scripts.Infrastructure.Services;
 using _Application.Scripts.Infrastructure.Services.Factory;
 using _Application.Scripts.Infrastructure.Services.Progress;
@@ -12,14 +11,14 @@ namespace _Application.Scripts.Managers
     {
         [SerializeField] private Level[] _levels;
 
-        private Level _currentLevel;
         private GlobalPool _globalPool;
         private ProgressService _progressService;
         private GameFactory _gameFactory;
         private CoreConfig _coreConfig;
 
-        public int CurrentLevelIndex { get;  set; }
-        public EnemyTracker EnemyTracker => _currentLevel.WaveManager.EnemyTracker;
+        public Level CurrentLevel { get; private set; }
+        public int CurrentLevelIndex { get; set; }
+
 
         public override void Init()
         {
@@ -42,11 +41,6 @@ namespace _Application.Scripts.Managers
             DeleteCurrentLevel();
         }
 
-        public void StartLevel()
-        {
-            _currentLevel.StartWaves();
-        }
-
         public IEnumerator CreateLevel()
         {
             if (CurrentLevelIndex >= _levels.Length)
@@ -54,9 +48,9 @@ namespace _Application.Scripts.Managers
 
             yield return StartCoroutine(DeleteLevel());
 
-            _currentLevel = _gameFactory.CreateLevel(_levels[CurrentLevelIndex]);
-            _currentLevel.Initialize(_globalPool, _coreConfig, CurrentLevelIndex);
-            _currentLevel.transform.SetParent(transform);
+            CurrentLevel = _gameFactory.CreateLevel(_levels[CurrentLevelIndex]);
+            CurrentLevel.Initialize(_globalPool, _coreConfig, CurrentLevelIndex);
+            CurrentLevel.transform.SetParent(transform);
         }
 
         public void DeleteCurrentLevel()
@@ -64,19 +58,14 @@ namespace _Application.Scripts.Managers
             StartCoroutine(DeleteLevel());
         }
 
-        public void Clear()
-        {
-            _currentLevel.Clear();
-        }
-
         private IEnumerator DeleteLevel()
         {
-            if (_currentLevel != null)
+            if (CurrentLevel != null)
             {
-                _currentLevel.gameObject.SetActive(false);
-                Destroy(_currentLevel.gameObject);
+                CurrentLevel.gameObject.SetActive(false);
+                Destroy(CurrentLevel.gameObject);
             }
-            
+
             yield break;
         }
     }

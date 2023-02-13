@@ -9,7 +9,6 @@ namespace _Application._Scripts.Core
     public class EnemyTracker
     {
         public event Action<BaseEnemy> Added = delegate {  };
-        public event Action<BaseEnemy> Removed = delegate {  };
         public event Action WaveEnded = delegate { }; 
         public event Action<BaseEnemy> Approached = delegate { };
 
@@ -48,12 +47,14 @@ namespace _Application._Scripts.Core
             Added(enemy);
         }
 
-        public void OnEnemyDied(BaseEnemy enemy)
+        public void OnEnemyDied(IDamagable damagable)
         {
-            Enemies.Remove(enemy);
+            BaseEnemy baseEnemy = damagable as BaseEnemy;
+            
+            Enemies.Remove(baseEnemy);
             _aliveEnemyAmount--;
 
-            FreeEnemy(enemy);
+            FreeEnemy(baseEnemy);
 
             if (_isTrackingEnabled && _aliveEnemyAmount == 0)
             {
@@ -71,7 +72,7 @@ namespace _Application._Scripts.Core
 
             _globalPool.Free(enemy);
 
-            Removed(enemy);
+            //Removed(enemy);
         }
 
         private void OnEnemyApproached(BaseEnemy enemy)
@@ -91,8 +92,13 @@ namespace _Application._Scripts.Core
 
         public void Clear()
         {
-            foreach (BaseEnemy enemy in Enemies) 
+            DisableTracking();
+
+            foreach (BaseEnemy enemy in Enemies)
+            {
                 FreeEnemy(enemy);
+                enemy.Die();
+            }
 
             Enemies.Clear();
         }

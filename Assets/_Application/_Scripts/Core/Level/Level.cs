@@ -2,6 +2,7 @@
 using System.Linq;
 using _Application._Scripts.Core;
 using _Application._Scripts.Core.Towers;
+using _Application._Scripts.Scriptables.Core.Towers;
 using PathCreation;
 using Pool_And_Particles;
 using UnityEngine;
@@ -33,6 +34,14 @@ namespace _Application.Scripts.Managers
                 tower.Enable();
         }
 
+        public List<TBaseTower> GetTowers<TBaseTower>(TowerType towerType) where TBaseTower : BaseTower
+        {
+            return _towers
+                .Where(tower => tower.TowerType == towerType)
+                .Cast<TBaseTower>()
+                .ToList();
+        }
+        
         public void Clear()
         {
             foreach (BaseTower tower in _towers)

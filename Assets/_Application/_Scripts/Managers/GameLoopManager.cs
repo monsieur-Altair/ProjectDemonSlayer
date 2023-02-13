@@ -94,7 +94,7 @@ namespace _Application.Scripts.Managers
                 }
                 case GameStates.GameEnded:
                 {
-                    _levelsManager.Clear();
+                    _levelsManager.CurrentLevel.Clear();
                     _userControl.Disable();
                     _barSpawner.Clear();
 
@@ -149,8 +149,8 @@ namespace _Application.Scripts.Managers
         private IEnumerator StartGameplay()
         {
             yield return _coroutineRunner.StartCoroutine(_levelsManager.CreateLevel());
-            _levelsManager.StartLevel();
-            _barSpawner.Initialize(_levelsManager.EnemyTracker);
+            _levelsManager.CurrentLevel.StartWaves();
+            _barSpawner.Initialize(_levelsManager);
             
             _userControl.Enable();
         }

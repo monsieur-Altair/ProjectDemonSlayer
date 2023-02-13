@@ -32,7 +32,7 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
         public override void Exit()
         {
             base.Exit();
-            
+            Holder.OnAppeared();
             Holder.SetIsAlive(true);
         }
     }

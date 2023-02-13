@@ -1,25 +1,75 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using _Application._Scripts.Core.Enemies;
 using _Application._Scripts.Scriptables.Core.Enemies;
 using _Application._Scripts.Scriptables.Core.UnitsBehaviour;
+using _Application.Scripts.Managers;
+using _Application.Scripts.Misc;
+using Pool_And_Particles;
 using UnityEngine;
 
 namespace _Application._Scripts.Core.Towers
 {
     public class WarriorTower : BaseTower
     {
-        [SerializeField] private int _warriorAmount = 3;
-
-
-        private List<BaseUnit> _warriors = new();
-
-        protected override bool CanAttack => CanAttackNow();
+        public event Action<IDamagable> Added = delegate {  };
         
-        private bool CanAttackNow()
+        [SerializeField] private int _warriorAmount = 3;
+        [SerializeField] private Transform _unitSpawnPoint;
+        [SerializeField] private float _spawnRadius;
+
+
+        private readonly List<BaseUnit> _warriors = new();
+        private BaseUnit _warriorPrefab;
+
+        public List<IDamagable> Damagables { get; private set; }
+        protected override bool CanAttack => _warriors.Count != 0 && _warriors.Any(IsAvailable);
+        
+
+        public override void Initialize(CoreConfig coreConfig, EnemyTracker enemyTracker, GlobalPool globalPool)
         {
-            return _warriors.Count != 0 
-                   && _warriors.Any(IsAvailable);
+            base.Initialize(coreConfig, enemyTracker, globalPool);
+
+            _warriorPrefab = coreConfig.Warehouse.WarriorPrefab;
+            
+            SpawnUnits();
+
+            Damagables = new List<IDamagable>(_warriors);
+        }
+
+        private void SpawnUnits()
+        {
+            for (int i = 0; i < _warriorAmount; i++)
+            {
+                BaseUnit warrior = _globalPool.Get(_warriorPrefab);
+                _warriors.Add(warrior);
+                warrior.Appeared += OnWarriorAppeared;
+                warrior.Initialize(_coreConfig);
+            }
+        }
+
+        public override void Clear()
+        {
+            base.Clear();
+
+            foreach (BaseUnit baseUnit in _warriors)
+            {
+                baseUnit.Appeared -= OnWarriorAppeared;
+                baseUnit.Clear();
+            }
+        }
+
+        private void OnWarriorAppeared(BaseUnit baseUnit)
+        {
+            int i = _warriors.IndexOf(baseUnit);
+            float delta = Mathf.PI * 2 / _warriorAmount;
+            Vector2 offset = BaseExtensions.GetPos(i * delta) * _spawnRadius;
+            Vector3 basePos = _unitSpawnPoint.position;
+            Vector3 pos = new(basePos.x + offset.x, basePos.y, basePos.z + offset.y);
+            baseUnit.Transform.position = pos;
+
+            Added(baseUnit);
         }
 
         protected override void Update()
@@ -40,9 +90,6 @@ namespace _Application._Scripts.Core.Towers
             }
         }
 
-        private static bool IsAvailable(BaseUnit warrior) => 
-            warrior.IsAlive && warrior.IsBusy == false;
-
         protected override void Attack(BaseEnemy target)
         {
             base.Attack(target);
@@ -51,5 +98,8 @@ namespace _Application._Scripts.Core.Towers
             availableUnit.SetTarget(target);
             availableUnit.GoToTarget();
         }
+
+        private static bool IsAvailable(BaseUnit warrior) => 
+            warrior.IsAlive && warrior.IsBusy == false;
     }
 }

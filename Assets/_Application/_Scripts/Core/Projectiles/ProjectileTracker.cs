@@ -6,7 +6,7 @@ namespace _Application._Scripts.Core.Towers
 {
     public class ProjectileTracker
     {
-        private readonly Dictionary<BaseEnemy, List<BaseProjectile>> _projectileInfo = new();
+        private readonly Dictionary<IDamagable, List<BaseProjectile>> _projectileInfo = new();
         private readonly GlobalPool _globalPool;
 
         public ProjectileTracker(GlobalPool globalPool)
@@ -33,10 +33,10 @@ namespace _Application._Scripts.Core.Towers
 
         public void Clear()
         {
-            foreach (KeyValuePair<BaseEnemy, List<BaseProjectile>> pair in _projectileInfo)
+            foreach ((IDamagable key, List<BaseProjectile> value) in _projectileInfo)
             {
-                Unsubscribe(pair.Key);
-                ClearList(pair.Value);
+                Unsubscribe(key);
+                ClearList(value);
             }
             
             _projectileInfo.Clear();
@@ -56,16 +56,14 @@ namespace _Application._Scripts.Core.Towers
             projectiles.Remove(baseProjectile);
         }
 
-        private void Subscribe(BaseEnemy enemy)
+        private void Subscribe(IDamagable damagable)
         {
-            enemy.Approached += DeleteList;
-            enemy.Died += DeleteList;
+            damagable.Died += DeleteList;
         }
 
-        private void Unsubscribe(BaseEnemy enemy)
+        private void Unsubscribe(IDamagable damagable)
         {
-            enemy.Approached -= DeleteList;
-            enemy.Died -= DeleteList;
+            damagable.Died -= DeleteList;
         }
 
         private void FreeProjectile(BaseProjectile baseProjectile)
@@ -75,10 +73,12 @@ namespace _Application._Scripts.Core.Towers
             _globalPool.Free(baseProjectile);
         }
 
-        private void DeleteList(BaseEnemy enemy)
+        private void DeleteList(IDamagable damagable)
         {
-            ClearList(_projectileInfo[enemy]);
-            Unsubscribe(enemy);
+            BaseEnemy baseEnemy = damagable as BaseEnemy;
+
+            ClearList(_projectileInfo[baseEnemy]);
+            Unsubscribe(baseEnemy);
         }
 
         private void ClearList(List<BaseProjectile> projectileList)

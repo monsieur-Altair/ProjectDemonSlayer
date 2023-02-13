@@ -1,28 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
 using _Application.Scripts.Infrastructure.States;
-using UnityEngine;
 
 namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
 {
-    public class UnitStateMachine : MonoBehaviour
+    public class UnitStateMachine
     {
         private BaseUnitState _activeState;
 
         private Dictionary<Type, IBaseState> _states;
+        public BaseUnit BaseUnit { get; }
 
-        public BaseUnit BaseUnit { get; private set; }
-
-        public void Initialize(BaseUnit baseUnit)
+        public UnitStateMachine(BaseUnit baseUnit)
         {
+            ResetState();
+            
             BaseUnit = baseUnit;
+            
             _states = new Dictionary<Type, IBaseState>()
             {
                 //todo: create states
             };
         }
 
-        private void Update()
+        public void ResetState()
+        {
+            _activeState = null;
+        }
+
+        public void Update()
         {
             _activeState?.Update();
         }

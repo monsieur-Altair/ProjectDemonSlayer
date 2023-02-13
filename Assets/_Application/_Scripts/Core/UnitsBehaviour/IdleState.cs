@@ -21,7 +21,7 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
 
             Holder.SetBusy(false);
             _closeAttackRadius = Holder.CloseAttackRadius;
-            _enemyTracker = AllServices.Get<LevelManager>().EnemyTracker;
+            _enemyTracker = AllServices.Get<LevelManager>().CurrentLevel.WaveManager.EnemyTracker;
         }
 
         public override void Exit()
@@ -43,7 +43,7 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
             if (target != null)
             {
                 Holder.SetTarget(target);
-                _stateMachine.Enter<AttackState>();
+                Holder.StartAttacking(target);
             }
         }
     }

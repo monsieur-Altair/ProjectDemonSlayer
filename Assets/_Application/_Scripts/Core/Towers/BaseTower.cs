@@ -22,8 +22,10 @@ namespace _Application._Scripts.Core.Towers
         protected bool _isEnabled;
         protected EnemyTracker _enemyTracker;
         protected float _elapsedTime;
+        protected CoreConfig _coreConfig;
 
-
+        public TowerType TowerType => _towerType;
+        
         protected virtual bool CanAttack => true;
 
 #if UNITY_EDITOR
@@ -33,8 +35,8 @@ namespace _Application._Scripts.Core.Towers
             Gizmos.color = Color.red;
             for (int i = 0; i < MaxCount; i++)
             {
-                Vector2 dir0 = _radius * GetPos(i/(float)MaxCount*Mathf.PI * 2);
-                Vector2 dir1 = _radius * GetPos((i+1)/(float)MaxCount*Mathf.PI * 2);
+                Vector2 dir0 = _radius * BaseExtensions.GetPos(i/(float)MaxCount*Mathf.PI * 2);
+                Vector2 dir1 = _radius * BaseExtensions.GetPos((i+1)/(float)MaxCount*Mathf.PI * 2);
                 Vector3 pos = transform.position;
                 Vector3 pos0 = pos.With(x: pos.x + dir0.x, z: pos.z + dir0.y);
                 Vector3 pos1 = pos.With(x: pos.x + dir1.x, z: pos.z + dir1.y);
@@ -42,12 +44,12 @@ namespace _Application._Scripts.Core.Towers
             }
         }
 
-        private static Vector2 GetPos(float angle) => 
-            new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)).normalized; 
+         
 #endif
         
         public virtual void Initialize(CoreConfig coreConfig, EnemyTracker enemyTracker, GlobalPool globalPool)
         {
+            _coreConfig = coreConfig;
             _warehouse = coreConfig.Warehouse;
             _globalPool = globalPool;
             _elapsedTime = 0f;
@@ -57,7 +59,7 @@ namespace _Application._Scripts.Core.Towers
             _projectileTracker = new ProjectileTracker(globalPool);
         }
 
-        public void Clear()
+        public virtual void Clear()
         {
             _projectileTracker.Clear();
         }

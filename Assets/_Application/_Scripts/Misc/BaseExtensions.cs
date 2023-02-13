@@ -8,6 +8,9 @@ namespace _Application.Scripts.Misc
 {
     public static class BaseExtensions
     {
+        public static Vector2 GetPos(float angle) => 
+            new Vector2(Mathf.Cos(angle), Mathf.Sin(angle)).normalized;
+        
         public static T ConvertFromJson<T>(this string json) => 
             JsonUtility.FromJson<T>(json);
         

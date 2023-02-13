@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using _Application._Scripts.Core.Towers;
 using _Application._Scripts.Scriptables.Core.Enemies;
-using _Application._Scripts.Scriptables.Core.UnitsBehaviour;
 using _Application.Scripts.Scriptables.Core.Enemies;
 using DG.Tweening;
 using Extensions;
@@ -12,13 +11,13 @@ using UnityEngine;
 
 namespace _Application._Scripts.Core.Enemies
 {
-    public class BaseEnemy : PooledBehaviour, IFindable
+    public class BaseEnemy : PooledBehaviour, IFindable, IDamagable
     {
         public event Action<BaseEnemy> Launched = delegate { };
-        public event Action<BaseEnemy> Died = delegate { };
-        public event Action<BaseEnemy> Damaged = delegate { };
+        public event Action<IDamagable> Died = delegate { };
+        public event Action<IDamagable> Damaged = delegate { };
+        public event Action<IDamagable> Updated = delegate { };
         public event Action<BaseEnemy> Approached = delegate { };
-        public event Action<BaseEnemy> Updated = delegate { };
 
         [SerializeField] private Transform _barPoint;
         [SerializeField] private Transform _hitPoint;
@@ -40,7 +39,9 @@ namespace _Application._Scripts.Core.Enemies
         public EnemyBehaviourType BehaviourType => _baseEnemyData.BehaviourType;
 
         private EnemyState _currentEnemyState = EnemyState.None;
-        private BaseUnit _target;
+        private IDamagable _target;
+
+        private readonly List<IDamagable> _targets = new();
 
 
         private void Awake()
@@ -93,14 +94,41 @@ namespace _Application._Scripts.Core.Enemies
                 Die();
         }
 
-        public void StartAttacking(BaseUnit target)
+        public void StartAttacking(IDamagable target)
         {
-            _target = target;
-            
+            if (_target == null)
+                _target = target;
+            else
+                _targets.Add(target);
+
             //todo: Subscribe for death and handle many targets   
+            target.Died += OnTargetDied;
             
             _currentEnemyState = EnemyState.Attacking;
             _elapsedTime = _baseEnemyData.AttackCooldown + float.Epsilon;
+        }
+
+        private void OnTargetDied(IDamagable damagable)
+        {
+            damagable.Died -= OnTargetDied;
+
+            if (damagable.Equals(_target))
+            {
+                if (_targets.Count == 0)
+                {
+                    _target = null;
+                    _currentEnemyState = EnemyState.Running;
+                }
+                else
+                {
+                    _target = _targets[0];
+                    _targets.RemoveAt(0);
+                }
+            }
+            else
+            {
+                _targets.Remove(damagable);
+            }
         }
 
         private void Update()
@@ -150,8 +178,13 @@ namespace _Application._Scripts.Core.Enemies
             }
         }
 
-        private void Die()
+        public void Die()
         {
+            foreach (IDamagable damagable in _targets) 
+                damagable.Died -= OnTargetDied;
+
+            _target = null;
+            _targets.Clear();
             _currentEnemyState = EnemyState.None;
             Died(this);
         }

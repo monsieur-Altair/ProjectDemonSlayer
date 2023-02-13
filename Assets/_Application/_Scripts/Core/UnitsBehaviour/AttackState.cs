@@ -30,11 +30,14 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
         {
             base.Exit();
             Holder.SetBusy(false);
-            Holder.Target.Died -= OnTargetDied;
+            if (Holder.Target != null)
+                Holder.Target.Died -= OnTargetDied;
         }
 
-        private void OnTargetDied(BaseEnemy target)
+        private void OnTargetDied(IDamagable damagable)
         {
+            Holder.Target.Died -= OnTargetDied;
+            Holder.SetTarget(null);
             _stateMachine.Enter<IdleState>();
         }
 

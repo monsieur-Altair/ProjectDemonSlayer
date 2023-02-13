@@ -29,13 +29,16 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
         {
             base.Exit();
 
-            Holder.Target.Died -= OnTargetDied;
+            if (Holder.Target != null)
+                Holder.Target.Died -= OnTargetDied;
             
             Holder.SetBusy(false);
         }
 
-        private void OnTargetDied(BaseEnemy target)
+        private void OnTargetDied(IDamagable damagable)
         {
+            Holder.Target.Died -= OnTargetDied;
+            Holder.SetTarget(null);
             _stateMachine.Enter<IdleState>();
         }
 
@@ -54,7 +57,7 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
             transform.rotation = Quaternion.LookRotation(target - newPos);
 
             if (Vector3.Distance(transform.position, target) < _closeAttackRadius) 
-                _stateMachine.Enter<AttackState>();
+                Holder.StartAttacking(Holder.Target);
         }
     }
 }
