@@ -42,7 +42,7 @@ namespace _Application._Scripts.Core.Towers
         {
             for (int i = 0; i < _warriorAmount; i++)
             {
-                BaseUnit warrior = _globalPool.Get(_warriorPrefab);
+                BaseUnit warrior = _globalPool.Get(_warriorPrefab, parent: transform);
                 _warriors.Add(warrior);
                 warrior.Appeared += OnWarriorAppeared;
                 warrior.Initialize(_coreConfig);

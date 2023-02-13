@@ -16,6 +16,8 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
         
         public override void Enter()
         {
+            Debug.Log($"enter move to");
+
             base.Enter();
 
             Holder.Target.Died += OnTargetDied;
@@ -27,11 +29,14 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
 
         public override void Exit()
         {
+            Debug.Log($"exit move to");
+
             base.Exit();
 
             if (Holder.Target != null)
                 Holder.Target.Died -= OnTargetDied;
             
+            Holder.StopTarget();
             Holder.SetBusy(false);
         }
 

@@ -9,11 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dbd2e737340b4625992c95aa0c1af8ba, type: 3}
-  m_Name: GoblinData
+  m_Script: {fileID: 11500000, guid: 191b5e2795964f9cbbc204e604fe9aa3, type: 3}
+  m_Name: WarriorData
   m_EditorClassIdentifier: 
-  _health: 10
-  _motionsSpeed: 1.5
+  _health: 20
+  _motionsSpeed: 4
   _attackCooldown: 1
   _attackInfo:
   - _value: 1
@@ -25,8 +25,3 @@ MonoBehaviour:
     _damageType: 0
   - _value: 0.1
     _damageType: 1
-  _killingReward: 20
-  _enemyType: 0
-  _enemyHierarchyType: 0
-  _behaviourType: 0
-  _enemyMotionType: 0

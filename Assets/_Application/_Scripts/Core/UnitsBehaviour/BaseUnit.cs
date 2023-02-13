@@ -16,22 +16,21 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
         public event Action<IDamagable> Damaged = delegate { };
         
         [SerializeField] private float _closeAttackRadius = 1f;
-        [SerializeField] private UnitStateMachine _stateMachine;
         [SerializeField] private float _reviveDuration;
         [SerializeField] private Transform _barPoint;
 
-        private BaseUnitData _baseUnitData;
+        protected UnitStateMachine _stateMachine;
 
         public BaseUnitData BaseUnitData { get; private set; }
-        public IDamagable Target { get; private set; }
+        public BaseEnemy Target { get; private set; }
         public float CloseAttackRadius => _closeAttackRadius;
-        public List<DamageInfo> DefenceInfo => _baseUnitData.DefenseInfo;
+        public List<DamageInfo> DefenceInfo => BaseUnitData.DefenseInfo;
         public Transform Transform { get; private set; }
 
         public bool IsBusy { get; private set; }
         public bool IsAlive { get; private set; }
         public float CurrentHealth { get; private set; }
-        public float MaxHealth => _baseUnitData.Health;
+        public float MaxHealth => BaseUnitData.Health;
         public Transform BarPoint => _barPoint;
         public float ReviveDuration => _reviveDuration;
 
@@ -49,10 +48,16 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
 
         public void Initialize(CoreConfig coreConfig)
         {
-            _baseUnitData = coreConfig.WarriorData;
+            BaseUnitData = coreConfig.WarriorData;
+            CreateStateMachine();
+            RestoreHp();
+            OnAppeared();
+        }
+
+        protected virtual void CreateStateMachine()
+        {
             _stateMachine = new UnitStateMachine(this);
             _stateMachine.Enter<IdleState>();
-            OnAppeared();
         }
 
         public void Clear()
@@ -74,13 +79,22 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
         public void SetTarget(BaseEnemy target)
         {
             Target = target;
-            if (target != null)
-                target.Stop();
+        }
+
+        public void StopTarget()
+        {
+            if (Target != null)
+                Target.Stop();
         }
 
         public void GoToTarget()
         {
             _stateMachine.Enter<MoveToTargetState>();
+        }
+
+        public void RestoreHp()
+        {
+            CurrentHealth = MaxHealth;
         }
 
         public void TakeDamage(float damageAmount)

@@ -30,5 +30,8 @@ MonoBehaviour:
       _value: {fileID: 11400000, guid: 093bee9b94c1eba4db390b69c58d3f28, type: 2}
     - _key: 2
       _value: {fileID: 11400000, guid: 093bee9b94c1eba4db390b69c58d3f28, type: 2}
+    - _key: 1
+      _value: {fileID: 11400000, guid: 093bee9b94c1eba4db390b69c58d3f28, type: 2}
   _levelData:
   - {fileID: 11400000, guid: 832c495a65c42644283cba5abbea4016, type: 2}
+  _warriorData: {fileID: 11400000, guid: f16132c44e0a55a4ebd20515fd94beea, type: 2}

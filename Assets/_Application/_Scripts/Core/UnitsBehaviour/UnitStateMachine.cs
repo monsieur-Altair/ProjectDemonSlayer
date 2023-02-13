@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using _Application.Scripts.Infrastructure.States;
 
 namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
 {
     public class UnitStateMachine
     {
-        private BaseUnitState _activeState;
-
-        private Dictionary<Type, IBaseState> _states;
+        protected readonly Dictionary<Type, BaseUnitState> _states;
+        
+        protected BaseUnitState _activeState;
+        
         public BaseUnit BaseUnit { get; }
 
         public UnitStateMachine(BaseUnit baseUnit)
@@ -17,9 +17,12 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
             
             BaseUnit = baseUnit;
             
-            _states = new Dictionary<Type, IBaseState>()
+            _states = new Dictionary<Type, BaseUnitState>
             {
-                //todo: create states
+                [typeof(IdleState)] = new IdleState(this),
+                [typeof(MoveToTargetState)] = new MoveToTargetState(this),
+                [typeof(AttackState)] = new AttackState(this),
+                [typeof(DeathState)] = new DeathState(this)
             };
         }
 

@@ -7,6 +7,7 @@ using _Application.Scripts.Infrastructure.Services;
 using _Application.Scripts.Managers;
 using _Application.Scripts.UI.Windows;
 using Pool_And_Particles;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace _Application.Scripts.UI
@@ -90,6 +91,7 @@ namespace _Application.Scripts.UI
 
         private void UpdateBar(IDamagable damagable)
         {
+            Debug.Log("updated " + damagable.Transform.name);
             UnitBar unitBar = _unitsBars[damagable];
             unitBar.gameObject.SetActive(true);
             float percent = Mathf.Clamp01(damagable.CurrentHealth / damagable.MaxHealth); 

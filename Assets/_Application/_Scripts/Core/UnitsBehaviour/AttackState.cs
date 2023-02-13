@@ -10,6 +10,9 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
         private BaseUnitData _holderData;
         private float _elapsedTime;
 
+        private bool IsOutOfDistance => 
+            Vector3.Distance(Holder.Transform.position, Holder.Target.Transform.position) > Holder.CloseAttackRadius;
+
         public AttackState(UnitStateMachine unitStateMachine) : base(unitStateMachine)
         {
         }
@@ -17,32 +20,41 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
         public override void Enter()
         {
             base.Enter();
+            Debug.Log($"enter attack");
 
             _holderData = Holder.BaseUnitData;
             _elapsedTime = _holderData.AttackCooldown + float.Epsilon;
             Holder.SetBusy(true);
-            Holder.Target.Died += OnTargetDied;
+            Holder.Target.Died += RemoveTarget;
             
             Holder.Target.StartAttacking(Holder);
         }
 
         public override void Exit()
         {
+            Debug.Log($"exit attack");
+
             base.Exit();
             Holder.SetBusy(false);
             if (Holder.Target != null)
-                Holder.Target.Died -= OnTargetDied;
+                Holder.Target.Died -= RemoveTarget;
         }
 
-        private void OnTargetDied(IDamagable damagable)
+        private void RemoveTarget(IDamagable damagable)
         {
-            Holder.Target.Died -= OnTargetDied;
+            Holder.Target.Died -= RemoveTarget;
             Holder.SetTarget(null);
             _stateMachine.Enter<IdleState>();
         }
 
         public override void Update()
         {
+            if (IsOutOfDistance)
+            {
+                RemoveTarget(Holder.Target);
+                return;
+            }
+            
             _elapsedTime += Time.deltaTime;
 
             if (_elapsedTime >= _holderData.AttackCooldown)

@@ -2,6 +2,7 @@
 using _Application._Scripts.Core.Enemies;
 using _Application.Scripts.Infrastructure.Services;
 using _Application.Scripts.Managers;
+using UnityEngine;
 
 namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
 {
@@ -17,8 +18,11 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
 
         public override void Enter()
         {
+            Debug.Log($"enter idle");
+
             base.Enter();
 
+            Holder.SetIsAlive(true);
             Holder.SetBusy(false);
             _closeAttackRadius = Holder.CloseAttackRadius;
             _enemyTracker = AllServices.Get<LevelManager>().CurrentLevel.WaveManager.EnemyTracker;
@@ -26,6 +30,8 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
 
         public override void Exit()
         {
+            Debug.Log($"exit idle");
+
             base.Exit();
             
             Holder.SetBusy(false);

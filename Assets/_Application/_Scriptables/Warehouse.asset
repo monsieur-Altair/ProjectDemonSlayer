@@ -35,3 +35,4 @@ MonoBehaviour:
       _value: {fileID: 407240055487379157, guid: e499b05cc4542294db8e0111039a959c, type: 3}
     - _key: 2
       _value: {fileID: 5556636542641998662, guid: b6a38dd6d63ed7d429d0f7ebfd1299b9, type: 3}
+  _warriorPrefab: {fileID: 3840385836188723549, guid: ab18a49ad0168e343a8d84b89ba6812d, type: 3}

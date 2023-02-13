@@ -1,4 +1,6 @@
-﻿namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
+﻿using UnityEngine;
+
+namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
 {
     public abstract class BaseUnitState
     {
