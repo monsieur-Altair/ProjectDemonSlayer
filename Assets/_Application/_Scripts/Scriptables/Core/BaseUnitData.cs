@@ -1,21 +1,14 @@
-﻿using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace _Application.Scripts.Scriptables.Core.Enemies
 {
     [CreateAssetMenu(fileName = "Base Unit Data", menuName = "Resources/Base Unit Data", order = 0)]
-    public class BaseUnitData : ScriptableObject
+    public class BaseUnitData : BaseData
     {
-        [SerializeField] private float _health = 20;
-        [SerializeField] private float _motionsSpeed = 1;
-        [SerializeField] private float _attackCooldown = 1;
-        [SerializeField, NonReorderable] private List<DamageInfo> _attackInfo;
-        [SerializeField, NonReorderable] private List<DamageInfo> _defenseInfo;
+        [SerializeField] private float _reviveDur;
+        [SerializeField] private float _closeAttackRadius;
 
-        public float Health => _health;
-        public float MotionsSpeed => _motionsSpeed;
-        public float AttackCooldown => _attackCooldown;
-        public List<DamageInfo> AttackInfo => _attackInfo;
-        public List<DamageInfo> DefenseInfo => _defenseInfo;
+        public float CloseAttackRadius => _closeAttackRadius;
+        public float ReviveDur => _reviveDur;
     }
 }

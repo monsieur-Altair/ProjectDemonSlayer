@@ -7,7 +7,7 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
 {
     public class AttackState : BaseUnitState
     {
-        private BaseUnitData _holderData;
+        private BaseData _holderData;
         private float _elapsedTime;
 
         private bool IsOutOfDistance => 
@@ -58,7 +58,7 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
             {
                 _elapsedTime = 0f;
                 float damage = CoreMethods.CalculateDamage(_holderData.AttackInfo, Holder.Target.DefenceInfo);
-                Holder.Target.TakeDamage(damage);
+                Holder.Target.TakeDamage(damage * Holder.PowerCoefficient);
             }
         }
     }

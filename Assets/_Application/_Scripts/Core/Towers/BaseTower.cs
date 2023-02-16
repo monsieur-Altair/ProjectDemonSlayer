@@ -1,5 +1,9 @@
-﻿using _Application._Scripts.Core.Enemies;
+﻿using System.Linq;
+using _Application._Scripts.Core.Enemies;
 using _Application._Scripts.Scriptables.Core.Towers;
+using _Application._Scripts.Scriptables.Core.TowerUpgrade;
+using _Application.Scripts.Infrastructure.Services;
+using _Application.Scripts.Infrastructure.Services.Progress;
 using _Application.Scripts.Managers;
 using _Application.Scripts.Misc;
 using Pool_And_Particles;
@@ -11,9 +15,7 @@ namespace _Application._Scripts.Core.Towers
     {
         [SerializeField] protected Transform _spawnPoint;
         [SerializeField] protected TowerType _towerType;
-
-        [SerializeField] private float _radius;
-
+        
         protected ProjectileTracker _projectileTracker;
         protected BaseTowerData _baseTowerData;
         protected GlobalPool _globalPool;
@@ -23,10 +25,21 @@ namespace _Application._Scripts.Core.Towers
         protected EnemyTracker _enemyTracker;
         protected float _elapsedTime;
         protected CoreConfig _coreConfig;
+        protected float _powerCoefficient;
 
+        [SerializeField] private float _radius = 5f;
+
+        private ProgressService _progressService;
+        private float _healthCoefficient;
+        private float _rangeCoefficient;
+
+        public float Health => _baseTowerData.Health * _healthCoefficient;
         public TowerType TowerType => _towerType;
         
+        
+        protected float Radius => _baseTowerData.Radius * _rangeCoefficient;
         protected virtual bool CanAttack => true;
+
 
 #if UNITY_EDITOR
         private void OnDrawGizmos()
@@ -43,20 +56,42 @@ namespace _Application._Scripts.Core.Towers
                 Gizmos.DrawLine(pos0, pos1);
             }
         }
-
-         
 #endif
         
         public virtual void Initialize(CoreConfig coreConfig, EnemyTracker enemyTracker, GlobalPool globalPool)
         {
+            _progressService = AllServices.Get<ProgressService>();
+
+            int upgradeLevel = _progressService.PlayerProgress.TowersUpgrades
+                .First(upgrade => upgrade.TowerType == _towerType).AchievedLevel;
+            
+            FillCoefficients(coreConfig, upgradeLevel);
+            
             _coreConfig = coreConfig;
             _warehouse = coreConfig.Warehouse;
             _globalPool = globalPool;
             _elapsedTime = 0f;
             _enemyTracker = enemyTracker;
             _baseTowerData = coreConfig.TowersData[_towerType];
-            _radius = _baseTowerData.Radius;
             _projectileTracker = new ProjectileTracker(globalPool);
+        }
+
+        private void FillCoefficients(CoreConfig coreConfig, int upgradeLevel)
+        {
+            BaseTowerUpgradeData[] upgradeData = coreConfig.TowersUpgrades[_towerType];
+
+            if (upgradeLevel == -1)
+            {
+                _healthCoefficient = 1f;
+                _rangeCoefficient = 1f;
+                _powerCoefficient = 1f;
+            }
+            else
+            {
+                _healthCoefficient = upgradeData[upgradeLevel].Health;
+                _rangeCoefficient  = upgradeData[upgradeLevel].Range;
+                _powerCoefficient  = upgradeData[upgradeLevel].Power;
+            }
         }
 
         public virtual void Clear()
@@ -73,7 +108,7 @@ namespace _Application._Scripts.Core.Towers
 
             if (_elapsedTime >= _baseTowerData.AttackCooldown && CanAttack)
             {
-                BaseEnemy target = CoreMethods.FindClosest(_enemyTracker.Enemies, _baseTowerData.Radius, transform);
+                BaseEnemy target = CoreMethods.FindClosest(_enemyTracker.Enemies, Radius, transform);
                 if (target != null)
                 {
                     _elapsedTime = 0f;

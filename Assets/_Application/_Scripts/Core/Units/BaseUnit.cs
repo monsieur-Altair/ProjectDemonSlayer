@@ -15,15 +15,13 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
         public event Action<IDamagable> Updated = delegate {  };
         public event Action<IDamagable> Damaged = delegate { };
         
-        [SerializeField] private float _closeAttackRadius = 1f;
-        [SerializeField] private float _reviveDuration;
         [SerializeField] private Transform _barPoint;
 
         protected UnitStateMachine _stateMachine;
 
         public BaseUnitData BaseUnitData { get; protected set; }
         public BaseEnemy Target { get; private set; }
-        public float CloseAttackRadius => _closeAttackRadius;
+        public float CloseAttackRadius => BaseUnitData.CloseAttackRadius;
         public List<DamageInfo> DefenceInfo => BaseUnitData.DefenseInfo;
         public Transform Transform { get; private set; }
 
@@ -32,7 +30,8 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
         public float CurrentHealth { get; private set; }
         public float MaxHealth => BaseUnitData.Health;
         public Transform BarPoint => _barPoint;
-        public float ReviveDuration => _reviveDuration;
+        public float ReviveDuration => BaseUnitData.ReviveDur;
+        public virtual float PowerCoefficient => 1f;
 
 
         private void Awake()
@@ -62,7 +61,6 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
 
         protected virtual void FetchData(CoreConfig coreConfig)
         {
-            BaseUnitData = coreConfig.WarriorData;
         }
 
         protected virtual void CreateStateMachine()

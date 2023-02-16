@@ -17,6 +17,7 @@ namespace _Application._Scripts.Core.Towers
         protected List<DamageInfo> _attackInfo;
         protected Transform _transform;
         protected GlobalPool _globalPool;
+        private float _powerCoefficient;
         public BaseEnemy Target { get; private set; }
 
         private void Awake()
@@ -25,8 +26,9 @@ namespace _Application._Scripts.Core.Towers
             _globalPool = AllServices.Get<GlobalPool>();
         }
 
-        public void Initialize(List<DamageInfo> attackInfo, float speed, BaseEnemy target)
+        public void Initialize(List<DamageInfo> attackInfo, float speed, BaseEnemy target, float powerCoefficient)
         {
+            _powerCoefficient = powerCoefficient;
             Target = target;
             _attackInfo = attackInfo;
             _speed = speed;
@@ -61,7 +63,7 @@ namespace _Application._Scripts.Core.Towers
         protected virtual void DamageTarget()
         {
             float damageAmount = CoreMethods.CalculateDamage(_attackInfo, Target.DefenceInfo);
-            Target.TakeDamage(damageAmount);
+            Target.TakeDamage(damageAmount * _powerCoefficient);
             OnDamaged();
         }
 

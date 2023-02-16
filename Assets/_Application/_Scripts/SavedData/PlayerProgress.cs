@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using _Application._Scripts.Scriptables.Core.Towers;
+using Extensions;
 
 namespace _Application.Scripts.SavedData
 {
@@ -7,7 +11,7 @@ namespace _Application.Scripts.SavedData
     {
         public LevelInfo LevelInfo;
         public int Money;
-        public AchievedUpgrades[] AchievedUpgrades;
+        public TowersUpgrade[] TowersUpgrades;
         public Statistic Statistic;
         
         public PlayerProgress(int levelNumber)
@@ -20,15 +24,22 @@ namespace _Application.Scripts.SavedData
 
         private void CreateAchieveUpgrades()
         {
-            int length = Enum.GetValues(typeof(UpgradeType)).Length;
+            List<TowerType> towerTypes = CollectionsExtensions.GetValues<TowerType>().ToList();
+            int length = towerTypes.Count;
 
             if (length == 0)
                 return;
 
-            AchievedUpgrades = new AchievedUpgrades[length];
-            
+            TowersUpgrades = new TowersUpgrade[length];
+
             for (int i = 0; i < length; i++)
-                AchievedUpgrades[i] = new AchievedUpgrades();
+            {
+                TowersUpgrades[i] = new TowersUpgrade
+                { 
+                    TowerType = towerTypes[i],
+                    SavedCard = 0
+                };
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using _Application._Scripts.Scriptables.Core.UnitsBehaviour;
+﻿using System;
+using _Application._Scripts.Scriptables.Core.UnitsBehaviour;
 using _Application.Scripts.Control;
 using _Application.Scripts.Infrastructure.Services;
 using _Application.Scripts.Managers;
@@ -14,6 +15,8 @@ namespace _Application._Scripts.Core.Heroes
     [RequireComponent(typeof(Collider))]
     public class BaseHero : BaseUnit, IPointerUpHandler, IPointerDownHandler
     {
+        public event Action UltimateApplied = delegate { };
+        
         [SerializeField] private GameObject _selectionMark;
         
         private bool _isSelected;
@@ -38,7 +41,6 @@ namespace _Application._Scripts.Core.Heroes
 
         protected override void FetchData(CoreConfig coreConfig)
         {
-            BaseUnitData = coreConfig.HeroData;
         }
 
         protected override void OnUpdated()
@@ -80,6 +82,18 @@ namespace _Application._Scripts.Core.Heroes
             TweenExt.Wait(0.01f).OnComplete(SwitchSelectionState);
         }
 
+        public void DoUltimate()
+        {
+            _stateMachine.Enter<UltimateState>();    
+        }
+
+        
+        
+        public virtual void DamageByUltimate()
+        {
+            
+        }
+        
         private void SwitchSelectionState()
         {
             _isSelected = !_isSelected;
@@ -88,6 +102,11 @@ namespace _Application._Scripts.Core.Heroes
 
         public void OnPointerDown(PointerEventData eventData)
         {
+        }
+
+        protected void OnUltimateApplied()
+        {
+            UltimateApplied();
         }
     }
 }

@@ -23,6 +23,21 @@ namespace _Application._Scripts.Core
             return result;
         }
         
+        public static List<T> FindInRange<T>(List<T> findables, Transform basePoint, float radius) where T : IFindable
+        {
+            List<T> result = new();
+            
+            foreach (T findable in findables)
+            {
+                float distance = Vector2.Distance(findable.FindPoint.position.ToXZ(), basePoint.position.ToXZ());
+                if (distance < radius) 
+                    result.Add(findable);
+            }
+
+            return result;
+        }
+
+        
         public static T FindClosest<T>(List<T> list, float radius, Transform centrePoint) where T : IFindable
         {
             T target = default;

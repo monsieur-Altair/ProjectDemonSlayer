@@ -9,19 +9,18 @@ namespace _Application._Scripts.Core.Towers
         private float _slowDur;
         private float _slowCoefficient;
 
-        public void Initialize(List<DamageInfo> attackInfo, float speed, BaseEnemy target, 
+        public void Initialize(List<DamageInfo> attackInfo, float speed, BaseEnemy target, float powerCoefficient,
             float slowCoefficient, float slowDur)
         {
             _slowCoefficient = slowCoefficient;
             _slowDur = slowDur;
-            Initialize(attackInfo, speed, target);
+            Initialize(attackInfo, speed, target, powerCoefficient);
         }
 
         protected override void DamageTarget()
         {
             float newSpeed = Target.MotionSpeed * (1 - _slowCoefficient);
             Target.SlowDown(newSpeed, _slowDur);
-                
             base.DamageTarget();
         }
     }

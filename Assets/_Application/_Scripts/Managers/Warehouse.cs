@@ -15,12 +15,12 @@ namespace _Application.Scripts.Managers
         [Space, SerializeField, NonReorderable] private MyDictionary<EnemyType, BaseEnemy> _enemiesPrefabs;
         [Space, SerializeField, NonReorderable] private MyDictionary<TowerType, BaseProjectile> _projectilePrefabs;
         [Space, SerializeField, NonReorderable] private MyDictionary<TowerType, BaseTower> _towersPrefabs;
-        [Space, SerializeField] private BaseUnit _warriorPrefab;
+        [Space, SerializeField] private Warrior _warriorPrefab;
         
         public MyDictionary<TowerType, BaseTower> TowersPrefabs => _towersPrefabs;
         public MyDictionary<TowerType, BaseProjectile> ProjectilePrefabs => _projectilePrefabs;
         public MyDictionary<EnemyType, BaseEnemy> EnemiesPrefabs => _enemiesPrefabs;
         public UnitBar BarPrefab => _barPrefab;
-        public BaseUnit WarriorPrefab => _warriorPrefab;
+        public Warrior WarriorPrefab => _warriorPrefab;
     }
 }

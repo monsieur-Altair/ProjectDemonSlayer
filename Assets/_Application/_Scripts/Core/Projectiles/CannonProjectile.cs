@@ -14,13 +14,15 @@ namespace _Application._Scripts.Core.Towers
         private float _elapsedTime;
         private Vector3 _startPos;
         private float _flightTime;
+        private float _powerCoefficient;
         private float HorizontalSpeed => _speed;
 
-        public void Initialize(List<DamageInfo> attackInfo, float horizontalSpeed, BaseEnemy target, Vector3 targetPos, 
-            float explosionRadius, EnemyTracker enemyTracker, float flightTime)
+        public void Initialize(List<DamageInfo> attackInfo, float horizontalSpeed, BaseEnemy target, float powerCoefficient, 
+            Vector3 targetPos, float explosionRadius, EnemyTracker enemyTracker, float flightTime)
         {
             _flightTime = flightTime;
-            base.Initialize(attackInfo, horizontalSpeed, target);
+            _powerCoefficient = powerCoefficient;
+            base.Initialize(attackInfo, horizontalSpeed, target, _powerCoefficient);
 
             _targetPos = targetPos;
             _enemyTracker = enemyTracker;
@@ -46,34 +48,15 @@ namespace _Application._Scripts.Core.Towers
 
         protected override void DamageTarget()
         {
-            List<BaseEnemy> enemiesInRange = FindEnemiesInRange();
-
-            List<DamageInfo> attackInfo = _attackInfo;
+            List<BaseEnemy> enemiesInRange = CoreMethods.FindInRange(_enemyTracker.Enemies, transform, _explosionRadius);
 
             foreach (BaseEnemy enemy in enemiesInRange)
             {
-                float damageAmount = CoreMethods.CalculateDamage(attackInfo, enemy.DefenceInfo);
-                enemy.TakeDamage(damageAmount);    
+                float damageAmount = CoreMethods.CalculateDamage(_attackInfo, enemy.DefenceInfo);
+                enemy.TakeDamage(damageAmount * _powerCoefficient);    
             }
             
             OnDamaged();
-            
-            //Clear();
-            //_globalPool.Free(this);
-        }
-
-        private List<BaseEnemy> FindEnemiesInRange()
-        {
-            List<BaseEnemy> result = new();
-            
-            foreach (BaseEnemy baseEnemy in _enemyTracker.Enemies)
-            {
-                float distance = Vector2.Distance(baseEnemy.FindPoint.position.ToXZ(), transform.position.ToXZ());
-                if (distance < _explosionRadius) 
-                    result.Add(baseEnemy);
-            }
-
-            return result;
         }
     }
 }

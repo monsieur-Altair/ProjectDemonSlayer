@@ -170,7 +170,7 @@ namespace _Application._Scripts.Core.Enemies
 
             Updated(this);
 
-            if (Mathf.Abs(_currentDistance - _path.length) < 1.0f)
+            if (Mathf.Abs(_currentDistance - _path.length) < 0.3f)
             {
                 CurrentEnemyState = EnemyState.None;
                 Approached(this);
