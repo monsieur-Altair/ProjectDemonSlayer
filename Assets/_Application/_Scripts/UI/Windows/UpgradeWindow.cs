@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using _Application.Scripts.Infrastructure.Services;
 using _Application.Scripts.Infrastructure.Services.Progress;
-using _Application.Scripts.Infrastructure.Services.Scriptables;
 using _Application.Scripts.Managers;
 using _Application.Scripts.Upgrades;
 using TMPro;
@@ -20,7 +19,6 @@ namespace _Application.Scripts.UI.Windows
         private int _money;
         
         private ProgressService _progressService;
-        private ScriptableService _scriptableService;
         private CoroutineRunner _coroutineRunner;
         
         private readonly List<IProgressReader> _progressReaders = new();
@@ -29,7 +27,6 @@ namespace _Application.Scripts.UI.Windows
         public override void GetDependencies()
         {
             _progressService = AllServices.Get<ProgressService>();
-            _scriptableService = AllServices.Get<ScriptableService>();
             _coroutineRunner = AllServices.Get<CoroutineRunner>();
             
             //foreach (UpgradeController upgradeController in upgradeControllers) 

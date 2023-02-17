@@ -1,14 +1,6 @@
 ﻿#nullable enable
-using System;
-using System.Collections;
-using _Application.Scripts.Infrastructure.Services.Progress;
-using _Application.Scripts.Infrastructure.Services.Scriptables;
-using _Application.Scripts.Managers;
-using _Application.Scripts.SavedData;
-using _Application.Scripts.Scriptables.Upgrades;
-using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
+
 #pragma warning disable 8618
 #pragma warning disable 8629
 

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using _Application._Scripts.Core.Enemies;
 using _Application._Scripts.Scriptables.Core.Towers;
 using _Application._Scripts.Scriptables.Core.TowerUpgrade;
@@ -11,10 +12,11 @@ using UnityEngine;
 
 namespace _Application._Scripts.Core.Towers
 {
-    public class BaseTower : MonoBehaviour
+    public class BaseTower : PooledBehaviour
     {
         [SerializeField] protected Transform _spawnPoint;
         [SerializeField] protected TowerType _towerType;
+        [SerializeField] private GameObject[] _levelVisuals;
         
         protected ProjectileTracker _projectileTracker;
         protected BaseTowerData _baseTowerData;
@@ -25,21 +27,18 @@ namespace _Application._Scripts.Core.Towers
         protected EnemyTracker _enemyTracker;
         protected float _elapsedTime;
         protected CoreConfig _coreConfig;
-        protected float _powerCoefficient;
+        protected BaseTowerUpgradeData _upgradeData;
 
         [SerializeField] private float _radius = 5f;
 
         private ProgressService _progressService;
-        private float _healthCoefficient;
-        private float _rangeCoefficient;
 
-        public float Health => _baseTowerData.Health * _healthCoefficient;
+        public int TowerLevel { get; private set; }
+        public float Health => _baseTowerData.Health * _upgradeData.HealthCoefficient;
         public TowerType TowerType => _towerType;
-        
-        
-        protected float Radius => _baseTowerData.Radius * _rangeCoefficient;
+        protected float Radius => _baseTowerData.Radius * _upgradeData.RangeCoefficient;
         protected virtual bool CanAttack => true;
-
+        public bool IsMaxLevel => TowerLevel >= CoreConfig.TowerLevelAmount - 1;
 
 #if UNITY_EDITOR
         private void OnDrawGizmos()
@@ -61,37 +60,39 @@ namespace _Application._Scripts.Core.Towers
         public virtual void Initialize(CoreConfig coreConfig, EnemyTracker enemyTracker, GlobalPool globalPool)
         {
             _progressService = AllServices.Get<ProgressService>();
-
-            int upgradeLevel = _progressService.PlayerProgress.TowersUpgrades
-                .First(upgrade => upgrade.TowerType == _towerType).AchievedLevel;
-            
-            FillCoefficients(coreConfig, upgradeLevel);
-            
+            TowerLevel = -1;
             _coreConfig = coreConfig;
             _warehouse = coreConfig.Warehouse;
             _globalPool = globalPool;
             _elapsedTime = 0f;
             _enemyTracker = enemyTracker;
-            _baseTowerData = coreConfig.TowersData[_towerType];
             _projectileTracker = new ProjectileTracker(globalPool);
+            
+            Upgrade();
         }
 
-        private void FillCoefficients(CoreConfig coreConfig, int upgradeLevel)
+        private void UpdateVisual()
         {
-            BaseTowerUpgradeData[] upgradeData = coreConfig.TowersUpgrades[_towerType];
+            foreach (GameObject levelVisual in _levelVisuals) 
+                levelVisual.SetActive(false);
+            
+            _levelVisuals[TowerLevel].SetActive(true);
+        }
 
-            if (upgradeLevel == -1)
-            {
-                _healthCoefficient = 1f;
-                _rangeCoefficient = 1f;
-                _powerCoefficient = 1f;
-            }
-            else
-            {
-                _healthCoefficient = upgradeData[upgradeLevel].Health;
-                _rangeCoefficient  = upgradeData[upgradeLevel].Range;
-                _powerCoefficient  = upgradeData[upgradeLevel].Power;
-            }
+        public void Upgrade()
+        {
+            TowerLevel++;
+            _baseTowerData = _coreConfig.TowersData[_towerType][TowerLevel];
+            ApplyUpgrades();
+            UpdateVisual();
+        }
+        
+        private void ApplyUpgrades()
+        {
+            int upgradeLevel = _progressService.PlayerProgress.TowersUpgrades
+                .First(upgrade => upgrade.TowerType == _towerType).AchievedLevels[TowerLevel];
+            
+            _upgradeData = _coreConfig.TowersUpgradesLists[_towerType][TowerLevel][upgradeLevel];
         }
 
         public virtual void Clear()

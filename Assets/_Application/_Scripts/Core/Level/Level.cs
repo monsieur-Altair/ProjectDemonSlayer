@@ -5,7 +5,6 @@ using _Application._Scripts.Core;
 using _Application._Scripts.Core.Enemies;
 using _Application._Scripts.Core.Heroes;
 using _Application._Scripts.Core.Towers;
-using _Application._Scripts.Scriptables.Core.Towers;
 using _Application._Scripts.Scriptables.Core.UnitsBehaviour;
 using PathCreation;
 using Pool_And_Particles;
@@ -17,24 +16,35 @@ namespace _Application.Scripts.Managers
     {
         public event Action<IDamagable> HeroAdded = delegate {  };
         
-        [SerializeField] private List<BaseTower> _towers;
+        [SerializeField] private List<BaseTower> _towersInLevel;
         [SerializeField] private List<PathCreator> _pathCreators;
         [SerializeField] private WaveManager _waveManager;
         [SerializeField] private BaseHero _baseHero;
-
+        [SerializeField] private List<BuildPlace> _buildPlaces;
+        
+        public List<BuildPlace> BuildPlaces => _buildPlaces;
         public WaveManager WaveManager => _waveManager;
         public BaseHero BaseHero => _baseHero;
+        public ElixirManager ElixirManager { get; private set; }
+        public TowersManager TowersManager { get; private set; }
+        
 
         public void Initialize(GlobalPool globalPool, CoreConfig coreConfig, int levelIndex)
         {
             List<VertexPath> paths = _pathCreators.Select(creator => creator.path).ToList();
             _waveManager.Initialize(globalPool, coreConfig, paths, levelIndex);
 
-            foreach (BaseTower tower in _towers)
-                tower.Initialize(coreConfig, _waveManager.EnemyTracker, globalPool);
-
             _baseHero.Appeared += OnHeroAppeared;
             _baseHero.Initialize(coreConfig);
+
+            foreach (BuildPlace buildPlace in _buildPlaces) 
+                buildPlace.Initialize();
+
+            ElixirManager = new ElixirManager(coreConfig, levelIndex, _waveManager.EnemyTracker);
+            TowersManager = new TowersManager(_towersInLevel, coreConfig, globalPool, _waveManager, 
+                _towersInLevel[0].transform.parent);
+            
+            TowersManager.Initialize();
         }
 
         private void OnHeroAppeared(BaseUnit hero) => 
@@ -44,27 +54,15 @@ namespace _Application.Scripts.Managers
         {
             _waveManager.StartSpawn();
             
-            foreach (BaseTower tower in _towers) 
+            foreach (BaseTower tower in _towersInLevel) 
                 tower.Enable();
         }
 
-        public List<TBaseTower> GetTowers<TBaseTower>(TowerType towerType) where TBaseTower : BaseTower
-        {
-            return _towers
-                .Where(tower => tower.TowerType == towerType)
-                .Cast<TBaseTower>()
-                .ToList();
-        }
-        
         public void Clear()
         {
-            foreach (BaseTower tower in _towers)
-            {
-                tower.Disable();
-                tower.Clear();
-            }
-            
+            TowersManager.Clear();
             _baseHero.Appeared -= OnHeroAppeared;
+            ElixirManager.Clear();
             _waveManager.EnemyTracker.Clear();
         }
     }

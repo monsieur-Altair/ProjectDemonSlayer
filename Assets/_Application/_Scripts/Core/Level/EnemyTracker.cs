@@ -8,7 +8,7 @@ namespace _Application._Scripts.Core
 {
     public class EnemyTracker
     {
-        public event Action<IDamagable> EnemyAdded = delegate {  };
+        public event Action<BaseEnemy> EnemyAdded = delegate {  };
         public event Action WaveEnded = delegate { }; 
         public event Action<BaseEnemy> Approached = delegate { };
 

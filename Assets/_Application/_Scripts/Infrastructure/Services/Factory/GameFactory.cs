@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using _Application.Scripts.Control;
 using _Application.Scripts.Infrastructure.Services.Progress;
-using _Application.Scripts.Infrastructure.Services.Scriptables;
 using _Application.Scripts.Managers;
 using _Application.Scripts.UI;
 using Pool_And_Particles;
@@ -39,7 +38,6 @@ namespace _Application.Scripts.Infrastructure.Services.Factory
 
             GameLoopManager gameLoopManager = new(AllServices.Get<LevelManager>(), 
                 coroutineRunner, objectPool, AllServices.Get<OutlookService>(), userControl,
-                AllServices.Get<ScriptableService>(),
                 AllServices.Get<ProgressService>(),
                 AllServices.Get<AudioManager>(), 
                 _coreConfig, 

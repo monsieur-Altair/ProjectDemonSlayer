@@ -2,7 +2,6 @@
 using _Application.Scripts.Control;
 using _Application.Scripts.Infrastructure.Services;
 using _Application.Scripts.Infrastructure.Services.Progress;
-using _Application.Scripts.Infrastructure.Services.Scriptables;
 using _Application.Scripts.SavedData;
 using _Application.Scripts.UI;
 using _Application.Scripts.UI.Windows;
@@ -26,7 +25,6 @@ namespace _Application.Scripts.Managers
         private readonly GlobalPool _objectPool;
         private readonly UserControl _userControl;
         private readonly CoroutineRunner _coroutineRunner;
-        private readonly ScriptableService _scriptableService;
         private readonly ProgressService _progressService;
         private readonly AudioManager _audioManager;
         private readonly bool _useTutorial;
@@ -38,7 +36,7 @@ namespace _Application.Scripts.Managers
         private readonly BarSpawner _barSpawner;
 
         public GameLoopManager(LevelManager levelsManager, CoroutineRunner coroutineRunner,
-            GlobalPool pool, OutlookService outlookService, UserControl userControl, ScriptableService scriptableService,
+            GlobalPool pool, OutlookService outlookService, UserControl userControl,
             ProgressService progressService, AudioManager audioManager, CoreConfig coreConfig, BarSpawner barSpawner)
         {
             _useTutorial = AllServices.Get<CoreConfig>().UseTutorial;
@@ -47,7 +45,6 @@ namespace _Application.Scripts.Managers
             _objectPool = pool;
             _outlookService = outlookService;
             _userControl = userControl;
-            _scriptableService = scriptableService;
             _progressService = progressService;
             _audioManager = audioManager;
             _barSpawner = barSpawner;
@@ -149,9 +146,7 @@ namespace _Application.Scripts.Managers
         private IEnumerator StartGameplay()
         {
             yield return _coroutineRunner.StartCoroutine(_levelsManager.CreateLevel());
-            _levelsManager.CurrentLevel.StartWaves();
             _barSpawner.Initialize(_levelsManager);
-            
             _userControl.Enable();
         }
     }

@@ -8,6 +8,6 @@ namespace _Application.Scripts.SavedData
     {
         public TowerType TowerType;
         public int SavedCard;
-        public int AchievedLevel = -1;
+        public int[] AchievedLevels;
     }
 }

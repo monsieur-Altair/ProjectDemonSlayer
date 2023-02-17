@@ -1,8 +1,6 @@
-﻿using _Application.Scripts.Control;
-using _Application.Scripts.Infrastructure.Services;
+﻿using _Application.Scripts.Infrastructure.Services;
 using _Application.Scripts.Infrastructure.Services.Factory;
 using _Application.Scripts.Infrastructure.Services.Progress;
-using _Application.Scripts.Infrastructure.Services.Scriptables;
 using _Application.Scripts.Managers;
 using _Application.Scripts.SavedData;
 using Pool_And_Particles;
@@ -75,9 +73,6 @@ namespace _Application.Scripts.Infrastructure.States
         {
             AllServices.Register(_coreConfig);
             RegisterPool();
-
-            ScriptableService scriptableService = AllServices.Register(new ScriptableService(_coreConfig));
-            scriptableService.LoadAll();
 
             GameFactory factory = AllServices.Register(new GameFactory(_coreConfig));
 

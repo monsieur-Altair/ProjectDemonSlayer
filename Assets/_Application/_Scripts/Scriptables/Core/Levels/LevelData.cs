@@ -9,7 +9,7 @@ namespace _Application._Scripts.Scriptables.Core.Levels
     {
         [SerializeField] private List<SingleReward> _rewards;
         [SerializeField] private int _approachingCount;
-        [SerializeField] private int _startElixirAmount;
+        [SerializeField] private int _startElixirAmount = 200;
 
         [SerializeField, NonReorderable] private List<WaveData> _wavesData;
 

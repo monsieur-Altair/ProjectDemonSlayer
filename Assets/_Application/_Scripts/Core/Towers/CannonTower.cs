@@ -35,8 +35,10 @@ namespace _Application._Scripts.Core.Towers
             Quaternion rot = Quaternion.LookRotation(futurePos - spawnPos);
             
             CannonProjectile projectile = _globalPool.Get(_cannonProjectilePrefab, spawnPos, rot);
-            projectile.Initialize(_baseTowerData.AttackInfo, projectileHorizontalSpeed, target, _powerCoefficient,
-                futurePos, _cannonTowerData.ExplosionRadius, _enemyTracker, flightTime);
+            
+            projectile.Initialize(_baseTowerData.AttackInfo, projectileHorizontalSpeed, target, 
+                _upgradeData.PowerCoefficient, futurePos, _cannonTowerData.ExplosionRadius, 
+                _enemyTracker, flightTime);
             
             _projectileTracker.Add(target, projectile);
         }

@@ -17,7 +17,7 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
             base.Enter();
 
             _targetPos = ((BaseHero) Holder).TargetPos;
-            _motionSpeed = Holder.BaseUnitData.MotionsSpeed;
+            _motionSpeed = Holder.MotionsSpeed;
         }
 
         public override void Update()

@@ -7,7 +7,6 @@ using _Application.Scripts.Infrastructure.Services;
 using _Application.Scripts.Managers;
 using _Application.Scripts.UI.Windows;
 using Pool_And_Particles;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace _Application.Scripts.UI
@@ -38,30 +37,59 @@ namespace _Application.Scripts.UI
 
             _levelManager = levelManager;
             _enemyTracker = _levelManager.CurrentLevel.WaveManager.EnemyTracker;
-            _warriorTowers = _levelManager.CurrentLevel.GetTowers<WarriorTower>(TowerType.WarriorTower);
+            _warriorTowers = _levelManager.CurrentLevel.TowersManager.GetTowers<WarriorTower>(TowerType.WarriorTower);
 
-            foreach (WarriorTower warriorTower in _warriorTowers)
-            {
-                warriorTower.WarriorAdded += AddBar;
-                foreach (IDamagable damagable in warriorTower.Damagables) 
-                    AddBar(damagable);
-            }
+            foreach (WarriorTower warriorTower in _warriorTowers) 
+                InitializeWarriorTower(warriorTower);
 
+            _levelManager.CurrentLevel.TowersManager.AddedTower += OnAddedTower;
+            _levelManager.CurrentLevel.TowersManager.DestroyedTower += OnDestroyedTower;
+            
             _levelManager.CurrentLevel.HeroAdded += AddBar;
             AddBar(_levelManager.CurrentLevel.BaseHero);
             
             _enemyTracker.EnemyAdded += AddBar;
         }
 
+        private void OnDestroyedTower(BaseTower baseTower)
+        {
+            if (baseTower.TowerType == TowerType.WarriorTower)
+            {
+                WarriorTower warriorTower = baseTower as WarriorTower;
+                _warriorTowers.Remove(warriorTower);
+                warriorTower.WarriorAdded -= AddBar;
+            }
+        }
+
+        private void OnAddedTower(BaseTower baseTower)
+        {
+            if (baseTower.TowerType == TowerType.WarriorTower)
+            {
+                WarriorTower warriorTower = baseTower as WarriorTower;
+                _warriorTowers.Add(warriorTower);
+                InitializeWarriorTower(warriorTower);
+            }
+        }
+
+        private void InitializeWarriorTower(WarriorTower warriorTower)
+        {
+            warriorTower.WarriorAdded += AddBar;
+            foreach (IDamagable damagable in warriorTower.Damagables)
+                AddBar(damagable);
+        }
+
         public void Clear()
         {
             foreach (UnitBar counter in _unitsBars.Values) 
                 _pool.Free(counter);
-            
+
             foreach (WarriorTower warriorTower in _warriorTowers) 
                 warriorTower.WarriorAdded -= AddBar;
+
             _enemyTracker.EnemyAdded -= AddBar;
             _levelManager.CurrentLevel.HeroAdded -= AddBar;
+
+            _levelManager.CurrentLevel.TowersManager.AddedTower -= OnAddedTower;
 
             _unitsBars.Clear();
             _enemyTracker = null;

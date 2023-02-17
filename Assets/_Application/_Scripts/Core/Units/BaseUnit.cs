@@ -19,7 +19,7 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
 
         protected UnitStateMachine _stateMachine;
 
-        public BaseUnitData BaseUnitData { get; protected set; }
+        protected BaseUnitData BaseUnitData { get; set; }
         public BaseEnemy Target { get; private set; }
         public float CloseAttackRadius => BaseUnitData.CloseAttackRadius;
         public List<DamageInfo> DefenceInfo => BaseUnitData.DefenseInfo;
@@ -28,10 +28,14 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
         public bool IsBusy { get; private set; }
         public bool IsAlive { get; private set; }
         public float CurrentHealth { get; private set; }
-        public float MaxHealth => BaseUnitData.Health;
         public Transform BarPoint => _barPoint;
         public float ReviveDuration => BaseUnitData.ReviveDur;
+        public float AttackCooldown => BaseUnitData.AttackCooldown;
+        public List<DamageInfo> AttackInfo => BaseUnitData.AttackInfo;
+
         public virtual float PowerCoefficient => 1f;
+        public virtual float MaxHealth => BaseUnitData.Health;
+        public virtual float MotionsSpeed => BaseUnitData.MotionsSpeed;
 
 
         private void Awake()

@@ -27,8 +27,8 @@ namespace _Application._Scripts.Core.Towers
             Quaternion rot = Quaternion.LookRotation(target.FindPoint.position - position);
             
             MagicProjectile projectile = _globalPool.Get(_projectilePrefab, position, rot);
-            projectile.Initialize(_baseTowerData.AttackInfo, _magicTowerData.ProjectileSpeed, target, _powerCoefficient, 
-                _magicTowerData.SlowCoefficient, _magicTowerData.SlowDur);
+            projectile.Initialize(_baseTowerData.AttackInfo, _magicTowerData.ProjectileSpeed, target, 
+                _upgradeData.PowerCoefficient, _magicTowerData.SlowCoefficient, _magicTowerData.SlowDur);
             
             _projectileTracker.Add(target, projectile);
         }

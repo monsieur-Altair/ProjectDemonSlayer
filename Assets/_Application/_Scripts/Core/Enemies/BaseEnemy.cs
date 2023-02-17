@@ -18,6 +18,8 @@ namespace _Application._Scripts.Core.Enemies
         public event Action<IDamagable> Damaged = delegate { };
         public event Action<IDamagable> Updated = delegate { };
         public event Action<BaseEnemy> Approached = delegate { };
+        public event Action<BaseEnemy> GrantedReward = delegate { };
+        
 
         [SerializeField] private Transform _barPoint;
         [SerializeField] private Transform _hitPoint;
@@ -38,6 +40,7 @@ namespace _Application._Scripts.Core.Enemies
         public float MotionSpeed => _baseEnemyData.MotionsSpeed;
         public EnemyBehaviourType BehaviourType => _baseEnemyData.BehaviourType;
         public EnemyState CurrentEnemyState { get; private set; } = EnemyState.None;
+        public int KillingReward => Mathf.RoundToInt(_baseEnemyData.KillingReward);
 
         private IDamagable _target;
 
@@ -185,6 +188,7 @@ namespace _Application._Scripts.Core.Enemies
             _target = null;
             _targets.Clear();
             CurrentEnemyState = EnemyState.None;
+            GrantedReward(this);
             Died(this);
         }
     }

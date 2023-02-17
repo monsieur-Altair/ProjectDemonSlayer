@@ -22,7 +22,7 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
             Holder.Target.Died += OnTargetDied;
             Holder.SetBusy(true);
 
-            _motionSpeed = Holder.BaseUnitData.MotionsSpeed;
+            _motionSpeed = Holder.MotionsSpeed;
             _closeAttackRadius = Holder.CloseAttackRadius;
             _stopRange = 2f * _closeAttackRadius;
         }

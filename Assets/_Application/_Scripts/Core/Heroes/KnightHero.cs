@@ -11,6 +11,9 @@ namespace _Application._Scripts.Core.Heroes
         private KnightHeroData _knightHeroData;
         private EnemyTracker _enemyTracker;
 
+        protected override HeroType HeroType => HeroType.Knight;
+        public override float SkillCooldown => _knightHeroData.SkillCooldown;
+
         public override void Initialize(CoreConfig coreConfig)
         {
             base.Initialize(coreConfig);
@@ -39,7 +42,7 @@ namespace _Application._Scripts.Core.Heroes
                 enemy.TakeDamage(damageAmount);
             }
             
-            OnUltimateApplied();
+            //OnUltimateApplied();
         }
     }
 }

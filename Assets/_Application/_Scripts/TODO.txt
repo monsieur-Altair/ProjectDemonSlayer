@@ -3,9 +3,10 @@
 * 1. battle logic (warrior house, enemy logic too)
 * 2. hero logic
  
- buy/sell system
- upgrade system
- *hero skill
+* buy/sell system
+ upgrade system (windows for tower and hero upgrades)
+* hero skill
+ card system/chest system
  
  3. animations
  4. UI

@@ -17,10 +17,11 @@ namespace _Application._Scripts.Core
     {
         public event Action LevelPassed = delegate { };
         public event Action LevelFailed = delegate { };
+        public event Action WaveUpdated = delegate { };
+        public event Action PenetrationUpdated = delegate { };
         
         private GlobalPool _globalPool;
 
-        private int _currentWaveIndex;
         private MyDictionary<EnemyType, BaseEnemy> _enemiesPrefabs;
         private MyDictionary<EnemyType, BaseEnemyData> _enemiesData;
         private List<VertexPath> _paths;
@@ -28,6 +29,29 @@ namespace _Application._Scripts.Core
         private Coroutine _spawnCoroutine;
         private int _approachedEnemyCount;
         private LevelData _levelData;
+        
+        private int _currentWaveIndex;
+        public int CurrentWaveIndex
+        {
+            get => _currentWaveIndex;
+            private set
+            {
+                _currentWaveIndex = value;
+                WaveUpdated();
+            }
+        }
+        public int MaxWaveIndex => _levelData.WavesData.Count;
+        public int MaxApproachingCount => _levelData.ApproachingCount;
+        public int ApproachedEnemyCount
+        {
+            get => _approachedEnemyCount;
+            private set
+            {
+                _approachedEnemyCount = value;
+                PenetrationUpdated();
+            }
+        }
+
 
         public EnemyTracker EnemyTracker { get; private set; }
 
@@ -40,12 +64,14 @@ namespace _Application._Scripts.Core
             _enemiesData = coreConfig.EnemiesData;
             
             EnemyTracker = new EnemyTracker();
+
+            CurrentWaveIndex = -1;
+            ApproachedEnemyCount = 0;
         }
 
         public void StartSpawn()
         {
-            _currentWaveIndex = 0;
-            _approachedEnemyCount = 0;
+            CurrentWaveIndex++;
             _isWaveEnded = false;
             EnemyTracker.WaveEnded += OnWaveEnded;
             EnemyTracker.Approached += OnEnemyApproached;
@@ -55,14 +81,14 @@ namespace _Application._Scripts.Core
 
         private IEnumerator SpawnCoroutine()
         {
-            while (_currentWaveIndex < _levelData.WavesData.Count)
+            while (CurrentWaveIndex < MaxWaveIndex)
             {
                 yield return null;
                 yield return StartCoroutine(SpawnWave());
                 yield return new WaitUntil(() => _isWaveEnded);
                 _isWaveEnded = false;
                 EnemyTracker.Clear();
-                _currentWaveIndex++;
+                CurrentWaveIndex++;
             }
 
             Unsubscribe();
@@ -79,9 +105,9 @@ namespace _Application._Scripts.Core
 
         private void OnEnemyApproached(BaseEnemy enemy)
         {
-            _approachedEnemyCount++;
+            ApproachedEnemyCount++;
 
-            if (_approachedEnemyCount == _levelData.ApproachingCount)
+            if (ApproachedEnemyCount == MaxApproachingCount)
             {
                 EnemyTracker.Clear();
                 
@@ -102,7 +128,7 @@ namespace _Application._Scripts.Core
 
         private IEnumerator SpawnWave()
         {
-            WaveData currentWaveData = _levelData.WavesData[_currentWaveIndex];
+            WaveData currentWaveData = _levelData.WavesData[CurrentWaveIndex];
             int enemyAmountInWave = currentWaveData.MiniWavesData.Sum(miniWaveData => miniWaveData.EnemyCount);
             EnemyTracker.Initialize(enemyAmountInWave, _globalPool);
 
