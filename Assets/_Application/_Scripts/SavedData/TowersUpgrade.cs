@@ -7,7 +7,7 @@ namespace _Application.Scripts.SavedData
     public class TowersUpgrade
     {
         public TowerType TowerType;
-        public int SavedCard;
+        public int[] SavedCard;
         public int[] AchievedLevels;
     }
 }

@@ -47,7 +47,8 @@ namespace _Application.Scripts.SavedData
                 HeroUpgrades[i] = new HeroUpgrade
                 {
                     HeroType = heroTypes[i],
-                    UpgradeLevel = 0,
+                    AchievedLevel = 0,
+                    SavedCard = 0
                 };
             }
         }
@@ -68,7 +69,7 @@ namespace _Application.Scripts.SavedData
                 TowersUpgrades[i] = new TowersUpgrade
                 {
                     TowerType = towerTypes[i],
-                    SavedCard = 0,
+                    SavedCard = new int[CoreConfig.TowerLevelAmount],
                     AchievedLevels = new int[CoreConfig.TowerLevelAmount]
                 };
             }

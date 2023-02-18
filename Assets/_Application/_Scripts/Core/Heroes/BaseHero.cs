@@ -59,7 +59,7 @@ namespace _Application._Scripts.Core.Heroes
         private void ApplyUpgrades(CoreConfig coreConfig)
         {
             int level = _progressService.PlayerProgress.HeroUpgrades
-                .First(upgradeProgress => upgradeProgress.HeroType == HeroType).UpgradeLevel;
+                .First(upgradeProgress => upgradeProgress.HeroType == HeroType).AchievedLevel;
 
             _baseHeroUpgradeData = coreConfig.HeroUpgrades[HeroType][level];
         }

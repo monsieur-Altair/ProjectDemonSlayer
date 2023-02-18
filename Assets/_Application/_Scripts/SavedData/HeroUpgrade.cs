@@ -7,6 +7,7 @@ namespace _Application.Scripts.SavedData
     public class HeroUpgrade
     {
         public HeroType HeroType;
-        public int UpgradeLevel;
+        public int AchievedLevel;
+        public int SavedCard;
     }
 }

@@ -25,8 +25,10 @@ namespace _Application._Scripts.Core.Heroes
         {
             base.FetchData(coreConfig);
             
-            BaseUnitData = coreConfig.KnightHeroData;
-            _knightHeroData = coreConfig.KnightHeroData;
+            KnightHeroData knightHeroData = coreConfig.HeroDatas[HeroType.Knight] as KnightHeroData;
+            
+            BaseUnitData = knightHeroData;
+            _knightHeroData = knightHeroData;
         }
 
         public override void DamageByUltimate()

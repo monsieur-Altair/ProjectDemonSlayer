@@ -8,8 +8,9 @@ namespace _Application.Scripts.UI.Windows
     public class LobbyWindow : Window
     {
         [SerializeField] private Button _toStatsButton;
-        [SerializeField] private Button _toUpgradeButton;
         [SerializeField] private Button _startGameButton;
+        [SerializeField] private Button _upgradeTowersButton;
+        [SerializeField] private Button _upgradeHeroesButton;
 
         private StateMachine _stateMachine;
 
@@ -25,8 +26,10 @@ namespace _Application.Scripts.UI.Windows
         {
             base.OnOpened();
             _toStatsButton.onClick.AddListener(OpenStats);
-            _toUpgradeButton.onClick.AddListener(OpenUpgrades);
             _startGameButton.onClick.AddListener(StartGame);
+            
+            _upgradeTowersButton.onClick.AddListener(OpenTowerUpgrades);
+            _upgradeHeroesButton.onClick.AddListener(OpenHeroesUpgrades);
         }
 
         protected override void OnClosed()
@@ -34,8 +37,16 @@ namespace _Application.Scripts.UI.Windows
             base.OnClosed();
             
             _toStatsButton.onClick.RemoveListener(OpenStats);
-            _toUpgradeButton.onClick.RemoveListener(OpenUpgrades);
             _startGameButton.onClick.RemoveListener(StartGame);
+            
+            _upgradeTowersButton.onClick.RemoveListener(OpenTowerUpgrades);
+            _upgradeHeroesButton.onClick.RemoveListener(OpenHeroesUpgrades);
+        }
+
+        private void OpenHeroesUpgrades()
+        {
+            Close();
+            UISystem.ShowWindow<HeroUpgradeWindow>();
         }
 
         private void StartGame()
@@ -43,10 +54,10 @@ namespace _Application.Scripts.UI.Windows
             _stateMachine.Enter<GameLoopState>();   
         }
 
-        private void OpenUpgrades()
+        private void OpenTowerUpgrades()
         {
             Close();
-            UISystem.ShowWindow<UpgradeWindow>();
+            UISystem.ShowWindow<TowerUpgradeWindow>();
         }
         
         private void OpenStats()

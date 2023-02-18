@@ -22,12 +22,12 @@ namespace _Application.Scripts.Managers
         [Space, SerializeField] private MyDictionary<TowerType, List<BaseTowerData>> _towersData;
         [Space, SerializeField, NonReorderable] private List<LevelData> _levelData;
         [Space, SerializeField] private BaseUnitData _warriorData;
-        [Space, SerializeField] private KnightHeroData _knightHeroData;
         [Space, SerializeField] private MyDictionary<TowerType, List<List<BaseTowerUpgradeData>>> _towersUpgradesLists;
         [Space, SerializeField] private MyDictionary<HeroType, List<BaseHeroUpgradeData>> _heroUpgrades;
+        [Space, SerializeField] private MyDictionary<HeroType, BaseUnitData> _heroDatas;
 
-        
-        
+
+        public MyDictionary<HeroType, BaseUnitData> HeroDatas => _heroDatas;
         public MyDictionary<HeroType, List<BaseHeroUpgradeData>> HeroUpgrades => _heroUpgrades;
         public MyDictionary<TowerType, List<List<BaseTowerUpgradeData>>> TowersUpgradesLists => _towersUpgradesLists;
         public MyDictionary<TowerType, List<BaseTowerData>> TowersData => _towersData;
@@ -37,6 +37,5 @@ namespace _Application.Scripts.Managers
         public bool UseTutorial => _useTutorial;
         public Warehouse Warehouse => _warehouse;
         public BaseUnitData WarriorData => _warriorData;
-        public KnightHeroData KnightHeroData => _knightHeroData;
     }
 }
