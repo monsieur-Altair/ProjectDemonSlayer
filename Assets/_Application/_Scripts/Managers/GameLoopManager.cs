@@ -80,8 +80,6 @@ namespace _Application.Scripts.Managers
                 {
                     _coroutineRunner.StartCoroutine(StartGameplay());
                     
-                    UISystem.ShowWindow<GameplayWindow>();
-
                     int currentLevelNumber = _levelsManager.CurrentLevelIndex;
 
                     if (currentLevelNumber <= MaxTutorialCount && _useTutorial) 
@@ -148,6 +146,8 @@ namespace _Application.Scripts.Managers
             yield return _coroutineRunner.StartCoroutine(_levelsManager.CreateLevel());
             _barSpawner.Initialize(_levelsManager);
             _userControl.Enable();
+
+            UISystem.ShowWindow<GameplayWindow>();
         }
     }
 }

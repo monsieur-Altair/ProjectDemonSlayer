@@ -17,6 +17,15 @@ namespace _Application.Scripts.Misc
         public static string ConvertToJson(this object obj) => 
             JsonUtility.ToJson(obj);
 
+        public static Vector2 GetResized(this Sprite sprite, float preferredSize)
+        {
+            int sWidth = sprite.texture.width;
+            int sHeight = sprite.texture.height;
+            return sWidth > sHeight 
+                ? new Vector2(preferredSize, preferredSize * sHeight / sWidth)
+                : new Vector2(preferredSize * sWidth / sHeight, preferredSize);
+        }
+        
         public static Vector3 With(this Vector3 v, float? x = null, float? y = null, float? z = null)
         {
             return new Vector3(

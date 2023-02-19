@@ -1,0 +1,36 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b320ebf4d1a64d37a9910b6f2d7c2ce5, type: 3}
+  m_Name: KnightHeroData
+  m_EditorClassIdentifier: 
+  _health: 120
+  _motionsSpeed: 4
+  _attackCooldown: 1
+  _attackInfo:
+  - _value: 6
+    _damageType: 0
+  - _value: 0
+    _damageType: 1
+  _defenseInfo:
+  - _value: 0.1
+    _damageType: 0
+  - _value: 0.1
+    _damageType: 1
+  _reviveDur: 4
+  _closeAttackRadius: 0.5
+  _skillAttackInfo:
+  - _value: 20
+    _damageType: 0
+  - _value: 0
+    _damageType: 1
+  _skillAttackRadius: 2
+  _skillCooldown: 30

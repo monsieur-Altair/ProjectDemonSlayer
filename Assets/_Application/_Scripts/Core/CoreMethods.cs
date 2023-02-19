@@ -9,6 +9,18 @@ namespace _Application._Scripts.Core
 {
     public static class CoreMethods
     {
+        public static string ConvertNumberToRome(int towerLevel)
+        {
+            return towerLevel switch
+            {
+                1 => "I",
+                2 => "II",
+                3 => "III",
+                4 => "IV",
+                _ => "WTF"
+            };
+        }
+        
         public static float CalculateDamage(List<DamageInfo> attackInfos, List<DamageInfo> defenceInfos)
         {
             float result = 0.0f;

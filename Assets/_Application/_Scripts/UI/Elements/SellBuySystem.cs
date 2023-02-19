@@ -2,6 +2,8 @@
 using _Application.Scripts.Control;
 using _Application.Scripts.Infrastructure.Services;
 using _Application.Scripts.Managers;
+using DG.Tweening;
+using Extensions;
 using UnityEngine;
 
 namespace _Application.Scripts.UI.Windows
@@ -80,9 +82,16 @@ namespace _Application.Scripts.UI.Windows
             _sellBuyUI.Pivot.anchoredPosition = UISystem.GetUIPosition(_globalCamera.WorldCamera, pointPosition);
 
             if (buildPlace.CurrentTower == null)
-                _sellBuyUI.ShowBuyMenu();
+                TweenExt.Wait(0.1f).OnComplete(_sellBuyUI.ShowBuyMenu);
             else
-                _sellBuyUI.ShowSellUpgradeMenu(buildPlace.CurrentTower.TowerType, buildPlace.CurrentTower.TowerLevel);
+            {
+                TweenExt.Wait(0.1f).OnComplete(() =>
+                {
+                    _sellBuyUI.ShowSellUpgradeMenu(buildPlace.CurrentTower.TowerType,
+                        buildPlace.CurrentTower.TowerLevel);
+                });
+                
+            }
         }
 
         private void OnDestroyButtonClicked(int cost)

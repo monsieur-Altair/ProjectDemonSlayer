@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _monoBehaviourServices: {fileID: 11400000, guid: 1e58fb0badccc14489107bb1502a5b6e, type: 2}
   _useTutorial: 0
-  _playerConfig: {fileID: 11400000, guid: 81e92971cbbfec14f89428a0593a8230, type: 2}
   _warehouse: {fileID: 11400000, guid: 1a3f58c302f52a54ebcbd8988e35ab35, type: 2}
   _enemiesData:
     _pairs:
@@ -25,14 +24,74 @@ MonoBehaviour:
   _towersData:
     _pairs:
     - _key: 0
-      _value: {fileID: 11400000, guid: 093bee9b94c1eba4db390b69c58d3f28, type: 2}
+      _value:
+      - {fileID: 11400000, guid: 093bee9b94c1eba4db390b69c58d3f28, type: 2}
+      - {fileID: 11400000, guid: 8a8c6029fb037df42985d625f3ae518e, type: 2}
     - _key: 3
-      _value: {fileID: 11400000, guid: 093bee9b94c1eba4db390b69c58d3f28, type: 2}
+      _value:
+      - {fileID: 11400000, guid: ca735edb3e7b4144e8e18b67c7ea579f, type: 2}
+      - {fileID: 11400000, guid: a47505ef6f4a5af40ad71afff4e47ec8, type: 2}
     - _key: 2
-      _value: {fileID: 11400000, guid: 093bee9b94c1eba4db390b69c58d3f28, type: 2}
+      _value:
+      - {fileID: 11400000, guid: 203643052956a2849a6c9fe30d223a44, type: 2}
+      - {fileID: 11400000, guid: 73e7ae9acca13fd4ab536294bb5073c8, type: 2}
     - _key: 1
-      _value: {fileID: 11400000, guid: 093bee9b94c1eba4db390b69c58d3f28, type: 2}
+      _value:
+      - {fileID: 11400000, guid: 223a3b91ff0d0394fb225232124ec04b, type: 2}
+      - {fileID: 11400000, guid: f33132113045d5443a4024db81f7e118, type: 2}
   _levelData:
   - {fileID: 11400000, guid: 832c495a65c42644283cba5abbea4016, type: 2}
-  _warriorData: {fileID: 11400000, guid: f16132c44e0a55a4ebd20515fd94beea, type: 2}
-  _heroData: {fileID: 11400000, guid: a07bf4eb60ea58c46b3e1b85f7c9c3e8, type: 2}
+  _warriorData: {fileID: 11400000, guid: be145be76b1fe9645b8ebcb27dba1187, type: 2}
+  _towersUpgradesLists:
+    _pairs:
+    - _key: 0
+      _value:
+      - List:
+        - {fileID: 11400000, guid: 33c0f4f22c08cc948a84f56c814c5929, type: 2}
+        - {fileID: 11400000, guid: 48b859c2a635518429a213ee4c6ee3ff, type: 2}
+        - {fileID: 11400000, guid: 9fb2729ae32fc944199df847a5b24022, type: 2}
+      - List:
+        - {fileID: 11400000, guid: 00264ef1d87d0fa459ba7ac4e5a4f641, type: 2}
+        - {fileID: 11400000, guid: bf9093b8c5be35e4fb5dd398073a4acf, type: 2}
+        - {fileID: 11400000, guid: 9dd2abf373267284bbc45f5255f84217, type: 2}
+    - _key: 1
+      _value:
+      - List:
+        - {fileID: 11400000, guid: a102cc839f31da444b789dcf1588d872, type: 2}
+        - {fileID: 11400000, guid: 3d068052a0f1fc542b8cda095f20ab24, type: 2}
+        - {fileID: 11400000, guid: 3cb1687a35b17874aa56861e700b92fc, type: 2}
+      - List:
+        - {fileID: 11400000, guid: 8d1c0f471ae639447bc98ac5f663d05c, type: 2}
+        - {fileID: 11400000, guid: 689e416663b308f4282343ff0268e863, type: 2}
+        - {fileID: 11400000, guid: 8556813317ab58645a477d2b5672b02e, type: 2}
+    - _key: 2
+      _value:
+      - List:
+        - {fileID: 11400000, guid: eb2755278ca1c2449add3ac1a2d38d11, type: 2}
+        - {fileID: 11400000, guid: 781f845f50605394d8cc687084eef400, type: 2}
+        - {fileID: 11400000, guid: 052a4132008cf194e9b1e542125dd911, type: 2}
+      - List:
+        - {fileID: 11400000, guid: 7ee3c6903f70ec6489278ee59621c804, type: 2}
+        - {fileID: 11400000, guid: b171ad880484fff44a15c7f0023bc983, type: 2}
+        - {fileID: 11400000, guid: ee6b3aa970915ca4bae38de3a73c5717, type: 2}
+    - _key: 3
+      _value:
+      - List:
+        - {fileID: 11400000, guid: 35bf76661850b5344af6e3601c407f36, type: 2}
+        - {fileID: 11400000, guid: 4968092e558f2014d9c6dabcf7a1e64c, type: 2}
+        - {fileID: 11400000, guid: 0f647d623f0981a42b6f6e73a316c022, type: 2}
+      - List:
+        - {fileID: 11400000, guid: cb66a3f682c627147a1c5b8139e8d78e, type: 2}
+        - {fileID: 11400000, guid: d440c88a42bd4ed44b8bda24e02097a3, type: 2}
+        - {fileID: 11400000, guid: 5d5f2f44a3a3bc049bdc0b23b7abf459, type: 2}
+  _heroUpgrades:
+    _pairs:
+    - _key: 0
+      _value:
+      - {fileID: 11400000, guid: 90343f4e21c9fbc4394403983b024bf3, type: 2}
+      - {fileID: 11400000, guid: 7dd945f77f70d6744984b98faf3a352a, type: 2}
+      - {fileID: 11400000, guid: 46bd3c25b3b7d694993eef9764d9fe98, type: 2}
+  _heroDatas:
+    _pairs:
+    - _key: 0
+      _value: {fileID: 11400000, guid: d6f866b8ac3246b4a95f4b3374fc3650, type: 2}

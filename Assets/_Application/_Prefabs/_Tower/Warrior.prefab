@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3840385836188723548}
-  - component: {fileID: 3840385836188723549}
+  - component: {fileID: 1204031645633475972}
   m_Layer: 0
   m_Name: Warrior
   m_TagString: Untagged
@@ -34,7 +34,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3840385836188723549
+--- !u!114 &1204031645633475972
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -43,13 +43,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 3840385836188723551}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 441a3d6e27d84cd585f279eb50081ed1, type: 3}
+  m_Script: {fileID: 11500000, guid: 31bc879061fd47afa5728e1370c7a391, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _freeTimeout: 0
   _freeAfterTime: 0
-  _closeAttackRadius: 1
-  _reviveDuration: 3
   _barPoint: {fileID: 3840385836954183202}
 --- !u!1 &3840385836954183205
 GameObject:

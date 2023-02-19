@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1493175bc2f9403ba92f55b8e28eebf9, type: 3}
+  m_Name: WarriorTowerData0
+  m_EditorClassIdentifier: 
+  _health: 300
+  _motionsSpeed: 0
+  _attackCooldown: 1
+  _attackInfo:
+  - _value: 7
+    _damageType: 0
+  - _value: 1
+    _damageType: 1
+  _defenseInfo:
+  - _value: 0
+    _damageType: 0
+  - _value: 0
+    _damageType: 1
+  _radius: 8
+  _projectileSpeed: 8
+  _buildCost: 270
+  _destroyReward: 120
+  _warriorAmount: 3
+  _spawnRadius: 3

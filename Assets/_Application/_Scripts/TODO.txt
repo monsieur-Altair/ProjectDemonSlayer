@@ -4,10 +4,11 @@
 * 2. hero logic
  
 * buy/sell system
-  upgrade system (windows for tower and hero upgrades)
+* upgrade system (windows for tower and hero upgrades)
 * hero skill
-  card system/chest system
+
+  create input zoned
+  card system (create rewards after level/ restart system)
  
   3. animations
-  4. UI
-  5. meta ()
+* 4. UI

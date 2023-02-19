@@ -5,6 +5,7 @@ using _Application._Scripts.Scriptables.Core.Towers;
 using _Application._Scripts.Scriptables.Core.TowerUpgrade;
 using _Application.Scripts.Infrastructure.Services.Progress;
 using _Application.Scripts.Managers;
+using _Application.Scripts.Misc;
 using _Application.Scripts.SavedData;
 using _Application.Scripts.Scriptables.Core.Enemies;
 using TMPro;
@@ -17,7 +18,14 @@ namespace _Application.Scripts.UI.Windows
     {
         private const string Format = "F0";
 
-        [SerializeField] private Button _upgradeButton; 
+        [SerializeField] private TextMeshProUGUI _labelTMP;
+        
+        [SerializeField] private Image _towerPreviewImage;
+        [SerializeField] private Image _towerCardImage;
+        [SerializeField] private float _towerCardPreferredSize;
+        [SerializeField] private float _towerPreviewPreferredSize;
+
+        [SerializeField] private Button _upgradeButton;
         [SerializeField] private Button _closeButton;
 
         [SerializeField] private List<Image> _bars;
@@ -25,13 +33,13 @@ namespace _Application.Scripts.UI.Windows
 
         [SerializeField] private TextMeshProUGUI _cardAmountTMP;
         [SerializeField] private GameObject _cardRectGO;
-        
+
         [SerializeField] private TextMeshProUGUI _upgradeLevelTMP;
-        
+
         private const int HealthIndex = 0;
         private const int PowerIndex = 1;
         private const int RangeIndex = 2;
-        
+
         private ProgressService _progressService;
         private CoreConfig _coreConfig;
         private TowersUpgrade _towersUpgrade;
@@ -48,8 +56,12 @@ namespace _Application.Scripts.UI.Windows
         {
             _towerType = towerType;
             _towerLevel = towerLevel;
+
+            _labelTMP.text = $"{towerType} {CoreMethods.ConvertNumberToRome(towerLevel+1)}";
             
-            List<BaseTowerUpgradeData> towersUpgrades = _coreConfig.TowersUpgradesLists[_towerType][_towerLevel];
+            SetImages();
+
+            List<BaseTowerUpgradeData> towersUpgrades = _coreConfig.TowersUpgradesLists[_towerType][_towerLevel].List;
             BaseTowerData baseTowerData = _coreConfig.TowersData[_towerType][_towerLevel];
 
             _towersUpgrade = _progressService.PlayerProgress.TowersUpgrades
@@ -61,7 +73,7 @@ namespace _Application.Scripts.UI.Windows
             SetHealth(towersUpgrades, currentLevel, baseTowerData);
             SetPower(towersUpgrades, currentLevel, baseTowerData);
             SetRange(towersUpgrades, currentLevel, baseTowerData);
-            
+
             _closeButton.onClick.AddListener(Close);
             _upgradeButton.onClick.AddListener(Upgrade);
 
@@ -72,18 +84,29 @@ namespace _Application.Scripts.UI.Windows
                 _upgradeButton.gameObject.SetActive(false);
                 return;
             }
-            
+
             SetCardZone(towersUpgrades, currentLevel);
+        }
+
+        private void SetImages()
+        {
+            Sprite previewSprite = _coreConfig.Warehouse.TowerPreviewSprites[_towerType][_towerLevel];
+            _towerPreviewImage.rectTransform.sizeDelta = previewSprite.GetResized(_towerPreviewPreferredSize);
+            _towerPreviewImage.sprite = previewSprite;
+
+            Sprite cardSprite = _coreConfig.Warehouse.TowerCardSprites[_towerType][_towerLevel];
+            _towerCardImage.rectTransform.sizeDelta = cardSprite.GetResized(_towerCardPreferredSize);
+            _towerCardImage.sprite = cardSprite;
         }
 
         private void Upgrade()
         {
-            List<BaseTowerUpgradeData> towersUpgrades = _coreConfig.TowersUpgradesLists[_towerType][_towerLevel];
+            List<BaseTowerUpgradeData> towersUpgrades = _coreConfig.TowersUpgradesLists[_towerType][_towerLevel].List;
             int currentLevel = _towersUpgrade.AchievedLevels[_towerLevel];
-            
+
             _towersUpgrade.SavedCard[_towerLevel] -= towersUpgrades[currentLevel + 1].RequiredCardAmount;
             _towersUpgrade.AchievedLevels[_towerLevel]++;
-            
+
             OnClosed();
             OnOpened(_towerType, _towerLevel);
         }
@@ -102,18 +125,19 @@ namespace _Application.Scripts.UI.Windows
 
         private void SetRange(List<BaseTowerUpgradeData> towersUpgrades, int currentLevel, BaseTowerData baseTowerData)
         {
-            float minCoefficient = towersUpgrades[0]            .RangeCoefficient;
-            float maxCoefficient = towersUpgrades[^1]           .RangeCoefficient;
+            float minCoefficient = towersUpgrades[0].RangeCoefficient;
+            float maxCoefficient = towersUpgrades[^1].RangeCoefficient;
             float currCoefficient = towersUpgrades[currentLevel].RangeCoefficient;
 
             float percent = (currCoefficient - minCoefficient) / (maxCoefficient - minCoefficient);
             _bars[RangeIndex].fillAmount = percent;
             _barsValues[RangeIndex].text = (baseTowerData.Radius * currCoefficient).ToString(Format);
         }
+
         private void SetPower(List<BaseTowerUpgradeData> towersUpgrades, int currentLevel, BaseTowerData baseTowerData)
         {
-            float minCoefficient = towersUpgrades[0]            .PowerCoefficient;
-            float maxCoefficient = towersUpgrades[^1]           .PowerCoefficient;
+            float minCoefficient = towersUpgrades[0].PowerCoefficient;
+            float maxCoefficient = towersUpgrades[^1].PowerCoefficient;
             float currCoefficient = towersUpgrades[currentLevel].PowerCoefficient;
 
             float percent = (currCoefficient - minCoefficient) / (maxCoefficient - minCoefficient);
@@ -137,10 +161,9 @@ namespace _Application.Scripts.UI.Windows
         {
             int currentAmount = _towersUpgrade.SavedCard[_towerLevel];
             int requiredCardAmount = towersUpgrades[currentLevel + 1].RequiredCardAmount;
-            _cardAmountTMP.text = $"{currentAmount / requiredCardAmount}";
-            
-            _upgradeButton.gameObject.SetActive(true);
-            _upgradeButton.interactable = currentAmount >= requiredCardAmount;
+            _cardAmountTMP.text = $"{currentAmount}/{requiredCardAmount}";
+
+            _upgradeButton.gameObject.SetActive(currentAmount >= requiredCardAmount);
         }
     }
 }

@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using _Application._Scripts.Scriptables.Core.Towers;
 using _Application.Scripts.Managers;
+using DG.Tweening;
+using Extensions;
 using UnityEngine;
 
 namespace _Application.Scripts.UI.Windows
@@ -29,10 +31,13 @@ namespace _Application.Scripts.UI.Windows
         {
             IsShown = true;
             _buyMenuGO.SetActive(true);
+            Debug.Log("show buy");
         }
 
         public void ShowSellUpgradeMenu(TowerType towerType, int towerLevel)
         {
+            Debug.Log("show up-sell");
+
             IsShown = true;
             _sellUpgradeMenu.SetActive(true);
 
@@ -43,9 +48,14 @@ namespace _Application.Scripts.UI.Windows
 
         public void Hide()
         {
+            Debug.Log("hide");
             IsShown = false;
-            _sellUpgradeMenu.SetActive(false);
-            _buyMenuGO.SetActive(false);
+            TweenExt.Wait(0.01f).OnComplete(() =>
+            {
+                _sellUpgradeMenu.SetActive(false);
+                _buyMenuGO.SetActive(false);
+            });
+            
         }
         
         public void OnOpened(CoreConfig coreConfig)
@@ -66,6 +76,9 @@ namespace _Application.Scripts.UI.Windows
             
             _upgradeTowerButton.Clicked += UpgradeTowerButtonOnClicked;
             _destroyTowerButton.Clicked += DestroyTowerButtonOnClicked;
+            
+            _upgradeTowerButton.Subscribe();
+            _destroyTowerButton.Subscribe();
         }
 
         public void Unsubscribe()
@@ -75,6 +88,12 @@ namespace _Application.Scripts.UI.Windows
                 towerButton.Unsubscribe();
                 towerButton.Clicked -= OnTowerButtonClicked;
             }
+            
+            _upgradeTowerButton.Clicked -= UpgradeTowerButtonOnClicked;
+            _destroyTowerButton.Clicked -= DestroyTowerButtonOnClicked;
+            
+            _upgradeTowerButton.Unsubscribe();
+            _destroyTowerButton.Unsubscribe();
         }
 
         private void DestroyTowerButtonOnClicked(int cost) => 

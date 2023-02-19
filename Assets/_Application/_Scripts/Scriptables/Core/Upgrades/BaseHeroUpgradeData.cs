@@ -2,7 +2,7 @@
 
 namespace _Application._Scripts.Scriptables.Core.TowerUpgrade
 {
-    [CreateAssetMenu(fileName = "base hero upgrade data", menuName = "Resources/Towers/HeroUpgradeData", order = 0)]
+    [CreateAssetMenu(fileName = "base hero upgrade data", menuName = "Resources/Hero/HeroUpgradeData", order = 0)]
     public class BaseHeroUpgradeData : ScriptableObject
     {
         [SerializeField] private float _powerCoefficient = 1;

@@ -17,7 +17,7 @@ namespace _Application._Scripts.Core.Towers
         protected List<DamageInfo> _attackInfo;
         protected Transform _transform;
         protected GlobalPool _globalPool;
-        private float _powerCoefficient;
+        protected float _powerCoefficient;
         public BaseEnemy Target { get; private set; }
 
         private void Awake()

@@ -14,7 +14,6 @@ namespace _Application._Scripts.Core.Towers
         private float _elapsedTime;
         private Vector3 _startPos;
         private float _flightTime;
-        private float _powerCoefficient;
         private float HorizontalSpeed => _speed;
 
         public void Initialize(List<DamageInfo> attackInfo, float horizontalSpeed, BaseEnemy target, float powerCoefficient, 

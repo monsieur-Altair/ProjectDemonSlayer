@@ -19,6 +19,12 @@ MonoBehaviour:
       _value: {fileID: 7288729417567964204, guid: a4c79d078865c584188878e072d8871e, type: 3}
     - _key: 1
       _value: {fileID: 5816151529748882696, guid: 20a519a7cc9d3124a99c34a3106e0059, type: 3}
+  _enemyPreviewSprites:
+    _pairs:
+    - _key: 0
+      _value: {fileID: 21300000, guid: 614a818b98d4bc941be141eb14d1c7fd, type: 3}
+    - _key: 1
+      _value: {fileID: 21300000, guid: 614a818b98d4bc941be141eb14d1c7fd, type: 3}
   _projectilePrefabs:
     _pairs:
     - _key: 0
@@ -35,4 +41,48 @@ MonoBehaviour:
       _value: {fileID: 407240055487379157, guid: e499b05cc4542294db8e0111039a959c, type: 3}
     - _key: 2
       _value: {fileID: 5556636542641998662, guid: b6a38dd6d63ed7d429d0f7ebfd1299b9, type: 3}
-  _warriorPrefab: {fileID: 3840385836188723549, guid: ab18a49ad0168e343a8d84b89ba6812d, type: 3}
+  _towerCardSprites:
+    _pairs:
+    - _key: 0
+      _value:
+      - {fileID: 21300000, guid: 614a818b98d4bc941be141eb14d1c7fd, type: 3}
+      - {fileID: 21300000, guid: 614a818b98d4bc941be141eb14d1c7fd, type: 3}
+    - _key: 1
+      _value:
+      - {fileID: 21300000, guid: 614a818b98d4bc941be141eb14d1c7fd, type: 3}
+      - {fileID: 21300000, guid: 614a818b98d4bc941be141eb14d1c7fd, type: 3}
+    - _key: 2
+      _value:
+      - {fileID: 21300000, guid: 614a818b98d4bc941be141eb14d1c7fd, type: 3}
+      - {fileID: 21300000, guid: 614a818b98d4bc941be141eb14d1c7fd, type: 3}
+    - _key: 3
+      _value:
+      - {fileID: 21300000, guid: 614a818b98d4bc941be141eb14d1c7fd, type: 3}
+      - {fileID: 21300000, guid: 614a818b98d4bc941be141eb14d1c7fd, type: 3}
+  _towerPreviewSprites:
+    _pairs:
+    - _key: 0
+      _value:
+      - {fileID: 21300000, guid: 614a818b98d4bc941be141eb14d1c7fd, type: 3}
+      - {fileID: 21300000, guid: 614a818b98d4bc941be141eb14d1c7fd, type: 3}
+    - _key: 1
+      _value:
+      - {fileID: 21300000, guid: 614a818b98d4bc941be141eb14d1c7fd, type: 3}
+      - {fileID: 21300000, guid: 614a818b98d4bc941be141eb14d1c7fd, type: 3}
+    - _key: 2
+      _value:
+      - {fileID: 21300000, guid: 614a818b98d4bc941be141eb14d1c7fd, type: 3}
+      - {fileID: 21300000, guid: 614a818b98d4bc941be141eb14d1c7fd, type: 3}
+    - _key: 3
+      _value:
+      - {fileID: 21300000, guid: 614a818b98d4bc941be141eb14d1c7fd, type: 3}
+      - {fileID: 21300000, guid: 614a818b98d4bc941be141eb14d1c7fd, type: 3}
+  _heroPreviewSprites:
+    _pairs:
+    - _key: 0
+      _value: {fileID: 21300000, guid: 614a818b98d4bc941be141eb14d1c7fd, type: 3}
+  _heroCardSprites:
+    _pairs:
+    - _key: 0
+      _value: {fileID: 21300000, guid: 614a818b98d4bc941be141eb14d1c7fd, type: 3}
+  _warriorPrefab: {fileID: 1204031645633475972, guid: ab18a49ad0168e343a8d84b89ba6812d, type: 3}

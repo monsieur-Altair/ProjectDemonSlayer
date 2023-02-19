@@ -92,7 +92,7 @@ namespace _Application._Scripts.Core.Towers
             int upgradeLevel = _progressService.PlayerProgress.TowersUpgrades
                 .First(upgrade => upgrade.TowerType == _towerType).AchievedLevels[TowerLevel];
             
-            _upgradeData = _coreConfig.TowersUpgradesLists[_towerType][TowerLevel][upgradeLevel];
+            _upgradeData = _coreConfig.TowersUpgradesLists[_towerType][TowerLevel].List[upgradeLevel];
         }
 
         public virtual void Clear()

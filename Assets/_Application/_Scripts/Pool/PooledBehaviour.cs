@@ -14,7 +14,7 @@ namespace Pool_And_Particles
         public event Action InstanceReturned = null;
 
         [SerializeField] private float _freeTimeout = 0f;
-        [SerializeField] private bool _freeAfterTime = true;
+        [SerializeField] private bool _freeAfterTime;
         
         protected GlobalPool GlobalPool;
 

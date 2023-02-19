@@ -46,7 +46,8 @@ namespace _Application._Scripts.Core.Towers
                 Warrior warrior = _globalPool.Get(_warriorPrefab, parent: transform);
                 _warriors.Add(warrior);
                 warrior.Appeared += OnWarriorAppeared;
-                warrior.Initialize(_coreConfig, _upgradeData.PowerCoefficient);
+                warrior.Initialize(_coreConfig, _upgradeData.PowerCoefficient, _upgradeData.HealthCoefficient, 
+                    _warriorTowerData.AttackInfo);
             }
         }
 

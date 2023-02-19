@@ -4,6 +4,7 @@ using _Application.Scripts.Infrastructure.Services;
 using _Application.Scripts.Infrastructure.Services.Progress;
 using _Application.Scripts.Managers;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace _Application.Scripts.UI.Windows
 {
@@ -11,6 +12,7 @@ namespace _Application.Scripts.UI.Windows
     {
         [SerializeField] private List<HeroUpgradeIcon> _heroUpgradeIcons;
         [SerializeField] private HeroUpgradePopup _heroUpgradePopup;
+        [SerializeField] private Button _closeButton;
         
         
         public override void GetDependencies()
@@ -22,6 +24,8 @@ namespace _Application.Scripts.UI.Windows
             
             foreach (HeroUpgradeIcon heroUpgradeIcon in _heroUpgradeIcons)
                 heroUpgradeIcon.Initialize(coreConfig, progressService);
+            
+            _heroUpgradePopup.Initialize(coreConfig, progressService);
         }
 
         protected override void OnOpened()
@@ -33,6 +37,14 @@ namespace _Application.Scripts.UI.Windows
                 heroUpgradeIcon.OnOpened();
                 heroUpgradeIcon.Clicked += OnIconClicked;
             }
+            
+            _closeButton.onClick.AddListener(CloseWindow);
+        }
+
+        private void CloseWindow()
+        {
+            Close();
+            UISystem.ShowWindow<LobbyWindow>();
         }
 
         protected override void OnClosed()
@@ -44,6 +56,8 @@ namespace _Application.Scripts.UI.Windows
                 heroUpgradeIcon.OnClosed();
                 heroUpgradeIcon.Clicked -= OnIconClicked;
             }
+            
+            _closeButton.onClick.RemoveListener(CloseWindow);
         }
 
         private void OnIconClicked(HeroType heroType)

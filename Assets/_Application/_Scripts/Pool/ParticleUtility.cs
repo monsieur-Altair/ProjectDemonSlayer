@@ -1,9 +1,9 @@
-using System;
+﻿using System;
 using UnityEngine;
 
 namespace Pool_And_Particles
 {
-    public static class ParticleUtility
+    public class ParticleUtility
     {
         public static float CalculateMaxLifetime(GameObject particlesParent)
         {

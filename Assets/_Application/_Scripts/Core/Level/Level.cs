@@ -16,7 +16,6 @@ namespace _Application.Scripts.Managers
     {
         public event Action<IDamagable> HeroAdded = delegate {  };
         
-        [SerializeField] private List<BaseTower> _towersInLevel;
         [SerializeField] private List<PathCreator> _pathCreators;
         [SerializeField] private WaveManager _waveManager;
         [SerializeField] private BaseHero _baseHero;
@@ -28,17 +27,27 @@ namespace _Application.Scripts.Managers
         public ElixirManager ElixirManager { get; private set; }
         public TowersManager TowersManager { get; private set; }
         
+        private List<BaseTower> _towersInLevel;
 
         public void Initialize(GlobalPool globalPool, CoreConfig coreConfig, int levelIndex)
         {
-            List<VertexPath> paths = _pathCreators.Select(creator => creator.path).ToList();
+            foreach (BuildPlace buildPlace in _buildPlaces) 
+                buildPlace.Initialize();
+
+            _towersInLevel = _buildPlaces
+                .Select(place => place.CurrentTower)
+                .Where(tower => tower != null)
+                .ToList();
+            
+            List<VertexPath> paths = _pathCreators
+                .Select(creator => creator.path)
+                .ToList();
+            
             _waveManager.Initialize(globalPool, coreConfig, paths, levelIndex);
 
             _baseHero.Appeared += OnHeroAppeared;
             _baseHero.Initialize(coreConfig);
 
-            foreach (BuildPlace buildPlace in _buildPlaces) 
-                buildPlace.Initialize();
 
             ElixirManager = new ElixirManager(coreConfig, levelIndex, _waveManager.EnemyTracker);
             TowersManager = new TowersManager(_towersInLevel, coreConfig, globalPool, _waveManager, 

@@ -5,7 +5,6 @@ using UnityEngine.EventSystems;
 
 namespace _Application.Scripts.Managers
 {
-    [RequireComponent(typeof(Collider))]
     public class BuildPlace : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         public event Action <BuildPlace> Clicked = delegate { };
@@ -23,6 +22,7 @@ namespace _Application.Scripts.Managers
         public void Initialize()
         {
             SetTower(_defaultBaseTower);
+            _defaultVisual.SetActive(_defaultBaseTower == null);
         }
         
         public void SetTower(BaseTower baseTower)

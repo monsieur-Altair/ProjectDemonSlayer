@@ -37,7 +37,6 @@ namespace _Application.Scripts.Infrastructure.States
             _readWriterService = AllServices.Get<ReadWriterService>();
             
             _gameFactory.CreateAndRegisterMonoBeh(_coreConfig.MonoBehaviourServices.UISystem);
-            _gameFactory.CreateAndRegisterMonoBeh(_coreConfig.MonoBehaviourServices.UserControl);
         }
 
         private void RegisterMonoBehServices()
@@ -45,12 +44,14 @@ namespace _Application.Scripts.Infrastructure.States
             _gameFactory = AllServices.Get<GameFactory>();
             MonoBehaviourServices servicePrefabs = _coreConfig.MonoBehaviourServices;
 
+            _gameFactory.CreateAndRegisterMonoBeh(_coreConfig.MonoBehaviourServices.UserControl);
             _gameFactory.CreateAndRegisterMonoBeh(servicePrefabs.AudioManager);
-            _audioManager = AllServices.Get<AudioManager>();
             _gameFactory.CreateAndRegisterMonoBeh(servicePrefabs.CoroutineRunner);
             _gameFactory.CreateAndRegisterMonoBeh(servicePrefabs.LevelManager);
             _gameFactory.CreateAndRegisterMonoBeh(servicePrefabs.GlobalCamera);
             _gameFactory.CreateAndRegisterMonoBeh(servicePrefabs.LobbyManager);
+            
+            _audioManager = AllServices.Get<AudioManager>();
         }
 
         public void Enter()

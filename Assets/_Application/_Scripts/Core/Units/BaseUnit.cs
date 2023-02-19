@@ -31,7 +31,7 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
         public Transform BarPoint => _barPoint;
         public float ReviveDuration => BaseUnitData.ReviveDur;
         public float AttackCooldown => BaseUnitData.AttackCooldown;
-        public List<DamageInfo> AttackInfo => BaseUnitData.AttackInfo;
+        public virtual List<DamageInfo> AttackInfo => BaseUnitData.AttackInfo;
 
         public virtual float PowerCoefficient => 1f;
         public virtual float MaxHealth => BaseUnitData.Health;
