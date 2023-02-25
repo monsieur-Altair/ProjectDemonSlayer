@@ -44,6 +44,9 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
 
         public override void Update()
         {
+            if(Holder.Target == null)
+                return;
+            
             if (IsOutOfDistance)
             {
                 RemoveTarget(Holder.Target);

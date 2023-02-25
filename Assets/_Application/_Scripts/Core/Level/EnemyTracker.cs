@@ -112,5 +112,15 @@ namespace _Application._Scripts.Core
         {
             _isTrackingEnabled = false;
         }
+
+        public void Stop()
+        {
+            DisableTracking();
+
+            foreach (BaseEnemy enemy in Enemies)
+            {
+                enemy.Stop();
+            }
+        }
     }
 }

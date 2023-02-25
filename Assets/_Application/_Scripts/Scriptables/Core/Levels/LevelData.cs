@@ -11,7 +11,7 @@ namespace _Application._Scripts.Scriptables.Core.Levels
         [SerializeField] private int _approachingCount;
         [SerializeField] private int _startElixirAmount = 200;
 
-        [SerializeField, NonReorderable] private List<WaveData> _wavesData;
+        [SerializeField] private List<WaveData> _wavesData;
 
         
         public List<SingleReward> Rewards => _rewards;

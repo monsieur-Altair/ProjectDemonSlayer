@@ -7,7 +7,7 @@
 * upgrade system (windows for tower and hero upgrades)
 * hero skill
 
-  create input zoned
+* create input zoned
   card system (create rewards after level/ restart system)
  
   3. animations

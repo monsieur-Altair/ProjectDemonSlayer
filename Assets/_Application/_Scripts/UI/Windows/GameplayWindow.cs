@@ -2,13 +2,15 @@
 using _Application.Scripts.Control;
 using _Application.Scripts.Infrastructure.Services;
 using _Application.Scripts.Managers;
+using _Managers;
+using _UI._Screens;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace _Application.Scripts.UI.Windows
 {
-    [RequireComponent(typeof(GraphicRaycaster))]
+   // [RequireComponent(typeof(GraphicRaycaster))]
     public class GameplayWindow : Window
     {
         [SerializeField] private Transform _barParent;
@@ -21,11 +23,13 @@ namespace _Application.Scripts.UI.Windows
         [SerializeField] private Button _startWaveButton;
         [SerializeField] private Button _pauseButton;
         [SerializeField] private Button _accelerationButton;
+        [SerializeField] private ClickableZone _clickableZone;
 
         private CoroutineRunner _coroutineRunner;
         private LevelManager _levelManager;
         private Level _currentLevel;
         private SellBuySystem _sellBuySystem;
+        private UserControl _userControl;
         public Transform BarParent => _barParent;
 
         public override void GetDependencies()
@@ -37,20 +41,21 @@ namespace _Application.Scripts.UI.Windows
 
             GlobalCamera globalCamera = AllServices.Get<GlobalCamera>();
             CoreConfig coreConfig = AllServices.Get<CoreConfig>();
-            UserControl userControl = AllServices.Get<UserControl>();
+            _userControl = AllServices.Get<UserControl>();
 
-            _sellBuySystem = new SellBuySystem(_sellBuyUI, globalCamera, coreConfig, userControl);
+            _sellBuySystem = new SellBuySystem(_sellBuyUI, globalCamera, coreConfig, _userControl);
         }
 
         private void Update()
         {
-            _sellBuySystem.OnUpdate();
         }
 
         protected override void OnOpened()
         {
             base.OnOpened();
 
+            _userControl.InputZoned.SetZone(_clickableZone, ClickableZoneType.GameplayScreen);
+            
             _currentLevel = _levelManager.CurrentLevel;
 
             UpdateWaveTMP();
@@ -112,7 +117,7 @@ namespace _Application.Scripts.UI.Windows
         {
             int curr = _currentLevel.WaveManager.CurrentWaveIndex;
             int max = _currentLevel.WaveManager.MaxWaveIndex;
-            _waveCountTMP.text = $"{curr/max}";
+            _waveCountTMP.text = $"{curr}/{max}";
         }
 
         private void UpdateElixirTMP()

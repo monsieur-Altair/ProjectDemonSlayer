@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using _Application.Scripts.Managers;
 using _Application.Scripts.Scriptables.Core.Enemies;
+using UnityEngine;
 
 namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
 {
     public class Warrior : BaseUnit
     {
+        [SerializeField] private GameObject[] _visuals;
+
         private float _powerCoefficient;
         private float _healthCoefficient;
         private List<DamageInfo> _attackInfo;
@@ -13,6 +16,7 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
         public override float PowerCoefficient => _powerCoefficient;
         public override float MaxHealth => BaseUnitData.Health * _healthCoefficient;
         public override List<DamageInfo> AttackInfo => _attackInfo;
+        
 
         protected override void FetchData(CoreConfig coreConfig)
         {
@@ -29,6 +33,13 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
             _powerCoefficient = powerCoefficient;
 
             Initialize(coreConfig);
+        }
+
+        public void SetVisual(int visualIndex)
+        {
+            foreach (GameObject visual in _visuals) 
+                visual.SetActive(false);
+            _visuals[visualIndex].SetActive(true);
         }
     }
 }

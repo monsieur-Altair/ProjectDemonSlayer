@@ -124,7 +124,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1338827347500833075}
-  - component: {fileID: 4367413915336739424}
+  - component: {fileID: 2567291486123640542}
   m_Layer: 0
   m_Name: ArcherTower
   m_TagString: Untagged
@@ -151,7 +151,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4367413915336739424
+--- !u!114 &2567291486123640542
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -160,7 +160,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6576838809652594397}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0ba1f4e8a8b442769866b36466e90e25, type: 3}
+  m_Script: {fileID: 11500000, guid: 84e37f30f9b34aaa8344f85d7c0ecc21, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _freeTimeout: 0

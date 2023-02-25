@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using _Application._Scripts.Core.Enemies;
 using _Application._Scripts.Scriptables.Core.Towers;
@@ -56,7 +57,7 @@ namespace _Application._Scripts.Core.Towers
             }
         }
 #endif
-        
+
         public virtual void Initialize(CoreConfig coreConfig, EnemyTracker enemyTracker, GlobalPool globalPool)
         {
             _progressService = AllServices.Get<ProgressService>();
@@ -69,9 +70,11 @@ namespace _Application._Scripts.Core.Towers
             _projectileTracker = new ProjectileTracker(globalPool);
             
             Upgrade();
+
+            Debug.Log($"INIT {_towerType}");
         }
 
-        private void UpdateVisual()
+        protected virtual void UpdateVisual()
         {
             foreach (GameObject levelVisual in _levelVisuals) 
                 levelVisual.SetActive(false);
@@ -120,16 +123,21 @@ namespace _Application._Scripts.Core.Towers
 
         protected virtual void Attack(BaseEnemy target)
         {
-            
+            Debug.Log($"att {_towerType}");
+
+
         }
 
         public void Enable()
         {
             _isEnabled = true;
+            
+            Debug.Log($"enn {_towerType}");
         }
 
         public void Disable()
         {
+            Debug.Log($"dis {_towerType}");
             _isEnabled = false;
         }
     }

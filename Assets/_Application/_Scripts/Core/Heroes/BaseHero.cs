@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using _Application._Scripts.Scriptables.Core.TowerUpgrade;
 using _Application._Scripts.Scriptables.Core.UnitsBehaviour;
 using _Application.Scripts.Control;
@@ -8,20 +7,18 @@ using _Application.Scripts.Infrastructure.Services.Progress;
 using _Application.Scripts.Managers;
 using _Application.Scripts.Misc;
 using _Managers;
-using DG.Tweening;
-using Extensions;
+using _Scripts._CoreLogic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 namespace _Application._Scripts.Core.Heroes
 {
     [RequireComponent(typeof(Collider))]
-    public abstract class BaseHero : BaseUnit, IPointerUpHandler, IPointerDownHandler
+    public abstract class BaseHero : BaseUnit, IMouseClickable
     {
         [SerializeField] private GameObject _selectionMark;
         
         private bool _isSelected;
-        private IInputSystem _inputService;
+        private InputZoned _inputZoned;
         private Camera _worldCamera;
         private Plane _raycastPlane;
         private ProgressService _progressService;
@@ -43,12 +40,32 @@ namespace _Application._Scripts.Core.Heroes
             _selectionMark.SetActive(_isSelected);
             
             _worldCamera = AllServices.Get<GlobalCamera>().WorldCamera;
-            _inputService = AllServices.Get<UserControl>().InputService;
+            _inputZoned = AllServices.Get<UserControl>().InputZoned;
             _progressService = AllServices.Get<ProgressService>();
             
             _raycastPlane = new Plane(Vector3.up, Vector3.zero);
+
+            _inputZoned.Upped += OnUpped;
             
             base.Initialize(coreConfig);
+        }
+
+        public override void Clear()
+        {
+            _inputZoned.Upped -= OnUpped;
+
+            base.Clear();
+        }
+
+        private void OnUpped()
+        {
+            if (_inputZoned.IsUpped && _isSelected)
+            {
+                SwitchSelectionState();
+                Vector3 targetPos = ConvertToTargetPos(_inputZoned.LastActivityPosition);
+                if(Vector2.Distance(targetPos.ToXZ(), Transform.position.ToXZ()) > 0.5f) 
+                    MoveTo(targetPos);
+            }
         }
 
         protected override void FetchData(CoreConfig coreConfig)
@@ -62,19 +79,6 @@ namespace _Application._Scripts.Core.Heroes
                 .First(upgradeProgress => upgradeProgress.HeroType == HeroType).AchievedLevel;
 
             _baseHeroUpgradeData = coreConfig.HeroUpgrades[HeroType][level];
-        }
-
-        protected override void OnUpdated()
-        {
-            base.OnUpdated();
-
-            if (_inputService.IsUpped && _isSelected)
-            {
-                OnPointerUp(null);
-                Vector3 targetPos = ConvertToTargetPos(_inputService.LastActivityPosition);
-                if(Vector2.Distance(targetPos.ToXZ(), Transform.position.ToXZ()) > 0.5f) 
-                    MoveTo(targetPos);
-            }
         }
 
         private Vector3 ConvertToTargetPos(Vector3 screenPos)
@@ -98,11 +102,6 @@ namespace _Application._Scripts.Core.Heroes
             _stateMachine.Enter<MoveToPositionState>();
         }
 
-        public void OnPointerUp(PointerEventData eventData)
-        {
-            TweenExt.Wait(0.01f).OnComplete(SwitchSelectionState);
-        }
-
         public void DoUltimate()
         {
             _stateMachine.Enter<UltimateState>();    
@@ -119,8 +118,19 @@ namespace _Application._Scripts.Core.Heroes
             _selectionMark.SetActive(_isSelected);
         }
 
-        public void OnPointerDown(PointerEventData eventData)
+        public void MouseUp()
+        {
+            SwitchSelectionState();
+        }
+
+        public void MouseDown()
         {
         }
+
+        public void MouseClick()
+        {
+        }
+
+        public int Priority => 1;
     }
 }

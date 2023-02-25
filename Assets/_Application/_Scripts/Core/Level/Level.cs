@@ -27,18 +27,9 @@ namespace _Application.Scripts.Managers
         public ElixirManager ElixirManager { get; private set; }
         public TowersManager TowersManager { get; private set; }
         
-        private List<BaseTower> _towersInLevel;
 
         public void Initialize(GlobalPool globalPool, CoreConfig coreConfig, int levelIndex)
         {
-            foreach (BuildPlace buildPlace in _buildPlaces) 
-                buildPlace.Initialize();
-
-            _towersInLevel = _buildPlaces
-                .Select(place => place.CurrentTower)
-                .Where(tower => tower != null)
-                .ToList();
-            
             List<VertexPath> paths = _pathCreators
                 .Select(creator => creator.path)
                 .ToList();
@@ -47,13 +38,15 @@ namespace _Application.Scripts.Managers
 
             _baseHero.Appeared += OnHeroAppeared;
             _baseHero.Initialize(coreConfig);
-
-
-            ElixirManager = new ElixirManager(coreConfig, levelIndex, _waveManager.EnemyTracker);
-            TowersManager = new TowersManager(_towersInLevel, coreConfig, globalPool, _waveManager, 
-                _towersInLevel[0].transform.parent);
             
-            TowersManager.Initialize();
+            ElixirManager = new ElixirManager(coreConfig, levelIndex, _waveManager.EnemyTracker);
+            TowersManager = new TowersManager(coreConfig, globalPool, _waveManager, transform.parent);
+            
+            foreach (BuildPlace buildPlace in _buildPlaces.Where(buildPlace => buildPlace.HasBuildFromStart))
+            {
+                buildPlace.DefaultVisual.SetActive(false);
+                TowersManager.BuildBuilding(buildPlace.TowerType, buildPlace);
+            }
         }
 
         private void OnHeroAppeared(BaseUnit hero) => 
@@ -62,16 +55,22 @@ namespace _Application.Scripts.Managers
         public void StartWaves()
         {
             _waveManager.StartSpawn();
-            
-            foreach (BaseTower tower in _towersInLevel) 
-                tower.Enable();
+            TowersManager.StartAttacking();
         }
 
+        public void Stop()
+        {
+            TowersManager.StopAttacking();
+            _waveManager.StopSpawn();
+            _waveManager.EnemyTracker.Stop();
+            _baseHero.Appeared -= OnHeroAppeared;
+            ElixirManager.Clear();
+        }
+        
         public void Clear()
         {
             TowersManager.Clear();
-            _baseHero.Appeared -= OnHeroAppeared;
-            ElixirManager.Clear();
+            _baseHero.Clear();
             _waveManager.EnemyTracker.Clear();
         }
     }

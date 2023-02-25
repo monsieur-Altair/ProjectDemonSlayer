@@ -19,7 +19,7 @@ namespace _Application._Scripts.Core.Towers
         [SerializeField] private Transform _unitSpawnPoint;
 
 
-        private readonly List<BaseUnit> _warriors = new();
+        private readonly List<Warrior> _warriors = new();
         private Warrior _warriorPrefab;
         private WarriorTowerData _warriorTowerData;
 
@@ -48,6 +48,18 @@ namespace _Application._Scripts.Core.Towers
                 warrior.Appeared += OnWarriorAppeared;
                 warrior.Initialize(_coreConfig, _upgradeData.PowerCoefficient, _upgradeData.HealthCoefficient, 
                     _warriorTowerData.AttackInfo);
+
+                warrior.SetVisual(TowerLevel);
+            }
+        }
+
+        protected override void UpdateVisual()
+        {
+            base.UpdateVisual();
+
+            foreach (Warrior warrior in _warriors)
+            {
+                warrior.SetVisual(TowerLevel);
             }
         }
 
@@ -55,23 +67,28 @@ namespace _Application._Scripts.Core.Towers
         {
             base.Clear();
 
-            foreach (BaseUnit baseUnit in _warriors)
+            foreach (Warrior warrior in _warriors)
             {
-                baseUnit.Appeared -= OnWarriorAppeared;
-                baseUnit.Clear();
+                warrior.Appeared -= OnWarriorAppeared;
+                warrior.Clear();
+                _globalPool.Free(warrior);
             }
+            
+            _warriors.Clear();
         }
 
         private void OnWarriorAppeared(BaseUnit baseUnit)
         {
-            int i = _warriors.IndexOf(baseUnit);
+            Warrior warrior = baseUnit as Warrior;
+            int i = _warriors.IndexOf(warrior);
             float delta = Mathf.PI * 2 / _warriorTowerData.WarriorAmount;
             Vector2 offset = BaseExtensions.GetPos(i * delta) * _warriorTowerData.SpawnRadius;
             Vector3 basePos = _unitSpawnPoint.position;
             Vector3 pos = new(basePos.x + offset.x, basePos.y, basePos.z + offset.y);
-            baseUnit.Transform.position = pos;
+            warrior.Transform.position = pos;
+            warrior.SetVisual(TowerLevel);
 
-            WarriorAdded(baseUnit);
+            WarriorAdded(warrior);
         }
 
         protected override void Update()

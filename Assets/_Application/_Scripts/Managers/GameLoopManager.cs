@@ -28,7 +28,6 @@ namespace _Application.Scripts.Managers
         private readonly ProgressService _progressService;
         private readonly AudioManager _audioManager;
         private readonly bool _useTutorial;
-        private bool _isWin;
         private GameStates _currentGameState;
 
         private int _lastCompletedLevel;
@@ -81,7 +80,6 @@ namespace _Application.Scripts.Managers
                     _coroutineRunner.StartCoroutine(StartGameplay());
                     
                     int currentLevelNumber = _levelsManager.CurrentLevelIndex;
-
                     if (currentLevelNumber <= MaxTutorialCount && _useTutorial) 
                         UISystem.ShowTutorialWindow(currentLevelNumber);
 
@@ -89,7 +87,10 @@ namespace _Application.Scripts.Managers
                 }
                 case GameStates.GameEnded:
                 {
-                    _levelsManager.CurrentLevel.Clear();
+                    _levelsManager.CurrentLevel.WaveManager.LevelPassed -= OnLevelPassed;
+                    _levelsManager.CurrentLevel.WaveManager.LevelFailed -= OnLevelFailed;
+                    
+                    _levelsManager.CurrentLevel.Stop();
                     _userControl.Disable();
                     _barSpawner.Clear();
 
@@ -97,9 +98,6 @@ namespace _Application.Scripts.Managers
                     if (currentLevelNumber <= MaxTutorialCount && _useTutorial) 
                         UISystem.CloseTutorialWindow(currentLevelNumber);
                     
-                    ShowEndGameWindow();
-
-                    _audioManager.PlayEndgame(_isWin);
                     break;
                 }
                 default:
@@ -108,37 +106,29 @@ namespace _Application.Scripts.Managers
             }
         }
 
-        private void ShowEndGameWindow()
-        {
-            UISystem.CloseWindow<GameplayWindow>();
-
-            if (_isWin)
-                UISystem.ShowWindow<WinWindow>();
-            else
-                UISystem.ShowWindow<LoseWindow>();
-        }
-
         private void EndGame(bool isWin)
         {
             _coroutineRunner.CancelAllInvoked();
-            _isWin = isWin;
-            
-            if (_isWin) 
+            _audioManager.PlayEndgame(isWin);
+
+            if (isWin) 
                 _lastCompletedLevel = _levelsManager.CurrentLevelIndex;
 
             AddReward();
             
+            UISystem.CloseWindow<GameplayWindow>();
+
+            if (isWin)
+                UISystem.ShowWindow<WinWindow>();
+            else
+                UISystem.ShowWindow<LoseWindow>();
+
             _currentGameState = GameStates.GameEnded;
             UpdateState();
         }
 
         private void AddReward()
         {
-            //int money = AllServices.Get<ProgressService>().PlayerProgress.Money;
-            //int rewardMoney = _isWin ? _scriptableService.RewardList.GetReward(_lastCompletedLevel) : 0;
-            //
-            //money += rewardMoney;
-            //AllServices.Get<ProgressService>().PlayerProgress.Money = money;
         }
 
         private IEnumerator StartGameplay()
@@ -148,6 +138,19 @@ namespace _Application.Scripts.Managers
             _userControl.Enable();
 
             UISystem.ShowWindow<GameplayWindow>();
+
+            _levelsManager.CurrentLevel.WaveManager.LevelPassed += OnLevelPassed;
+            _levelsManager.CurrentLevel.WaveManager.LevelFailed += OnLevelFailed;
+        }
+
+        private void OnLevelFailed()
+        {
+            EndGame(false);
+        }
+
+        private void OnLevelPassed()
+        {
+            EndGame(true);
         }
     }
 }

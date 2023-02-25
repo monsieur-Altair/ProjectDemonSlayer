@@ -8,12 +8,14 @@ namespace _Application.Scripts.Control
     {
         private bool _isActive;
         public IInputSystem InputService { get; private set; }
+        public InputZoned InputZoned { get; private set; }
 
         public override void Init()
         {
             base.Init();
             
             InputService = RegisterInputService();
+            InputZoned = RegisterInputZoned();
         }
 
         public void Update()
@@ -30,8 +32,19 @@ namespace _Application.Scripts.Control
         public void Enable() => 
             _isActive = true;
 
-        private static IInputSystem RegisterInputService() => 
-            Application.isEditor ? new StandaloneInput() : new MobileInput();
+        private InputZoned RegisterInputZoned()
+        {
+            return Application.isEditor 
+                ? new StandaloneInputZoned(InputService) 
+                : new MobileInputZoned(InputService);
+        }
+
+        private static IInputSystem RegisterInputService()
+        {
+            return Application.isEditor
+                ? new StandaloneInput()
+                : new MobileInput();
+        }
     }
 }
 

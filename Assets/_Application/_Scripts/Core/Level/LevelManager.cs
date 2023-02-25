@@ -60,8 +60,9 @@ namespace _Application.Scripts.Managers
         {
             if (CurrentLevel != null)
             {
-                CurrentLevel.gameObject.SetActive(false);
+                CurrentLevel.Clear();
                 Destroy(CurrentLevel.gameObject);
+                CurrentLevel = null;
             }
 
             yield break;

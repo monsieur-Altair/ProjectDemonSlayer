@@ -36,11 +36,13 @@ MonoBehaviour:
   _towersPrefabs:
     _pairs:
     - _key: 0
-      _value: {fileID: 4367413915336739424, guid: bdf0c0170a64246409dc4cf6528519f9, type: 3}
+      _value: {fileID: 2567291486123640542, guid: bdf0c0170a64246409dc4cf6528519f9, type: 3}
     - _key: 3
       _value: {fileID: 407240055487379157, guid: e499b05cc4542294db8e0111039a959c, type: 3}
     - _key: 2
       _value: {fileID: 5556636542641998662, guid: b6a38dd6d63ed7d429d0f7ebfd1299b9, type: 3}
+    - _key: 1
+      _value: {fileID: 534021431662475179, guid: 1fa3ce1f1ff69a94483803426b46d78d, type: 3}
   _towerCardSprites:
     _pairs:
     - _key: 0

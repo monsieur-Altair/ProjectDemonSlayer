@@ -28,11 +28,10 @@ namespace _Application.Scripts.Infrastructure.Services.Factory
             GlobalPool objectPool = AllServices.Get<GlobalPool>();
             CoroutineRunner coroutineRunner = AllServices.Get<CoroutineRunner>();
             
-            Warehouse warehouse = _coreConfig.Warehouse;
-
             GlobalCamera globalCamera = AllServices.Get<GlobalCamera>();
             
             UserControl userControl = AllServices.Get<UserControl>();
+            userControl.InputZoned.SetMouseClickable(globalCamera.MouseClickableRaycaster);
 
             BarSpawner barSpawner = new(_coreConfig, objectPool, globalCamera);
 

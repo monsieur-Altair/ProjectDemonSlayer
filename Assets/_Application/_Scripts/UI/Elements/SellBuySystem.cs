@@ -2,8 +2,6 @@
 using _Application.Scripts.Control;
 using _Application.Scripts.Infrastructure.Services;
 using _Application.Scripts.Managers;
-using DG.Tweening;
-using Extensions;
 using UnityEngine;
 
 namespace _Application.Scripts.UI.Windows
@@ -40,9 +38,17 @@ namespace _Application.Scripts.UI.Windows
             _sellBuyUI.TowerButtonClicked += OnTowerButtonClicked;
             _sellBuyUI.UpgradeButtonClicked += OnUpgradeButtonClicked;
             _sellBuyUI.DestroyButtonClicked += OnDestroyButtonClicked;
+
+            _userControl.InputZoned.Upped += OnUpped;
             
             foreach (BuildPlace buildPlace in _currentLevel.BuildPlaces) 
                 buildPlace.Clicked += OnPlaceClicked;
+        }
+
+        private void OnUpped()
+        {
+            if (_sellBuyUI.IsShown && _userControl.InputZoned.IsUpped) 
+                _sellBuyUI.Hide();
         }
 
         public void Unsubscribe()
@@ -50,6 +56,9 @@ namespace _Application.Scripts.UI.Windows
             _sellBuyUI.Unsubscribe();
             _sellBuyUI.TowerButtonClicked -= OnTowerButtonClicked;
             _sellBuyUI.UpgradeButtonClicked -= OnUpgradeButtonClicked;
+            _sellBuyUI.DestroyButtonClicked -= OnDestroyButtonClicked;
+
+            _userControl.InputZoned.Upped -= OnUpped;
 
             foreach (BuildPlace buildPlace in _currentLevel.BuildPlaces) 
                 buildPlace.Clicked -= OnPlaceClicked;
@@ -62,11 +71,6 @@ namespace _Application.Scripts.UI.Windows
                 _sellBuyUI.Hide();
         }
 
-        public void OnUpdate()
-        {
-            if (_sellBuyUI.IsShown && _userControl.InputService.IsUpped) 
-                _sellBuyUI.Hide();
-        }
 
         private void OnPlaceClicked(BuildPlace buildPlace)
         {
@@ -82,15 +86,11 @@ namespace _Application.Scripts.UI.Windows
             _sellBuyUI.Pivot.anchoredPosition = UISystem.GetUIPosition(_globalCamera.WorldCamera, pointPosition);
 
             if (buildPlace.CurrentTower == null)
-                TweenExt.Wait(0.1f).OnComplete(_sellBuyUI.ShowBuyMenu);
+                _sellBuyUI.ShowBuyMenu();
             else
             {
-                TweenExt.Wait(0.1f).OnComplete(() =>
-                {
-                    _sellBuyUI.ShowSellUpgradeMenu(buildPlace.CurrentTower.TowerType,
-                        buildPlace.CurrentTower.TowerLevel);
-                });
-                
+                _sellBuyUI.ShowSellUpgradeMenu(buildPlace.CurrentTower.TowerType,
+                    buildPlace.CurrentTower.TowerLevel);
             }
         }
 
@@ -98,6 +98,9 @@ namespace _Application.Scripts.UI.Windows
         {
             _currentLevel.ElixirManager.IncreaseElixir(cost);
             _currentLevel.TowersManager.DestroyBuilding(_currentBuildPlace);
+            
+            _sellBuyUI.Hide();
+            _currentBuildPlace = null;
         }
 
         private void OnUpgradeButtonClicked(int cost)
@@ -106,6 +109,9 @@ namespace _Application.Scripts.UI.Windows
             {
                 _currentLevel.ElixirManager.DecreaseElixir(cost);
                 _currentBuildPlace.CurrentTower.Upgrade();
+                
+                _sellBuyUI.Hide();
+                _currentBuildPlace = null;
             }
         }
 
@@ -115,6 +121,9 @@ namespace _Application.Scripts.UI.Windows
             {
                 _currentLevel.ElixirManager.DecreaseElixir(cost);
                 _currentLevel.TowersManager.BuildBuilding(towerType, _currentBuildPlace);
+                
+                _sellBuyUI.Hide();
+                _currentBuildPlace = null;
             }
         }
     }

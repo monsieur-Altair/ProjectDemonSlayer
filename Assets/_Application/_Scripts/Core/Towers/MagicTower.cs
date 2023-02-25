@@ -26,11 +26,13 @@ namespace _Application._Scripts.Core.Towers
             Vector3 position = _spawnPoint.position;
             Quaternion rot = Quaternion.LookRotation(target.FindPoint.position - position);
             
-            MagicProjectile projectile = _globalPool.Get(_projectilePrefab, position, rot);
-            projectile.Initialize(_baseTowerData.AttackInfo, _magicTowerData.ProjectileSpeed, target, 
+            MagicProjectile magicProjectile = _globalPool.Get(_projectilePrefab, position, rot);
+            magicProjectile.Initialize(_baseTowerData.AttackInfo, _magicTowerData.ProjectileSpeed, target, 
                 _upgradeData.PowerCoefficient, _magicTowerData.SlowCoefficient, _magicTowerData.SlowDur);
             
-            _projectileTracker.Add(target, projectile);
+            magicProjectile.SetVisual(TowerLevel);
+
+            _projectileTracker.Add(target, magicProjectile);
         }
     }
 }

@@ -14,11 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rewards: []
   _approachingCount: 5
-  _startElixirAmount: 200
+  _startElixirAmount: 1000
   _wavesData:
   - _miniWavesData:
     - _enemyType: 0
-      _enemyCount: 1
+      _enemyCount: 6
       _miniWaveSpawnDelay: 0
     _startDelay: 1
   - _miniWavesData:

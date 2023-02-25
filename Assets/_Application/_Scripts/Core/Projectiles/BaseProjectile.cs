@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using _Application._Scripts.Core.Enemies;
+using _Application.Scripts.Infrastructure;
 using _Application.Scripts.Infrastructure.Services;
 using _Application.Scripts.Scriptables.Core.Enemies;
 using Pool_And_Particles;
@@ -11,6 +12,8 @@ namespace _Application._Scripts.Core.Towers
 {
     public class BaseProjectile : PooledBehaviour
     {
+        [SerializeField] private List<GameObject> _visuals;
+
         public event Action<BaseProjectile> Damaged = delegate {  };
 
         protected float _speed;
@@ -18,6 +21,7 @@ namespace _Application._Scripts.Core.Towers
         protected Transform _transform;
         protected GlobalPool _globalPool;
         protected float _powerCoefficient;
+        
         public BaseEnemy Target { get; private set; }
 
         private void Awake()
@@ -32,6 +36,13 @@ namespace _Application._Scripts.Core.Towers
             Target = target;
             _attackInfo = attackInfo;
             _speed = speed;
+        }
+
+        public void SetVisual(int levelIndex)
+        {
+            foreach (GameObject visual in _visuals) 
+                visual.SetActive(false);
+            _visuals[levelIndex].SetActive(true);
         }
 
         public void Clear()

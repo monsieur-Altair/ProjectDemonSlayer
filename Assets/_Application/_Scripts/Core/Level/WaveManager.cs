@@ -90,10 +90,7 @@ namespace _Application._Scripts.Core
                 EnemyTracker.Clear();
                 CurrentWaveIndex++;
             }
-
-            Unsubscribe();
-            EnemyTracker = null;
-            Debug.Log("passed");
+            
             LevelPassed();
         }
 
@@ -109,22 +106,13 @@ namespace _Application._Scripts.Core
 
             if (ApproachedEnemyCount == MaxApproachingCount)
             {
-                EnemyTracker.Clear();
-                
-                Unsubscribe();
-                if (_spawnCoroutine != null)
-                {
-                    StopCoroutine(_spawnCoroutine);
-                    _spawnCoroutine = null;
-                }
-                
-                EnemyTracker = null;
                 Debug.Log("failed");
                 LevelFailed();
             }
             else
                 EnemyTracker.OnEnemyDied(enemy);
         }
+        
 
         private IEnumerator SpawnWave()
         {
@@ -170,6 +158,17 @@ namespace _Application._Scripts.Core
             }
 
             return enemies;
+        }
+
+        public void StopSpawn()
+        {
+            Unsubscribe();
+            
+            if (_spawnCoroutine != null)
+            {
+                StopCoroutine(_spawnCoroutine);
+                _spawnCoroutine = null;
+            }
         }
     }
 }

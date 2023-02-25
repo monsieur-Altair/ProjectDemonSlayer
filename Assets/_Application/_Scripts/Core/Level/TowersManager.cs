@@ -20,20 +20,15 @@ namespace _Application.Scripts.Managers
         private readonly CoreConfig _coreConfig;
         private readonly Transform _parent;
 
-        public TowersManager(IEnumerable<BaseTower> defaultTowers, CoreConfig coreConfig, GlobalPool globalPool, 
-            WaveManager waveManager, Transform parent)
+        private bool _isAttacking;
+
+        public TowersManager(CoreConfig coreConfig, GlobalPool globalPool, WaveManager waveManager, Transform parent)
         {
             _parent = parent;
             _coreConfig = coreConfig;
             _globalPool = globalPool;
             _waveManager = waveManager;
-            _allTowers = new List<BaseTower>(defaultTowers);
-        }
-
-        public void Initialize()
-        {
-            foreach (BaseTower tower in _allTowers)
-                tower.Initialize(_coreConfig, _waveManager.EnemyTracker, _globalPool);
+            _allTowers = new List<BaseTower>();
         }
 
         public void BuildBuilding(TowerType towerType, BuildPlace buildPlace)
@@ -47,19 +42,23 @@ namespace _Application.Scripts.Managers
             buildPlace.SetTower(builtTower);
             
             _allTowers.Add(builtTower);
+            
+            if(_isAttacking)
+                builtTower.Enable();
+            
             AddedTower(builtTower);
         }
 
         public void DestroyBuilding(BuildPlace buildPlace)
         {
+            _allTowers.Remove(buildPlace.CurrentTower);
+         
             buildPlace.DefaultVisual.SetActive(true);
-            
             BaseTower tower = buildPlace.CurrentTower;
             tower.Disable();
-            tower.Disable();
-            
+            tower.Clear();
+            _globalPool.Free(tower);
             buildPlace.SetTower(null);
-            
             DestroyedTower(tower);
         }
 
@@ -77,9 +76,24 @@ namespace _Application.Scripts.Managers
             {
                 tower.Disable();
                 tower.Clear();
+                _globalPool.Free(tower);
+                DestroyedTower(tower);
             }
             
             _allTowers.Clear();
+        }
+
+        public void StopAttacking()
+        {
+            _isAttacking = false;
+        }
+
+        public void StartAttacking()
+        {
+            _isAttacking = true;
+            
+            foreach (BaseTower tower in _allTowers) 
+                tower.Enable();
         }
     }
 }

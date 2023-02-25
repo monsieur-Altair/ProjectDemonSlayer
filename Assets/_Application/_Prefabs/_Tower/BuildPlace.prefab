@@ -10,7 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3840385836188723548}
   - component: {fileID: 7501024337459798291}
-  m_Layer: 0
+  - component: {fileID: 6862312099461228866}
+  m_Layer: 6
   m_Name: BuildPlace
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -51,6 +52,19 @@ MonoBehaviour:
   _buildPoint: {fileID: 3840385836954183202}
   _defaultBaseTower: {fileID: 0}
   _defaultVisual: {fileID: 3840385837548684246}
+--- !u!135 &6862312099461228866
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3840385836188723551}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.93
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3840385836954183205
 GameObject:
   m_ObjectHideFlags: 0
@@ -60,7 +74,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3840385836954183202}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BuildPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,8 +107,7 @@ GameObject:
   - component: {fileID: 3840385837548684242}
   - component: {fileID: 3840385837548684245}
   - component: {fileID: 3840385837548684244}
-  - component: {fileID: 8699372203679522948}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Model
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -166,19 +179,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &8699372203679522948
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3840385837548684246}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &4073959084277188694
 GameObject:
   m_ObjectHideFlags: 0
@@ -188,7 +188,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 627633375211027974}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: ClickPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}

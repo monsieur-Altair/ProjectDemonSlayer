@@ -39,7 +39,8 @@ namespace _Application._Scripts.Core.Towers
             projectile.Initialize(_baseTowerData.AttackInfo, projectileHorizontalSpeed, target, 
                 _upgradeData.PowerCoefficient, futurePos, _cannonTowerData.ExplosionRadius, 
                 _enemyTracker, flightTime);
-            
+            projectile.SetVisual(TowerLevel);
+
             _projectileTracker.Add(target, projectile);
         }
     }

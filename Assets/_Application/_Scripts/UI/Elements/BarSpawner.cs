@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using _Application._Scripts.Core;
 using _Application._Scripts.Core.Enemies;
 using _Application._Scripts.Core.Towers;
@@ -90,6 +91,10 @@ namespace _Application.Scripts.UI
             _levelManager.CurrentLevel.HeroAdded -= AddBar;
 
             _levelManager.CurrentLevel.TowersManager.AddedTower -= OnAddedTower;
+
+            List<IDamagable> damagables = _unitsBars.Keys.ToList();
+            foreach (IDamagable damagable in damagables) 
+                OnDied(damagable);
 
             _unitsBars.Clear();
             _enemyTracker = null;

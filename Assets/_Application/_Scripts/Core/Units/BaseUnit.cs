@@ -38,7 +38,7 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
         public virtual float MotionsSpeed => BaseUnitData.MotionsSpeed;
 
 
-        private void Awake()
+        protected virtual void Awake()
         {
             Transform = transform;
         }
@@ -73,7 +73,7 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
             _stateMachine.Enter<IdleState>();
         }
 
-        public void Clear()
+        public virtual void Clear()
         {
             _stateMachine.ResetState();
             Died(this);

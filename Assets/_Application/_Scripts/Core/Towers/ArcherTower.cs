@@ -26,6 +26,7 @@ namespace _Application._Scripts.Core.Towers
             BaseProjectile baseProjectile = _globalPool.Get(_projectilePrefab, position, rot);
             baseProjectile.Initialize(_baseTowerData.AttackInfo, _baseTowerData.ProjectileSpeed, target, 
                 _upgradeData.PowerCoefficient);
+            baseProjectile.SetVisual(TowerLevel);
             
             _projectileTracker.Add(target, baseProjectile);
         }

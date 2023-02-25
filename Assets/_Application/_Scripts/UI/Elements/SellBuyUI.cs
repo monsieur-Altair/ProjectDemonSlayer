@@ -31,7 +31,6 @@ namespace _Application.Scripts.UI.Windows
         {
             IsShown = true;
             _buyMenuGO.SetActive(true);
-            Debug.Log("show buy");
         }
 
         public void ShowSellUpgradeMenu(TowerType towerType, int towerLevel)
@@ -41,14 +40,19 @@ namespace _Application.Scripts.UI.Windows
             IsShown = true;
             _sellUpgradeMenu.SetActive(true);
 
-            int upgradeCost = _coreConfig.TowersData[towerType][towerLevel + 1].BuildCost;
-            _upgradeTowerButton.OnOpened(upgradeCost);
+            bool isMax = _coreConfig.TowersData[towerType].Count - 1 <= towerLevel;
+            _upgradeTowerButton.gameObject.SetActive(isMax==false);
+            if (isMax == false)
+            {
+                int upgradeCost = _coreConfig.TowersData[towerType][towerLevel + 1].BuildCost;
+                _upgradeTowerButton.OnOpened(upgradeCost);
+            }
+
             _destroyTowerButton.OnOpened(_coreConfig.TowersData[towerType][towerLevel].DestroyReward);
         }
 
         public void Hide()
         {
-            Debug.Log("hide");
             IsShown = false;
             TweenExt.Wait(0.01f).OnComplete(() =>
             {
