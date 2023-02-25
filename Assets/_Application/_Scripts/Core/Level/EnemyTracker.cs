@@ -59,7 +59,6 @@ namespace _Application._Scripts.Core
             if (_isTrackingEnabled && _aliveEnemyAmount == 0)
             {
                 DisableTracking();
-                Debug.Log("ended");
                 WaveEnded();
             }
         }
@@ -72,12 +71,10 @@ namespace _Application._Scripts.Core
 
             _globalPool.Free(enemy);
 
-            //Removed(enemy);
         }
 
         private void OnEnemyApproached(BaseEnemy enemy)
         {
-            Debug.Log("approached");
             Approached(enemy);
         }
 

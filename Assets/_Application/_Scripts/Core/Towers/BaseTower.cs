@@ -70,8 +70,6 @@ namespace _Application._Scripts.Core.Towers
             _projectileTracker = new ProjectileTracker(globalPool);
             
             Upgrade();
-
-            Debug.Log($"INIT {_towerType}");
         }
 
         protected virtual void UpdateVisual()
@@ -123,21 +121,15 @@ namespace _Application._Scripts.Core.Towers
 
         protected virtual void Attack(BaseEnemy target)
         {
-            Debug.Log($"att {_towerType}");
-
-
         }
 
         public void Enable()
         {
             _isEnabled = true;
-            
-            Debug.Log($"enn {_towerType}");
         }
 
         public void Disable()
         {
-            Debug.Log($"dis {_towerType}");
             _isEnabled = false;
         }
     }

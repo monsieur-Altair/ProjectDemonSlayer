@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2ca23b87df6646c48589767a696fcab3, type: 3}
   m_Name: level data 0
   m_EditorClassIdentifier: 
-  _rewards: []
+  _currencyRewards: []
   _approachingCount: 5
   _startElixirAmount: 1000
   _wavesData:
@@ -40,3 +40,17 @@ MonoBehaviour:
       _enemyCount: 1
       _miniWaveSpawnDelay: 0.1
     _startDelay: 4
+  _cardReward:
+    TowerCardRewards:
+    - TowerType: 1
+      Level: 0
+      CardAmount: 3
+    - TowerType: 2
+      Level: 0
+      CardAmount: 2
+    - TowerType: 3
+      Level: 1
+      CardAmount: 2
+    HeroCardRewards:
+    - HeroType: 0
+      CardAmount: 4

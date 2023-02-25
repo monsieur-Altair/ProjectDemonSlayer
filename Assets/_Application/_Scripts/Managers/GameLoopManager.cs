@@ -1,4 +1,6 @@
 ﻿using System.Collections;
+using System.Linq;
+using _Application._Scripts.Scriptables.Core.Levels;
 using _Application.Scripts.Control;
 using _Application.Scripts.Infrastructure.Services;
 using _Application.Scripts.Infrastructure.Services.Progress;
@@ -114,12 +116,15 @@ namespace _Application.Scripts.Managers
             if (isWin) 
                 _lastCompletedLevel = _levelsManager.CurrentLevelIndex;
 
-            AddReward();
+           
             
             UISystem.CloseWindow<GameplayWindow>();
 
             if (isWin)
-                UISystem.ShowWindow<WinWindow>();
+            {
+                AddReward();
+                UISystem.ShowPayloadedWindow<WinWindow, CardReward>(_levelsManager.CurrentLevel.GetReward());
+            }
             else
                 UISystem.ShowWindow<LoseWindow>();
 
@@ -129,6 +134,26 @@ namespace _Application.Scripts.Managers
 
         private void AddReward()
         {
+            CardReward cardReward = _levelsManager.CurrentLevel.GetReward();
+
+            PlayerProgress playerProgress = _progressService.PlayerProgress;
+            
+            foreach (HeroCardReward heroCardReward in cardReward.HeroCardRewards)
+            {
+                HeroUpgrade upgrade = playerProgress.HeroUpgrades.First(upgrade =>
+                    upgrade.HeroType == heroCardReward.HeroType);
+
+                upgrade.SavedCard += heroCardReward.CardAmount;
+            }
+
+            foreach (TowerCardReward towerCardReward in cardReward.TowerCardRewards)
+            {
+                TowersUpgrade upgrade = playerProgress.TowersUpgrades.First(upgrade => 
+                    upgrade.TowerType == towerCardReward.TowerType);
+
+                int index = towerCardReward.Level;
+                upgrade.SavedCard[index] += towerCardReward.CardAmount;
+            }
         }
 
         private IEnumerator StartGameplay()

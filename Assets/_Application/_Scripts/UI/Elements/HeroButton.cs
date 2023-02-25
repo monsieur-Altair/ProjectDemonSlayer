@@ -18,6 +18,7 @@ namespace _Application.Scripts.UI.Windows
         {
             _baseHero = hero;
             _cooldownTime = _baseHero.SkillCooldown;
+            _maskImage.fillAmount = 0.0f;
         }
 
         private void Update()

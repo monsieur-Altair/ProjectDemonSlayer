@@ -5,6 +5,7 @@ using _Application._Scripts.Core;
 using _Application._Scripts.Core.Enemies;
 using _Application._Scripts.Core.Heroes;
 using _Application._Scripts.Core.Towers;
+using _Application._Scripts.Scriptables.Core.Levels;
 using _Application._Scripts.Scriptables.Core.UnitsBehaviour;
 using PathCreation;
 using Pool_And_Particles;
@@ -20,7 +21,8 @@ namespace _Application.Scripts.Managers
         [SerializeField] private WaveManager _waveManager;
         [SerializeField] private BaseHero _baseHero;
         [SerializeField] private List<BuildPlace> _buildPlaces;
-        
+        private LevelData _levelData;
+
         public List<BuildPlace> BuildPlaces => _buildPlaces;
         public WaveManager WaveManager => _waveManager;
         public BaseHero BaseHero => _baseHero;
@@ -33,7 +35,7 @@ namespace _Application.Scripts.Managers
             List<VertexPath> paths = _pathCreators
                 .Select(creator => creator.path)
                 .ToList();
-            
+            _levelData = coreConfig.LevelData[levelIndex];
             _waveManager.Initialize(globalPool, coreConfig, paths, levelIndex);
 
             _baseHero.Appeared += OnHeroAppeared;
@@ -73,5 +75,7 @@ namespace _Application.Scripts.Managers
             _baseHero.Clear();
             _waveManager.EnemyTracker.Clear();
         }
+
+        public CardReward GetReward() => _levelData.CardReward;
     }
 }

@@ -11,6 +11,7 @@ namespace _Application.Scripts.UI.Windows
         [SerializeField] private Button _startGameButton;
         [SerializeField] private Button _upgradeTowersButton;
         [SerializeField] private Button _upgradeHeroesButton;
+        [SerializeField] private Button _inventoryButton;
 
         private StateMachine _stateMachine;
 
@@ -27,7 +28,8 @@ namespace _Application.Scripts.UI.Windows
             base.OnOpened();
             _toStatsButton.onClick.AddListener(OpenStats);
             _startGameButton.onClick.AddListener(StartGame);
-            
+            _inventoryButton.onClick.AddListener(OpenInventory);
+
             _upgradeTowersButton.onClick.AddListener(OpenTowerUpgrades);
             _upgradeHeroesButton.onClick.AddListener(OpenHeroesUpgrades);
         }
@@ -37,7 +39,8 @@ namespace _Application.Scripts.UI.Windows
             base.OnClosed();
             
             _toStatsButton.onClick.RemoveListener(OpenStats);
-            _startGameButton.onClick.RemoveListener(StartGame);
+            _startGameButton.onClick.RemoveListener(StartGame);            
+            _inventoryButton.onClick.RemoveListener(OpenInventory);
             
             _upgradeTowersButton.onClick.RemoveListener(OpenTowerUpgrades);
             _upgradeHeroesButton.onClick.RemoveListener(OpenHeroesUpgrades);
@@ -47,6 +50,12 @@ namespace _Application.Scripts.UI.Windows
         {
             Close();
             UISystem.ShowWindow<HeroUpgradeWindow>();
+        }
+
+        private void OpenInventory()
+        {
+            Close();
+            UISystem.ShowWindow<InventoryWindow>();
         }
 
         private void StartGame()

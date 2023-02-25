@@ -35,8 +35,6 @@ namespace _Application.Scripts.UI.Windows
 
         public void ShowSellUpgradeMenu(TowerType towerType, int towerLevel)
         {
-            Debug.Log("show up-sell");
-
             IsShown = true;
             _sellUpgradeMenu.SetActive(true);
 
