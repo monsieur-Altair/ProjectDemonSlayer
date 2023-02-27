@@ -15,6 +15,7 @@ namespace _Application._Scripts.Core.Towers
 {
     public class BaseTower : PooledBehaviour
     {
+        [SerializeField] private SpriteRenderer _spriteRenderer;
         [SerializeField] protected Transform _spawnPoint;
         [SerializeField] protected TowerType _towerType;
         [SerializeField] private GameObject[] _levelVisuals;
@@ -68,8 +69,11 @@ namespace _Application._Scripts.Core.Towers
             _elapsedTime = 0f;
             _enemyTracker = enemyTracker;
             _projectileTracker = new ProjectileTracker(globalPool);
-            
+
             Upgrade();
+            
+            _radius = Radius;
+            _spriteRenderer.transform.localScale = Vector3.one * Radius; 
         }
 
         protected virtual void UpdateVisual()

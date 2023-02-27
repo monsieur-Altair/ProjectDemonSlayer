@@ -25,7 +25,7 @@ MonoBehaviour:
     _damageType: 0
   - _value: 0
     _damageType: 1
-  _radius: 8
+  _radius: 6
   _projectileSpeed: 8
   _buildCost: 400
   _destroyReward: 150

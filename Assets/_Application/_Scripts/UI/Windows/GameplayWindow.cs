@@ -30,6 +30,8 @@ namespace _Application.Scripts.UI.Windows
         private Level _currentLevel;
         private SellBuySystem _sellBuySystem;
         private UserControl _userControl;
+        private bool _isPause;
+        private bool _isAccelerated;
         public Transform BarParent => _barParent;
 
         public override void GetDependencies()
@@ -45,18 +47,16 @@ namespace _Application.Scripts.UI.Windows
 
             _sellBuySystem = new SellBuySystem(_sellBuyUI, globalCamera, coreConfig, _userControl);
         }
-
-        private void Update()
-        {
-        }
-
+        
         protected override void OnOpened()
         {
             base.OnOpened();
 
             _userControl.InputZoned.SetZone(_clickableZone, ClickableZoneType.GameplayScreen);
-            
             _currentLevel = _levelManager.CurrentLevel;
+
+            _isAccelerated = false;
+            _isPause = false;
 
             UpdateWaveTMP();
             UpdatePenetrationTMP();
@@ -116,6 +116,7 @@ namespace _Application.Scripts.UI.Windows
         private void UpdateWaveTMP()
         {
             int curr = _currentLevel.WaveManager.CurrentWaveIndex;
+            curr = Mathf.Max(0, curr);
             int max = _currentLevel.WaveManager.MaxWaveIndex;
             _waveCountTMP.text = $"{curr}/{max}";
         }
@@ -133,12 +134,14 @@ namespace _Application.Scripts.UI.Windows
 
         private void OnPauseClicked()
         {
-            Time.timeScale = 1 - Time.timeScale;
+            _isPause = !_isPause;
+            Time.timeScale = _isPause ? 0.0f : 1.0f;
         }
 
         private void OnAccelerationClicked()
         {
-            Time.timeScale = 3 - Time.timeScale;
+            _isAccelerated = !_isAccelerated;
+            Time.timeScale = _isAccelerated ? 3f : 1f;
         }
     }
 }

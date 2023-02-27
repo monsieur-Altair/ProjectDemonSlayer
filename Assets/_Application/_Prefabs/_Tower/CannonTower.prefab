@@ -133,6 +133,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _freeTimeout: 0
   _freeAfterTime: 0
+  _spriteRenderer: {fileID: 2413986361254164256}
   _spawnPoint: {fileID: 2205918427646451384}
   _towerType: 3
   _levelVisuals:
