@@ -19,10 +19,11 @@ namespace _Application._Scripts.Core.Enemies
         public event Action<IDamagable> Updated = delegate { };
         public event Action<BaseEnemy> Approached = delegate { };
         public event Action<BaseEnemy> GrantedReward = delegate { };
-        
 
         [SerializeField] private Transform _barPoint;
         [SerializeField] private Transform _hitPoint;
+
+        [SerializeField] private AnimatorController<EnemyAnimationState> _animatorController;
 
         private BaseEnemyData _baseEnemyData;
         private VertexPath _path;
@@ -65,12 +66,14 @@ namespace _Application._Scripts.Core.Enemies
         public void Launch()
         {
             CurrentEnemyState = EnemyState.Running;
+            _animatorController.PlayAnimation(EnemyAnimationState.Run);
             Launched(this);
         }
 
         public void Stop()
         {
             CurrentEnemyState = EnemyState.Waiting;
+            _animatorController.PlayAnimation(EnemyAnimationState.Idle);
         }
 
         public void SlowDown(float newSpeed, float slowDur)
@@ -120,6 +123,7 @@ namespace _Application._Scripts.Core.Enemies
                 {
                     _target = null;
                     CurrentEnemyState = EnemyState.Running;
+                    _animatorController.PlayAnimation(EnemyAnimationState.Run);
                 }
                 else
                 {
@@ -162,6 +166,7 @@ namespace _Application._Scripts.Core.Enemies
                 _elapsedTime = 0f;
                 float damage = CoreMethods.CalculateDamage(_baseEnemyData.AttackInfo, _target.DefenceInfo);
                 _target.TakeDamage(damage);
+                _animatorController.PlayAnimation(EnemyAnimationState.Attack);
             }
         }
 
@@ -176,6 +181,7 @@ namespace _Application._Scripts.Core.Enemies
             if (Mathf.Abs(_currentDistance - _path.length) < 0.3f)
             {
                 CurrentEnemyState = EnemyState.None;
+                _animatorController.PlayAnimation(EnemyAnimationState.Idle);
                 Approached(this);
             }
         }
@@ -188,9 +194,15 @@ namespace _Application._Scripts.Core.Enemies
             _target = null;
             _targets.Clear();
             CurrentEnemyState = EnemyState.None;
+            _animatorController.PlayAnimation(EnemyAnimationState.Death);
             GrantedReward(this);
             Died(this);
         }
+    }
+
+    public enum EnemyAnimationState
+    {
+        Idle, Attack, Run, Death
     }
 
     public enum EnemyState

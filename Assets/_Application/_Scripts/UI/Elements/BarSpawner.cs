@@ -109,6 +109,10 @@ namespace _Application.Scripts.UI
             damagable.Updated -= UpdateCounterPos;
             damagable.Damaged -= UpdateBar;
             damagable.Died -= OnDied;
+            
+            if (damagable is BaseEnemy baseEnemy) 
+                baseEnemy.Approached -= OnDied;
+
         }
 
         private void AddBar(IDamagable damagable)
@@ -121,6 +125,9 @@ namespace _Application.Scripts.UI
             damagable.Updated += UpdateCounterPos;
             damagable.Damaged += UpdateBar;
             damagable.Died += OnDied;
+
+            if (damagable is BaseEnemy baseEnemy) 
+                baseEnemy.Approached += OnDied;
         }
 
         private void UpdateBar(IDamagable damagable)

@@ -11,6 +11,8 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
         private float _closeAttackRadius;
         private float _stopRange;
 
+        private float _cachedDistance;
+
         public MoveToTargetState(UnitStateMachine unitStateMachine) : base(unitStateMachine)
         {
         }
@@ -22,9 +24,13 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
             Holder.Target.Died += OnTargetDied;
             Holder.SetBusy(true);
 
+            Holder.PlayRunAnimation();
+            
             _motionSpeed = Holder.MotionsSpeed;
             _closeAttackRadius = Holder.CloseAttackRadius;
             _stopRange = 2f * _closeAttackRadius;
+
+            _cachedDistance = float.MaxValue;
         }
 
         public override void Exit()
@@ -35,6 +41,8 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
                 Holder.Target.Died -= OnTargetDied;
             
             Holder.SetBusy(false);
+            
+            _cachedDistance = float.MaxValue;
         }
 
         private void OnTargetDied(IDamagable damagable)
@@ -54,7 +62,15 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
             transform.rotation = Quaternion.LookRotation(target - newPos);
 
             float distance = Vector3.Distance(newPos, target);
-            
+
+            if (distance > _cachedDistance + float.Epsilon)
+            {
+                _stateMachine.Enter<IdleState>();
+                return;
+            }
+
+            _cachedDistance = distance;
+
             if (distance < _closeAttackRadius) 
                 Holder.StartAttacking(Holder.Target);
             else if(distance < _stopRange) 

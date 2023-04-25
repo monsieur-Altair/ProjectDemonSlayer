@@ -55,11 +55,16 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
             
             _elapsedTime += Time.deltaTime;
 
+            Vector3 lookDir = (Holder.Target.transform.position - Holder.transform.position).normalized;
+            Holder.transform.rotation = Quaternion.LookRotation(lookDir);
+
             if (_elapsedTime >= Holder.AttackCooldown)
             {
                 _elapsedTime = 0f;
                 float damage = CoreMethods.CalculateDamage(Holder.AttackInfo, Holder.Target.DefenceInfo);
                 Holder.Target.TakeDamage(damage * Holder.PowerCoefficient);
+
+                Holder.PlayAttackAnimation();
             }
         }
     }

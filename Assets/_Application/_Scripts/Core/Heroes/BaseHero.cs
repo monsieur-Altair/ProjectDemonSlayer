@@ -15,6 +15,8 @@ namespace _Application._Scripts.Core.Heroes
     [RequireComponent(typeof(Collider))]
     public abstract class BaseHero : BaseUnit, IMouseClickable
     {
+        private static readonly int Ultimate = Animator.StringToHash("Ultimate");
+
         [SerializeField] private GameObject _selectionMark;
         
         private bool _isSelected;
@@ -132,5 +134,11 @@ namespace _Application._Scripts.Core.Heroes
         }
 
         public int Priority => 1;
+
+        public void PlayUltimateAnimation()
+        {
+            Animator.ResetTrigger(Ultimate);
+            Animator.SetTrigger(Ultimate);
+        }
     }
 }

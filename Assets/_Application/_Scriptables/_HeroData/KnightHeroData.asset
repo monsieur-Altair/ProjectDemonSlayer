@@ -26,11 +26,11 @@ MonoBehaviour:
   - _value: 0.1
     _damageType: 1
   _reviveDur: 4
-  _closeAttackRadius: 0.5
+  _closeAttackRadius: 2
   _skillAttackInfo:
   - _value: 20
     _damageType: 0
   - _value: 0
     _damageType: 1
-  _skillAttackRadius: 2
+  _skillAttackRadius: 5
   _skillCooldown: 30

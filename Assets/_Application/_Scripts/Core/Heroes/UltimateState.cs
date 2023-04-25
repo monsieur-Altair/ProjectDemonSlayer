@@ -1,6 +1,7 @@
 ﻿using _Application._Scripts.Scriptables.Core.UnitsBehaviour;
 using DG.Tweening;
 using Extensions;
+using UnityEngine;
 
 namespace _Application._Scripts.Core.Heroes
 {
@@ -19,7 +20,12 @@ namespace _Application._Scripts.Core.Heroes
 
         private void ApplyUltimate()
         {
-            (Holder as BaseHero)?.DamageByUltimate();
+            if (Holder is BaseHero baseHero)
+            {
+                baseHero.DamageByUltimate();
+                baseHero.PlayUltimateAnimation();
+            }
+            
             _stateMachine.Enter<IdleState>();
         }
     }

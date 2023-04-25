@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using _Application._Scripts.Core.Enemies;
+using _Application._Scripts.Scriptables.Core.Enemies;
 using _Application.Scripts.Managers;
 using _Application.Scripts.Scriptables.Core.Enemies;
 using Pool_And_Particles;
@@ -10,12 +11,19 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
 {
     public class BaseUnit : PooledBehaviour, IDamagable
     {
+        private static readonly int Attack = Animator.StringToHash("Attack");
+        private static readonly int Run = Animator.StringToHash("Run");
+        private static readonly int Idle = Animator.StringToHash("Idle");        
+        private static readonly int Die1 = Animator.StringToHash("Die");
+        private static readonly int Revive = Animator.StringToHash("Revive");
+
         public event Action<BaseUnit> Appeared = delegate {  };
         public event Action<IDamagable> Died = delegate { };
         public event Action<IDamagable> Updated = delegate {  };
         public event Action<IDamagable> Damaged = delegate { };
         
         [SerializeField] private Transform _barPoint;
+        [SerializeField] private Animator _animator;
 
         protected UnitStateMachine _stateMachine;
 
@@ -32,11 +40,13 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
         public float ReviveDuration => BaseUnitData.ReviveDur;
         public float AttackCooldown => BaseUnitData.AttackCooldown;
         public virtual List<DamageInfo> AttackInfo => BaseUnitData.AttackInfo;
-
+        public Animator Animator => _animator;
         public virtual float PowerCoefficient => 1f;
         public virtual float MaxHealth => BaseUnitData.Health;
         public virtual float MotionsSpeed => BaseUnitData.MotionsSpeed;
-
+        private bool CanStopEnemy => Target != null 
+                                     && Target.CurrentEnemyState == EnemyState.Running 
+                                     && Target.BehaviourType != EnemyBehaviourType.Runner;
 
         protected virtual void Awake()
         {
@@ -78,7 +88,7 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
             _stateMachine.ResetState();
             Died(this);
         }
-        
+
         public void SetBusy(bool isBusy)
         {
             IsBusy = isBusy;
@@ -88,7 +98,7 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
         {
             IsAlive = isAlive;
         }
-        
+
         public void SetTarget(BaseEnemy target)
         {
             Target = target;
@@ -96,7 +106,7 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
 
         public void StopTarget()
         {
-            if (Target != null && Target.CurrentEnemyState == EnemyState.Running)
+            if (CanStopEnemy)
                 Target.Stop();
         }
 
@@ -131,6 +141,36 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
         {
             _stateMachine.Enter<DeathState>();
             Died(this);
+        }
+
+        public void PlayAttackAnimation()
+        {
+            Animator.ResetTrigger(Attack);
+            Animator.SetTrigger(Attack);
+        }
+
+        public void PlayRunAnimation()
+        {
+            Animator.ResetTrigger(Run);
+            Animator.SetTrigger(Run);
+        }
+
+        public void PlayIdleAnimation()
+        {
+            Animator.ResetTrigger(Idle);
+            Animator.SetTrigger(Idle);
+        }
+
+        public void PlayDeathAnimation()
+        {
+            Animator.ResetTrigger(Die1);
+            Animator.SetTrigger(Die1);
+        }
+
+        public void PlayReviveAnimation()
+        {
+            Animator.ResetTrigger(Revive);
+            Animator.SetTrigger(Revive);
         }
     }
 }

@@ -22,6 +22,9 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
 
             Holder.SetIsAlive(true);
             Holder.SetBusy(false);
+            
+            Holder.PlayIdleAnimation();
+            
             _closeAttackRadius = Holder.CloseAttackRadius;
             _enemyTracker = AllServices.Get<LevelManager>().CurrentLevel.WaveManager.EnemyTracker;
         }

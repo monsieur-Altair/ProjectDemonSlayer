@@ -3,6 +3,7 @@
     public enum EnemyType
     {
         Goblin, 
-        Zombie
+        Zombie,
+        BigSmth
     }
 }

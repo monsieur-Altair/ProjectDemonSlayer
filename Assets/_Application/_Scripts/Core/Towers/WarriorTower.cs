@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using _Application._Scripts.Core.Enemies;
-using _Application._Scripts.Scriptables.Core.Enemies;
 using _Application._Scripts.Scriptables.Core.Towers;
 using _Application._Scripts.Scriptables.Core.UnitsBehaviour;
 using _Application.Scripts.Managers;
@@ -101,7 +100,7 @@ namespace _Application._Scripts.Core.Towers
             if (_elapsedTime >= _baseTowerData.AttackCooldown && CanAttack)
             {
                 BaseEnemy target = CoreMethods.FindClosest(_enemyTracker.Enemies, Radius, transform);
-                if (target != null && target.BehaviourType != EnemyBehaviourType.Runner)
+                if (target != null)
                 {
                     _elapsedTime = 0f;
                     Attack(target);

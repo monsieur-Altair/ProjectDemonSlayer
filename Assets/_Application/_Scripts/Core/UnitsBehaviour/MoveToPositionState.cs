@@ -6,7 +6,9 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
     public class MoveToPositionState : BaseUnitState
     {
         private Vector3 _targetPos;
+        private Vector3 _lookDir;
         private float _motionSpeed;
+        private static readonly int Run = Animator.StringToHash("Run");
 
         public MoveToPositionState(UnitStateMachine unitStateMachine) : base(unitStateMachine)
         {
@@ -16,8 +18,12 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
         {
             base.Enter();
 
+            Holder.PlayRunAnimation();
+            
             _targetPos = ((BaseHero) Holder).TargetPos;
             _motionSpeed = Holder.MotionsSpeed;
+
+            _lookDir = (_targetPos - Holder.transform.position).normalized;
         }
 
         public override void Update()
@@ -30,8 +36,11 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
             transform.position = newPos;
             transform.rotation = Quaternion.LookRotation(_targetPos - newPos);
 
-            if (Vector3.Distance(transform.position, _targetPos) < float.Epsilon) 
+            if (Vector3.Distance(transform.position, _targetPos) < 0.001f)
+            {
+                transform.rotation = Quaternion.LookRotation(_lookDir);
                 _stateMachine.Enter<IdleState>();
+            }
         }
     }
 }

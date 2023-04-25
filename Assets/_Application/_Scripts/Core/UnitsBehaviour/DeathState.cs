@@ -6,7 +6,7 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
     {
         private float _reviveDuration;
         private float _elapsedTime;
-        
+
         public DeathState(UnitStateMachine unitStateMachine) : base(unitStateMachine)
         {
         }
@@ -15,6 +15,8 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
         {
             base.Enter();
 
+            Holder.PlayDeathAnimation();
+            
             Holder.SetIsAlive(false);
             _elapsedTime = 0.0f;
             _reviveDuration = Holder.ReviveDuration;
@@ -25,8 +27,11 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
             base.Update();
 
             _elapsedTime += Time.deltaTime;
-            if (_elapsedTime >= _reviveDuration) 
+            if (_elapsedTime >= _reviveDuration)
+            {
+                Holder.PlayReviveAnimation();                
                 _stateMachine.Enter<IdleState>();
+            }
         }
 
         public override void Exit()
