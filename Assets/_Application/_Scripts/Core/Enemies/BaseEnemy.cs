@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using _Application._Scripts.Core.Towers;
 using _Application._Scripts.Scriptables.Core.Enemies;
+using _Application._Scripts.Scriptables.Core.UnitsBehaviour;
 using _Application.Scripts.Scriptables.Core.Enemies;
 using DG.Tweening;
 using Extensions;
@@ -23,7 +24,7 @@ namespace _Application._Scripts.Core.Enemies
         [SerializeField] private Transform _barPoint;
         [SerializeField] private Transform _hitPoint;
 
-        [SerializeField] private AnimatorController<EnemyAnimationState> _animatorController;
+        [SerializeField] private AnimatorController _animatorController;
 
         private BaseEnemyData _baseEnemyData;
         private VertexPath _path;
@@ -66,14 +67,15 @@ namespace _Application._Scripts.Core.Enemies
         public void Launch()
         {
             CurrentEnemyState = EnemyState.Running;
-            _animatorController.PlayAnimation(EnemyAnimationState.Run);
+            _animatorController.PlayAnimation(AnimationHash.Run);
             Launched(this);
         }
 
         public void Stop()
         {
+            Debug.Log("stopped");
             CurrentEnemyState = EnemyState.Waiting;
-            _animatorController.PlayAnimation(EnemyAnimationState.Idle);
+            _animatorController.PlayAnimation(AnimationHash.Idle);
         }
 
         public void SlowDown(float newSpeed, float slowDur)
@@ -123,7 +125,7 @@ namespace _Application._Scripts.Core.Enemies
                 {
                     _target = null;
                     CurrentEnemyState = EnemyState.Running;
-                    _animatorController.PlayAnimation(EnemyAnimationState.Run);
+                    _animatorController.PlayAnimation(AnimationHash.Run);
                 }
                 else
                 {
@@ -166,7 +168,7 @@ namespace _Application._Scripts.Core.Enemies
                 _elapsedTime = 0f;
                 float damage = CoreMethods.CalculateDamage(_baseEnemyData.AttackInfo, _target.DefenceInfo);
                 _target.TakeDamage(damage);
-                _animatorController.PlayAnimation(EnemyAnimationState.Attack);
+                _animatorController.PlayAnimation(AnimationHash.Attack);
             }
         }
 
@@ -180,8 +182,9 @@ namespace _Application._Scripts.Core.Enemies
 
             if (Mathf.Abs(_currentDistance - _path.length) < 0.3f)
             {
+                Debug.Log("stopped");
                 CurrentEnemyState = EnemyState.None;
-                _animatorController.PlayAnimation(EnemyAnimationState.Idle);
+                _animatorController.PlayAnimation(AnimationHash.Idle);
                 Approached(this);
             }
         }
@@ -194,17 +197,32 @@ namespace _Application._Scripts.Core.Enemies
             _target = null;
             _targets.Clear();
             CurrentEnemyState = EnemyState.None;
-            _animatorController.PlayAnimation(EnemyAnimationState.Death);
+            _animatorController.PlayAnimation(AnimationHash.Die);
+
+            //use correct value for each death animation
+            float delay = GetDelay();
+            this.InvokeWithDelay(delay, SendDeathEvents);
+        }
+
+        private float GetDelay()
+        {
+            return _baseEnemyData.EnemyType switch
+            {
+                EnemyType.Goblin => 0.8f,
+                EnemyType.Zombie => 1.2f,
+                EnemyType.Skeleton => 1.2f,
+                EnemyType.BigSmth => 1.2f,
+                _ => throw new ArgumentOutOfRangeException()
+            };
+        }
+
+        private void SendDeathEvents()
+        {
             GrantedReward(this);
             Died(this);
         }
     }
-
-    public enum EnemyAnimationState
-    {
-        Idle, Attack, Run, Death
-    }
-
+    
     public enum EnemyState
     {
         None, 

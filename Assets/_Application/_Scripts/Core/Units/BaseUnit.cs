@@ -11,12 +11,6 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
 {
     public class BaseUnit : PooledBehaviour, IDamagable
     {
-        private static readonly int Attack = Animator.StringToHash("Attack");
-        private static readonly int Run = Animator.StringToHash("Run");
-        private static readonly int Idle = Animator.StringToHash("Idle");        
-        private static readonly int Die1 = Animator.StringToHash("Die");
-        private static readonly int Revive = Animator.StringToHash("Revive");
-
         public event Action<BaseUnit> Appeared = delegate {  };
         public event Action<IDamagable> Died = delegate { };
         public event Action<IDamagable> Updated = delegate {  };
@@ -24,6 +18,7 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
         
         [SerializeField] private Transform _barPoint;
         [SerializeField] private Animator _animator;
+        [SerializeField] private bool _useAnim = false;
 
         protected UnitStateMachine _stateMachine;
 
@@ -145,32 +140,36 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
 
         public void PlayAttackAnimation()
         {
-            Animator.ResetTrigger(Attack);
-            Animator.SetTrigger(Attack);
+            PlayAnimation(AnimationHash.Attack);
         }
 
         public void PlayRunAnimation()
         {
-            Animator.ResetTrigger(Run);
-            Animator.SetTrigger(Run);
+            PlayAnimation(AnimationHash.Run);
         }
 
         public void PlayIdleAnimation()
         {
-            Animator.ResetTrigger(Idle);
-            Animator.SetTrigger(Idle);
+            PlayAnimation(AnimationHash.Idle);
         }
 
         public void PlayDeathAnimation()
         {
-            Animator.ResetTrigger(Die1);
-            Animator.SetTrigger(Die1);
+            PlayAnimation(AnimationHash.Die);
         }
 
         public void PlayReviveAnimation()
         {
-            Animator.ResetTrigger(Revive);
-            Animator.SetTrigger(Revive);
+            PlayAnimation(AnimationHash.Revive);
+        }
+
+        protected void PlayAnimation(int hash)
+        {
+            if(_useAnim == false)
+                return;
+            
+            Animator.ResetTrigger(hash);
+            Animator.SetTrigger(hash);
         }
     }
 }

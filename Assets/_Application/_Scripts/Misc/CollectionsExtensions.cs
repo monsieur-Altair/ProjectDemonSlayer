@@ -1,11 +1,26 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace Extensions
 {
     public static class CollectionsExtensions
     {
+        public static void InvokeWithDelay(this MonoBehaviour monoBehaviour, float delay, Action action = null)
+        {
+            if(monoBehaviour.gameObject.activeInHierarchy)
+                monoBehaviour.StartCoroutine(DelayedAction(delay, action));
+        }
+
+        private static IEnumerator DelayedAction(float delay, Action action = null)
+        {
+            yield return new WaitForSeconds(delay);
+            action?.Invoke();
+        }
+
+
         /// <summary>
         /// Compares two lists element by element
         /// </summary>

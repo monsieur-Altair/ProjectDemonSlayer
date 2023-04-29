@@ -4,6 +4,7 @@
     {
         Goblin, 
         Zombie,
-        BigSmth
+        Skeleton,
+        BigSmth = 99
     }
 }

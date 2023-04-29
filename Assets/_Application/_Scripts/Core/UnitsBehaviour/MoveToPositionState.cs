@@ -8,7 +8,6 @@ namespace _Application._Scripts.Scriptables.Core.UnitsBehaviour
         private Vector3 _targetPos;
         private Vector3 _lookDir;
         private float _motionSpeed;
-        private static readonly int Run = Animator.StringToHash("Run");
 
         public MoveToPositionState(UnitStateMachine unitStateMachine) : base(unitStateMachine)
         {

@@ -19,6 +19,8 @@ MonoBehaviour:
       _value: {fileID: 7288729417567964204, guid: a4c79d078865c584188878e072d8871e, type: 3}
     - _key: 1
       _value: {fileID: 5816151529748882696, guid: 20a519a7cc9d3124a99c34a3106e0059, type: 3}
+    - _key: 2
+      _value: {fileID: 7288729417567964204, guid: ca1bb501a32d34b409eae5330c47fe7f, type: 3}
   _enemyPreviewSprites:
     _pairs:
     - _key: 0

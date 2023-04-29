@@ -39,8 +39,8 @@ namespace _Application.Scripts.UI
             Rect pixelRect = _canvas.pixelRect;
             float aspect = pixelRect.width / pixelRect.height;
             _canvasScaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
-            const float minAspect = 0.45f;
-            const float maxAspect = 0.8f;
+            const float minAspect = 1/0.8f;
+            const float maxAspect = 1/0.45f;
             _canvasScaler.matchWidthOrHeight = Mathf.Clamp01(Mathf.InverseLerp(minAspect, maxAspect, aspect));
             _refRes = _canvasRect.sizeDelta;
         }

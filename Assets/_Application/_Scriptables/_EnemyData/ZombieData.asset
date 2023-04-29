@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: ZombieData
   m_EditorClassIdentifier: 
   _health: 20
-  _motionsSpeed: 1
-  _attackSpeed: 1
+  _motionsSpeed: 0.6
+  _attackCooldown: 1
   _attackInfo:
   - _value: 2
     _damageType: 1

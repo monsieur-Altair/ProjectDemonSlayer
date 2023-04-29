@@ -11,7 +11,7 @@ namespace _Application._Scripts.Scriptables.Core.Enemies
         [SerializeField] private EnemyHierarchyType _enemyHierarchyType;
         [SerializeField] private EnemyBehaviourType _behaviourType;
         [SerializeField] private EnemyMotionType _enemyMotionType;
-
+        
         public EnemyMotionType EnemyMotionType => _enemyMotionType;
         public EnemyHierarchyType EnemyHierarchyType => _enemyHierarchyType;
         public EnemyBehaviourType BehaviourType => _behaviourType;
